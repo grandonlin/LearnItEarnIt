@@ -7,21 +7,47 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		A70FCC0E2B11EB04A560239E /* Pods_LearnItEarnIt.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 76088AC4C7211978A73A6E0E /* Pods_LearnItEarnIt.framework */; };
 		C15BF5E51EAAF6F60057310D /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = C15BF5E41EAAF6F60057310D /* AppDelegate.swift */; };
-		C15BF5E71EAAF6F60057310D /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C15BF5E61EAAF6F60057310D /* ViewController.swift */; };
+		C15BF5E71EAAF6F60057310D /* MainVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = C15BF5E61EAAF6F60057310D /* MainVC.swift */; };
 		C15BF5EA1EAAF6F60057310D /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = C15BF5E81EAAF6F60057310D /* Main.storyboard */; };
 		C15BF5EC1EAAF6F60057310D /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = C15BF5EB1EAAF6F60057310D /* Assets.xcassets */; };
 		C15BF5EF1EAAF6F60057310D /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = C15BF5ED1EAAF6F60057310D /* LaunchScreen.storyboard */; };
+		C15BF5F71EAAF7F00057310D /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = C15BF5F61EAAF7F00057310D /* GoogleService-Info.plist */; };
+		C15BF5FE1EAB04E10057310D /* CircleButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = C15BF5FD1EAB04E10057310D /* CircleButton.swift */; };
+		C15BF6001EAB0A660057310D /* PostCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C15BF5FF1EAB0A660057310D /* PostCell.swift */; };
+		C15BF6021EAB6A210057310D /* PostVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = C15BF6011EAB6A210057310D /* PostVC.swift */; };
+		C15BF6041EAB701B0057310D /* FancyBtn.swift in Sources */ = {isa = PBXBuildFile; fileRef = C15BF6031EAB701B0057310D /* FancyBtn.swift */; };
+		C15BF6081EAB74C90057310D /* Post.swift in Sources */ = {isa = PBXBuildFile; fileRef = C15BF6071EAB74C90057310D /* Post.swift */; };
+		C15BF60A1EAC3DD50057310D /* ProductCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C15BF6091EAC3DD50057310D /* ProductCell.swift */; };
+		C15BF60C1EAC3F3F0057310D /* Step.swift in Sources */ = {isa = PBXBuildFile; fileRef = C15BF60B1EAC3F3F0057310D /* Step.swift */; };
+		C15BF60E1EAE135C0057310D /* ProfileVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = C15BF60D1EAE135C0057310D /* ProfileVC.swift */; };
+		C15BF6101EAE174B0057310D /* CircleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C15BF60F1EAE174B0057310D /* CircleView.swift */; };
+		C15BF6121EAEFBCD0057310D /* LoginVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = C15BF6111EAEFBCD0057310D /* LoginVC.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		76088AC4C7211978A73A6E0E /* Pods_LearnItEarnIt.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_LearnItEarnIt.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		85451FB6E8DEFB98F6CF38D4 /* Pods-LearnItEarnIt.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-LearnItEarnIt.release.xcconfig"; path = "Pods/Target Support Files/Pods-LearnItEarnIt/Pods-LearnItEarnIt.release.xcconfig"; sourceTree = "<group>"; };
 		C15BF5E11EAAF6F60057310D /* LearnItEarnIt.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = LearnItEarnIt.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		C15BF5E41EAAF6F60057310D /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
-		C15BF5E61EAAF6F60057310D /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
+		C15BF5E61EAAF6F60057310D /* MainVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainVC.swift; sourceTree = "<group>"; };
 		C15BF5E91EAAF6F60057310D /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		C15BF5EB1EAAF6F60057310D /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		C15BF5EE1EAAF6F60057310D /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		C15BF5F01EAAF6F60057310D /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		C15BF5F61EAAF7F00057310D /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
+		C15BF5FD1EAB04E10057310D /* CircleButton.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CircleButton.swift; sourceTree = "<group>"; };
+		C15BF5FF1EAB0A660057310D /* PostCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PostCell.swift; sourceTree = "<group>"; };
+		C15BF6011EAB6A210057310D /* PostVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PostVC.swift; sourceTree = "<group>"; };
+		C15BF6031EAB701B0057310D /* FancyBtn.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FancyBtn.swift; sourceTree = "<group>"; };
+		C15BF6071EAB74C90057310D /* Post.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Post.swift; sourceTree = "<group>"; };
+		C15BF6091EAC3DD50057310D /* ProductCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProductCell.swift; sourceTree = "<group>"; };
+		C15BF60B1EAC3F3F0057310D /* Step.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Step.swift; sourceTree = "<group>"; };
+		C15BF60D1EAE135C0057310D /* ProfileVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProfileVC.swift; sourceTree = "<group>"; };
+		C15BF60F1EAE174B0057310D /* CircleView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CircleView.swift; sourceTree = "<group>"; };
+		C15BF6111EAEFBCD0057310D /* LoginVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoginVC.swift; sourceTree = "<group>"; };
+		D7C9C38294BA99CEF24D18B7 /* Pods-LearnItEarnIt.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-LearnItEarnIt.debug.xcconfig"; path = "Pods/Target Support Files/Pods-LearnItEarnIt/Pods-LearnItEarnIt.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -29,17 +55,28 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				A70FCC0E2B11EB04A560239E /* Pods_LearnItEarnIt.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		71FA860E226DE34742CCEECD /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				76088AC4C7211978A73A6E0E /* Pods_LearnItEarnIt.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
 		C15BF5D81EAAF6F50057310D = {
 			isa = PBXGroup;
 			children = (
 				C15BF5E31EAAF6F60057310D /* LearnItEarnIt */,
 				C15BF5E21EAAF6F60057310D /* Products */,
+				FB834E9B721D348D71CE5A39 /* Pods */,
+				71FA860E226DE34742CCEECD /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -54,14 +91,58 @@
 		C15BF5E31EAAF6F60057310D /* LearnItEarnIt */ = {
 			isa = PBXGroup;
 			children = (
+				C15BF5FA1EAB04740057310D /* Model */,
+				C15BF5F91EAB046F0057310D /* View */,
+				C15BF5F81EAB04670057310D /* Controller */,
 				C15BF5E41EAAF6F60057310D /* AppDelegate.swift */,
-				C15BF5E61EAAF6F60057310D /* ViewController.swift */,
 				C15BF5E81EAAF6F60057310D /* Main.storyboard */,
 				C15BF5EB1EAAF6F60057310D /* Assets.xcassets */,
 				C15BF5ED1EAAF6F60057310D /* LaunchScreen.storyboard */,
 				C15BF5F01EAAF6F60057310D /* Info.plist */,
+				C15BF5F61EAAF7F00057310D /* GoogleService-Info.plist */,
 			);
 			path = LearnItEarnIt;
+			sourceTree = "<group>";
+		};
+		C15BF5F81EAB04670057310D /* Controller */ = {
+			isa = PBXGroup;
+			children = (
+				C15BF5E61EAAF6F60057310D /* MainVC.swift */,
+				C15BF6011EAB6A210057310D /* PostVC.swift */,
+				C15BF60D1EAE135C0057310D /* ProfileVC.swift */,
+				C15BF6111EAEFBCD0057310D /* LoginVC.swift */,
+			);
+			name = Controller;
+			sourceTree = "<group>";
+		};
+		C15BF5F91EAB046F0057310D /* View */ = {
+			isa = PBXGroup;
+			children = (
+				C15BF5FD1EAB04E10057310D /* CircleButton.swift */,
+				C15BF5FF1EAB0A660057310D /* PostCell.swift */,
+				C15BF6031EAB701B0057310D /* FancyBtn.swift */,
+				C15BF6091EAC3DD50057310D /* ProductCell.swift */,
+				C15BF60F1EAE174B0057310D /* CircleView.swift */,
+			);
+			name = View;
+			sourceTree = "<group>";
+		};
+		C15BF5FA1EAB04740057310D /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				C15BF6071EAB74C90057310D /* Post.swift */,
+				C15BF60B1EAC3F3F0057310D /* Step.swift */,
+			);
+			name = Model;
+			sourceTree = "<group>";
+		};
+		FB834E9B721D348D71CE5A39 /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				D7C9C38294BA99CEF24D18B7 /* Pods-LearnItEarnIt.debug.xcconfig */,
+				85451FB6E8DEFB98F6CF38D4 /* Pods-LearnItEarnIt.release.xcconfig */,
+			);
+			name = Pods;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -71,9 +152,12 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = C15BF5F31EAAF6F60057310D /* Build configuration list for PBXNativeTarget "LearnItEarnIt" */;
 			buildPhases = (
+				5B2E1BFDEE3F2FAE8DF1B559 /* [CP] Check Pods Manifest.lock */,
 				C15BF5DD1EAAF6F60057310D /* Sources */,
 				C15BF5DE1EAAF6F60057310D /* Frameworks */,
 				C15BF5DF1EAAF6F60057310D /* Resources */,
+				22391D21270401F16ABD3787 /* [CP] Embed Pods Frameworks */,
+				B47CF1AADA0C66FDB9D6DC72 /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -125,6 +209,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				C15BF5EF1EAAF6F60057310D /* LaunchScreen.storyboard in Resources */,
+				C15BF5F71EAAF7F00057310D /* GoogleService-Info.plist in Resources */,
 				C15BF5EC1EAAF6F60057310D /* Assets.xcassets in Resources */,
 				C15BF5EA1EAAF6F60057310D /* Main.storyboard in Resources */,
 			);
@@ -132,13 +217,71 @@
 		};
 /* End PBXResourcesBuildPhase section */
 
+/* Begin PBXShellScriptBuildPhase section */
+		22391D21270401F16ABD3787 /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-LearnItEarnIt/Pods-LearnItEarnIt-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		5B2E1BFDEE3F2FAE8DF1B559 /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n";
+			showEnvVarsInLog = 0;
+		};
+		B47CF1AADA0C66FDB9D6DC72 /* [CP] Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "[CP] Copy Pods Resources";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-LearnItEarnIt/Pods-LearnItEarnIt-resources.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+/* End PBXShellScriptBuildPhase section */
+
 /* Begin PBXSourcesBuildPhase section */
 		C15BF5DD1EAAF6F60057310D /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				C15BF5E71EAAF6F60057310D /* ViewController.swift in Sources */,
+				C15BF60E1EAE135C0057310D /* ProfileVC.swift in Sources */,
+				C15BF6041EAB701B0057310D /* FancyBtn.swift in Sources */,
+				C15BF6121EAEFBCD0057310D /* LoginVC.swift in Sources */,
+				C15BF5FE1EAB04E10057310D /* CircleButton.swift in Sources */,
+				C15BF60C1EAC3F3F0057310D /* Step.swift in Sources */,
+				C15BF5E71EAAF6F60057310D /* MainVC.swift in Sources */,
 				C15BF5E51EAAF6F60057310D /* AppDelegate.swift in Sources */,
+				C15BF6101EAE174B0057310D /* CircleView.swift in Sources */,
+				C15BF6001EAB0A660057310D /* PostCell.swift in Sources */,
+				C15BF60A1EAC3DD50057310D /* ProductCell.swift in Sources */,
+				C15BF6081EAB74C90057310D /* Post.swift in Sources */,
+				C15BF6021EAB6A210057310D /* PostVC.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -259,12 +402,13 @@
 		};
 		C15BF5F41EAAF6F60057310D /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = D7C9C38294BA99CEF24D18B7 /* Pods-LearnItEarnIt.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				DEVELOPMENT_TEAM = UM5SX26C6N;
 				INFOPLIST_FILE = LearnItEarnIt/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = com.example.LearnItEarnIt;
+				PRODUCT_BUNDLE_IDENTIFIER = com.grandonlin.LearnItEarnIt;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 3.0;
 			};
@@ -272,12 +416,13 @@
 		};
 		C15BF5F51EAAF6F60057310D /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 85451FB6E8DEFB98F6CF38D4 /* Pods-LearnItEarnIt.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				DEVELOPMENT_TEAM = UM5SX26C6N;
 				INFOPLIST_FILE = LearnItEarnIt/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = com.example.LearnItEarnIt;
+				PRODUCT_BUNDLE_IDENTIFIER = com.grandonlin.LearnItEarnIt;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 3.0;
 			};
@@ -302,6 +447,7 @@
 				C15BF5F51EAAF6F60057310D /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
