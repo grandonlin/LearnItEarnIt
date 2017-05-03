@@ -19,7 +19,11 @@ class ProductCell: UITableViewCell {
         // Initialization code
     }
     
-    
+    func configureCell(step: Step) {
+        stepLbl.text = "Step \(step.stepNum)"
+        //stepImg.image = UIImage(named: step.)
+        //stepDescription.text = step.
+    }
 
 
 }

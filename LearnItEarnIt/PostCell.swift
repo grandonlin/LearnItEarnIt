@@ -12,6 +12,7 @@ class PostCell: UITableViewCell {
 
     @IBOutlet weak var cellTitleLbl: UILabel!
     @IBOutlet weak var cellImg: UIImageView!
+    @IBOutlet weak var likeNumLbl: UILabel!
     
     
     func configureCell(post: Post) {

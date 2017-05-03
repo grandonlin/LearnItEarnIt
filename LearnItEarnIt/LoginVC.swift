@@ -10,7 +10,7 @@ import UIKit
 import Firebase
 import FBSDKCoreKit
 import FBSDKLoginKit
-
+import SwiftKeychainWrapper
 
 class LoginVC: UIViewController {
 
@@ -20,16 +20,20 @@ class LoginVC: UIViewController {
 
     
     var activityIndicator: UIActivityIndicatorView = UIActivityIndicatorView()
-    var currentAccessToken = FBSDKAccessToken.current()
     
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        if currentAccessToken != nil {
-            performSegue(withIdentifier: "MainVC", sender: currentAccessToken)
-        }
         
+    }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(true)
+        
+        if let _ = KeychainWrapper.standard.string(forKey: KEY_UID) {
+            performSegue(withIdentifier: "MainVC", sender: nil)
+        }
     }
     
     @IBAction func signInTapped(_ sender: Any) {
@@ -88,6 +92,7 @@ class LoginVC: UIViewController {
             } else {
                 print("Grandon: successfully authenticated with Firebase")
                 if let user = user {
+                    print("Grandon: userID is \(user.uid)")
                     self.completeSignIn(id: user.uid)
                 }
             }
@@ -95,10 +100,16 @@ class LoginVC: UIViewController {
     }
     
     func completeSignIn(id: String) {
+        KeychainWrapper.standard.set(id, forKey: KEY_UID)
         
         performSegue(withIdentifier: "MainVC", sender: AnyObject.self)
     }
 
+    @IBAction func newUserBtnTapped(_ sender: Any) {
+        performSegue(withIdentifier: "NewUserVC", sender: sender)
+    }
+    
+    
     @IBAction func forgetPwBtnTapped(_ sender: Any) {
         if let email = emailTextField.text {
             FIRAuth.auth()?.sendPasswordReset(withEmail: email, completion: { (error) in
@@ -111,15 +122,4 @@ class LoginVC: UIViewController {
         }
         
     }
-
-    
-//    FIRAuth.auth()?.currentUser?.sendEmailVerification(completion: { (emailVerificationError) in
-//    if emailVerificationError != nil {
-//    print("Grandon: unable to send email verification")
-//    } else {
-//    print("Grandon: successfully sent email verification")
-//    }
-//    })
-
-    
 }

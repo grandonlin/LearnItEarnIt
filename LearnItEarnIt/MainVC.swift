@@ -7,11 +7,14 @@
 //
 
 import UIKit
+import Firebase
 import FirebaseDatabase
 
 class MainVC: UIViewController, UITableViewDataSource, UITableViewDelegate {
 
     @IBOutlet weak var tableView: UITableView!
+    @IBOutlet weak var likeNumLbl: UILabel!
+
     
     var posts = [Post]()
     var postTitle: String!
@@ -31,7 +34,23 @@ class MainVC: UIViewController, UITableViewDataSource, UITableViewDelegate {
         let post2 = Post(title: "Mini Motorcycle by Lighter")
         posts.append(post2)
         
+        
+        
+        
     }
+    
+//    override func viewDidAppear(_ animated: Bool) {
+//        DataService.ds.REF_USERS.observe(.value, with: { (snapshot) in
+//            if let snapshot = snapshot.children.allObjects as? [FIRDataSnapshot] {
+//                for snap in snapshot {
+//                    print("SNAP: \(snap)")
+//                    if let snapValue = snap.value {
+//                        print("SNAPVALUE: \(snapValue)")
+//                    }
+//                }
+//            }
+//        })
+//    }
 
     func numberOfSections(in tableView: UITableView) -> Int {
         return 1
@@ -62,10 +81,6 @@ class MainVC: UIViewController, UITableViewDataSource, UITableViewDelegate {
             destination.vcTitle = title
         }
         
-        if let destination = segue.destination as? ProfileVC {
-            let title = "Profile"
-            destination.profileTitle = title
-        }
     }
     
     @IBAction func profileBtnTapped(_ sender: Any) {

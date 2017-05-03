@@ -24,6 +24,12 @@
 		C15BF60E1EAE135C0057310D /* ProfileVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = C15BF60D1EAE135C0057310D /* ProfileVC.swift */; };
 		C15BF6101EAE174B0057310D /* CircleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C15BF60F1EAE174B0057310D /* CircleView.swift */; };
 		C15BF6121EAEFBCD0057310D /* LoginVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = C15BF6111EAEFBCD0057310D /* LoginVC.swift */; };
+		C163733D1EB1458800CF68BD /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = C163733C1EB1458800CF68BD /* Constants.swift */; };
+		C16373401EB190A500CF68BD /* DataService.swift in Sources */ = {isa = PBXBuildFile; fileRef = C163733F1EB190A500CF68BD /* DataService.swift */; };
+		C16373421EB3608A00CF68BD /* NewUserVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = C16373411EB3608A00CF68BD /* NewUserVC.swift */; };
+		C1CC26AE1EB4A56A00CFA708 /* SetupVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1CC26AD1EB4A56A00CFA708 /* SetupVC.swift */; };
+		C1CC26B11EB5973200CFA708 /* Profile.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1CC26B01EB5973200CFA708 /* Profile.swift */; };
+		C1CC26B51EB8A1FE00CFA708 /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1CC26B41EB8A1FE00CFA708 /* User.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -47,6 +53,13 @@
 		C15BF60D1EAE135C0057310D /* ProfileVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProfileVC.swift; sourceTree = "<group>"; };
 		C15BF60F1EAE174B0057310D /* CircleView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CircleView.swift; sourceTree = "<group>"; };
 		C15BF6111EAEFBCD0057310D /* LoginVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoginVC.swift; sourceTree = "<group>"; };
+		C163733C1EB1458800CF68BD /* Constants.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
+		C163733F1EB190A500CF68BD /* DataService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DataService.swift; sourceTree = "<group>"; };
+		C16373411EB3608A00CF68BD /* NewUserVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NewUserVC.swift; sourceTree = "<group>"; };
+		C1CC26AD1EB4A56A00CFA708 /* SetupVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SetupVC.swift; sourceTree = "<group>"; };
+		C1CC26AF1EB578F900CFA708 /* LearnItEarnIt.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = LearnItEarnIt.entitlements; sourceTree = "<group>"; };
+		C1CC26B01EB5973200CFA708 /* Profile.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Profile.swift; sourceTree = "<group>"; };
+		C1CC26B41EB8A1FE00CFA708 /* User.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
 		D7C9C38294BA99CEF24D18B7 /* Pods-LearnItEarnIt.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-LearnItEarnIt.debug.xcconfig"; path = "Pods/Target Support Files/Pods-LearnItEarnIt/Pods-LearnItEarnIt.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -91,6 +104,9 @@
 		C15BF5E31EAAF6F60057310D /* LearnItEarnIt */ = {
 			isa = PBXGroup;
 			children = (
+				C1CC26AF1EB578F900CFA708 /* LearnItEarnIt.entitlements */,
+				C163733E1EB1909500CF68BD /* Services */,
+				C163733B1EB1457200CF68BD /* Util */,
 				C15BF5FA1EAB04740057310D /* Model */,
 				C15BF5F91EAB046F0057310D /* View */,
 				C15BF5F81EAB04670057310D /* Controller */,
@@ -107,10 +123,12 @@
 		C15BF5F81EAB04670057310D /* Controller */ = {
 			isa = PBXGroup;
 			children = (
-				C15BF5E61EAAF6F60057310D /* MainVC.swift */,
-				C15BF6011EAB6A210057310D /* PostVC.swift */,
-				C15BF60D1EAE135C0057310D /* ProfileVC.swift */,
 				C15BF6111EAEFBCD0057310D /* LoginVC.swift */,
+				C16373411EB3608A00CF68BD /* NewUserVC.swift */,
+				C15BF5E61EAAF6F60057310D /* MainVC.swift */,
+				C15BF60D1EAE135C0057310D /* ProfileVC.swift */,
+				C1CC26AD1EB4A56A00CFA708 /* SetupVC.swift */,
+				C15BF6011EAB6A210057310D /* PostVC.swift */,
 			);
 			name = Controller;
 			sourceTree = "<group>";
@@ -132,8 +150,26 @@
 			children = (
 				C15BF6071EAB74C90057310D /* Post.swift */,
 				C15BF60B1EAC3F3F0057310D /* Step.swift */,
+				C1CC26B01EB5973200CFA708 /* Profile.swift */,
+				C1CC26B41EB8A1FE00CFA708 /* User.swift */,
 			);
 			name = Model;
+			sourceTree = "<group>";
+		};
+		C163733B1EB1457200CF68BD /* Util */ = {
+			isa = PBXGroup;
+			children = (
+				C163733C1EB1458800CF68BD /* Constants.swift */,
+			);
+			name = Util;
+			sourceTree = "<group>";
+		};
+		C163733E1EB1909500CF68BD /* Services */ = {
+			isa = PBXGroup;
+			children = (
+				C163733F1EB190A500CF68BD /* DataService.swift */,
+			);
+			name = Services;
 			sourceTree = "<group>";
 		};
 		FB834E9B721D348D71CE5A39 /* Pods */ = {
@@ -182,6 +218,11 @@
 						CreatedOnToolsVersion = 8.2.1;
 						DevelopmentTeam = UM5SX26C6N;
 						ProvisioningStyle = Automatic;
+						SystemCapabilities = {
+							com.apple.Keychain = {
+								enabled = 1;
+							};
+						};
 					};
 				};
 			};
@@ -270,15 +311,21 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				C1CC26B11EB5973200CFA708 /* Profile.swift in Sources */,
 				C15BF60E1EAE135C0057310D /* ProfileVC.swift in Sources */,
+				C16373401EB190A500CF68BD /* DataService.swift in Sources */,
+				C1CC26AE1EB4A56A00CFA708 /* SetupVC.swift in Sources */,
 				C15BF6041EAB701B0057310D /* FancyBtn.swift in Sources */,
 				C15BF6121EAEFBCD0057310D /* LoginVC.swift in Sources */,
 				C15BF5FE1EAB04E10057310D /* CircleButton.swift in Sources */,
 				C15BF60C1EAC3F3F0057310D /* Step.swift in Sources */,
 				C15BF5E71EAAF6F60057310D /* MainVC.swift in Sources */,
 				C15BF5E51EAAF6F60057310D /* AppDelegate.swift in Sources */,
+				C163733D1EB1458800CF68BD /* Constants.swift in Sources */,
 				C15BF6101EAE174B0057310D /* CircleView.swift in Sources */,
+				C16373421EB3608A00CF68BD /* NewUserVC.swift in Sources */,
 				C15BF6001EAB0A660057310D /* PostCell.swift in Sources */,
+				C1CC26B51EB8A1FE00CFA708 /* User.swift in Sources */,
 				C15BF60A1EAC3DD50057310D /* ProductCell.swift in Sources */,
 				C15BF6081EAB74C90057310D /* Post.swift in Sources */,
 				C15BF6021EAB6A210057310D /* PostVC.swift in Sources */,
@@ -405,6 +452,7 @@
 			baseConfigurationReference = D7C9C38294BA99CEF24D18B7 /* Pods-LearnItEarnIt.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = LearnItEarnIt/LearnItEarnIt.entitlements;
 				DEVELOPMENT_TEAM = UM5SX26C6N;
 				INFOPLIST_FILE = LearnItEarnIt/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
@@ -419,6 +467,7 @@
 			baseConfigurationReference = 85451FB6E8DEFB98F6CF38D4 /* Pods-LearnItEarnIt.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = LearnItEarnIt/LearnItEarnIt.entitlements;
 				DEVELOPMENT_TEAM = UM5SX26C6N;
 				INFOPLIST_FILE = LearnItEarnIt/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";

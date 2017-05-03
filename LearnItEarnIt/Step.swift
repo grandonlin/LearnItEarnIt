@@ -11,6 +11,7 @@ import Foundation
 class Step {
     private var _stepNum: Int!
     
+    
     var stepNum: Int {
         return _stepNum
     }
