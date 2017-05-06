@@ -46,23 +46,6 @@ class LoginVC: UIViewController {
                     }
                 } else {
                     print("Grandon: unable to sign in user - \(error)")
-                    FIRAuth.auth()?.createUser(withEmail: email, password: password, completion: { (user, error) in
-                        if error == nil {
-                            print("Grandon: successfully created a user")
-                            if let user = user {
-                                self.completeSignIn(id: user.uid)
-                                FIRAuth.auth()?.currentUser?.sendEmailVerification(completion: { (error) in
-                                    if error == nil {
-                                        print("Grandon: sent email verification")
-                                    } else {
-                                        print("Grandon: unable to send email verification - \(error)")
-                                    }
-                                })
-                            }
-                        } else {
-                            print("Grandon: unable to sign in - \(error)")
-                        }
-                    })
                 }
             })
         }
@@ -101,7 +84,6 @@ class LoginVC: UIViewController {
     
     func completeSignIn(id: String) {
         KeychainWrapper.standard.set(id, forKey: KEY_UID)
-        
         performSegue(withIdentifier: "MainVC", sender: AnyObject.self)
     }
 

@@ -41,9 +41,12 @@ class NewUserVC: UIViewController {
                     self.errMsgLbl.text = error.localizedDescription
                 } else {
                     print("Grandon: successfully create a new user")
-                    let profileData = ["userName": "FunnyKing"]
+                    let defaultProfileImgUrl = "https://firebasestorage.googleapis.com/v0/b/learnitearnit-2223f.appspot.com/o/profile_pic%2FSnowflake.tif?alt=media&token=0fe82a6c-8a8a-4a32-b688-7781b65f22cc"
+                    let username = self.userName
+                    let profileData = ["userName": username, "profileImgUrl": defaultProfileImgUrl, "gender": "", "recentCompletionImgUrl": ""]
                     if let user = user {
-                        self.completeSignIn(id: user.uid, profileData: profileData)
+                        print("User.uid is: \(user.uid)")
+                        self.completeSignIn(id: user.uid, profileData: profileData as! Dictionary<String, String>)
                         FIRAuth.auth()?.currentUser?.sendEmailVerification(completion: { (error) in
                             if error == nil {
                                 print("Grandon: sent email verification")

@@ -359,7 +359,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="KYB-5d-EzS" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-1978" y="1330"/>
+            <point key="canvasLocation" x="-2084" y="-347"/>
         </scene>
         <!--MainVC-->
         <scene sceneID="tne-QT-ifu">
@@ -447,7 +447,7 @@
                                                 <rect key="frame" x="0.0" y="28" width="375" height="323"/>
                                                 <autoresizingMask key="autoresizingMask"/>
                                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" alpha="0.90000000000000002" contentMode="center" tableViewCell="NpS-Qk-nsx" id="6lJ-8d-JfG">
-                                                    <rect key="frame" x="0.0" y="0.0" width="375" height="322"/>
+                                                    <rect key="frame" x="0.0" y="0.0" width="375" height="322.5"/>
                                                     <autoresizingMask key="autoresizingMask"/>
                                                     <subviews>
                                                         <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="i6Y-am-ZBi">
@@ -896,7 +896,6 @@
                         </constraints>
                     </view>
                     <connections>
-                        <outlet property="genderPicker" destination="EGn-6V-ZaQ" id="IB3-Zr-BRv"/>
                         <outlet property="genderPickerView" destination="EGn-6V-ZaQ" id="eJ9-jJ-Koc"/>
                         <outlet property="profileImageView" destination="Xpg-iy-Wsg" id="GCr-q2-SEw"/>
                         <outlet property="userNameTextField" destination="F1K-k9-uyq" id="ssG-J4-xqZ"/>
@@ -911,7 +910,7 @@
                     </connections>
                 </tapGestureRecognizer>
             </objects>
-            <point key="canvasLocation" x="518.84057971014499" y="-269.02173913043481"/>
+            <point key="canvasLocation" x="-1175" y="-269"/>
         </scene>
         <!--PostVC-->
         <scene sceneID="14h-9d-CJn">
@@ -983,7 +982,7 @@
                                         <rect key="frame" x="0.0" y="28" width="359" height="385"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="idk-6b-iJ6" id="mka-lE-N5t">
-                                            <rect key="frame" x="0.0" y="0.0" width="359" height="384"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="359" height="384.5"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="r5C-Hx-6QS">

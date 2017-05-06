@@ -13,60 +13,54 @@ class Profile {
 //    static let pf = Profile()
     
     private var _profileKey: String!
-    private var _userName: String = ""
-    private var _profileImageUrl: String = ""
-    private var _gender: String = ""
-    private var _profileImage: UIImageView! = nil
-    private var _recentCompletedImage: UIImageView! = nil
+    private var _userName: String!
+    private var _profileImgUrl: String!
+    private var _gender: String!
+//    private var _profileImage: UIImageView! = nil
+    private var _recentCompletionImgUrl: String!
     
     var profilekey: String {
         return _profileKey
     }
     
     var userName: String {
-        get {
-            return _userName
-        } set {
-            _userName = newValue
-        }
+        return _userName
     }
     
-    var profileImageUrl: String {
-        get {
-            return _profileImageUrl
-        }
+    var profileImgUrl: String {
+        return _profileImgUrl
     }
     
     var gender: String {
-        get {
-            return _gender
-        } set {
-            _gender = newValue
-        }
+        return _gender
     }
     
-    var profileImage: UIImageView! {
-        get {
-            return _profileImage
-        } set {
-            _profileImage = newValue
-        }
-    }
+//    var profileImage: UIImageView! {
+//            return _profileImage
+//    }
     
-    var recentCompletedImage: UIImageView! {
-        get {
-            return _recentCompletedImage
-        } set {
-            _recentCompletedImage = newValue
-        }
+    var recentCompletionImgUrl: String! {
+        return _recentCompletionImgUrl
     }
     
     init(profileKey: String, profileData: Dictionary<String, Any>) {
         self._profileKey = profileKey
         
-//        if let profileImageUrl = profileData["profileImageUrl"] as? String {
-//            self._profileImageUrl = profileImageUrl
-//        }
+        if let profileImageUrl = profileData["profileImgUrl"] as? String {
+            self._profileImgUrl = profileImageUrl
+        }
+        
+        if let username = profileData["userName"] as? String {
+            self._userName = username
+        }
+        
+        if let gender = profileData["gender"] as? String {
+            self._gender = gender
+        }
+        
+        if let recentCompletionImageUrl = profileData["recentCompletionImgUrl"] as? String {
+            self._recentCompletionImgUrl = recentCompletionImageUrl
+        }
      }
     
 }
