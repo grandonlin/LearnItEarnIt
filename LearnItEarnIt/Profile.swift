@@ -10,13 +10,10 @@ import UIKit
 
 class Profile {
     
-//    static let pf = Profile()
-    
     private var _profileKey: String!
     private var _userName: String!
     private var _profileImgUrl: String!
     private var _gender: String!
-//    private var _profileImage: UIImageView! = nil
     private var _recentCompletionImgUrl: String!
     
     var profilekey: String {
@@ -35,12 +32,12 @@ class Profile {
         return _gender
     }
     
-//    var profileImage: UIImageView! {
-//            return _profileImage
-//    }
-    
     var recentCompletionImgUrl: String! {
         return _recentCompletionImgUrl
+    }
+    
+    init(profileKey: String) {
+        self._profileKey = profileKey
     }
     
     init(profileKey: String, profileData: Dictionary<String, Any>) {

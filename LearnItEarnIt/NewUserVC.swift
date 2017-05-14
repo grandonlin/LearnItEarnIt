@@ -77,10 +77,18 @@ class NewUserVC: UIViewController {
     func completeSignIn(id: String, profileData: Dictionary<String, String>) {
         KeychainWrapper.standard.set(id, forKey: KEY_UID)
         DataService.ds.createFirebaseDBUser(uid: id, profileData: profileData)
-        performSegue(withIdentifier: "MainVC", sender: nil)
+        performSegue(withIdentifier: "SetupVC", sender: nil)
     }
     
-
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        if let destination = segue.destination as? SetupVC {
+            if let username = self.usernameTextField.text {
+                destination.userName = username
+                destination.newProfileSetup = true
+                
+            }
+        }
+    }
 
     @IBAction func errorCancelBtnTapped(_ sender: Any) {
         self.errorView.isHidden = true

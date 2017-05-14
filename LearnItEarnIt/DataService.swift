@@ -51,5 +51,20 @@ class DataService {
         REF_USERS.child(uid).child("profile").updateChildValues(profileData)
         
     }
-
+    
+    func existingUserDetermined(uid: String) -> Bool {
+        var userExist = false
+        
+        self._REF_USERS.observe(.value, with: { (snapshot) in
+            if let snapShot = snapshot.children.allObjects as? [FIRDataSnapshot] {
+                for snap in snapShot {
+                    let id = snap.key
+                    if id == uid {
+                        userExist = true
+                    }
+                }
+            }
+        })
+        return userExist
+    }
 }

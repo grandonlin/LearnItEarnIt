@@ -75,6 +75,7 @@ class ProfileVC: UIViewController, UIImagePickerControllerDelegate, UINavigation
 //            }
 //        })
         
+        //Download profile data
         let ref = DataService.ds.REF_USERS.child(profileKey).child("profile")
         ref.observe(.value, with: { (snapshot) in
             if let profileDict = snapshot.value as? Dictionary<String, Any> {
@@ -109,13 +110,13 @@ class ProfileVC: UIViewController, UIImagePickerControllerDelegate, UINavigation
                 destination.profileImg = image
                 destination.userName = username
                 destination.genderSelected = gender
+                destination.newProfileSetup = false
             }
         }
-        
     }
     
     @IBAction func backBtnTapped(_ sender: Any) {
-        dismiss(animated: true, completion: nil)
+        performSegue(withIdentifier: "MainVC", sender: sender)
     }
 
 }

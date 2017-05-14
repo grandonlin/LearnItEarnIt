@@ -15,12 +15,16 @@ class SetupVC: UIViewController, UIImagePickerControllerDelegate, UINavigationCo
     @IBOutlet weak var userNameTextField: UITextField!
     @IBOutlet weak var genderPickerView: UIPickerView!
     @IBOutlet weak var profileImageView: UIImageView!
+    @IBOutlet weak var backBtnImageView: FancyBtn!
+    @IBOutlet weak var saveBtnView: UIButton!
+    @IBOutlet weak var signOutBtnView: UIButton!
     
     var imagePicker: UIImagePickerController!
     var profileImg: UIImage!
     let genders = ["Male", "Female"]
     var genderSelected: String! = "Male"
     var userName: String!
+    var newProfileSetup: Bool! = false
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -34,11 +38,24 @@ class SetupVC: UIViewController, UIImagePickerControllerDelegate, UINavigationCo
         
         userNameTextField.text = userName
         profileImageView.image = profileImg
+        
         if genderSelected == "Male" {
             genderPickerView.selectRow(0, inComponent: 0, animated: true)
         } else {
             genderPickerView.selectRow(1, inComponent: 0, animated: true)
         }
+        
+        if newProfileSetup == true {
+            backBtnImageView.isHidden = true
+            saveBtnView.isEnabled = false
+            signOutBtnView.isHidden = true
+        } else {
+            backBtnImageView.isHidden = false
+            saveBtnView.isEnabled = true
+            signOutBtnView.isHidden = false
+        }
+        
+        
     }
     
     func numberOfComponents(in pickerView: UIPickerView) -> Int {
@@ -74,6 +91,7 @@ class SetupVC: UIViewController, UIImagePickerControllerDelegate, UINavigationCo
     
     func uploadProfileData() {
         if userNameTextField.text != nil && userNameTextField.text != "" {
+            if profileImageView.image != nil {
                 if let imageData = UIImageJPEGRepresentation(profileImg, 0.3) {
                     let imgUid = NSUUID().uuidString
                     let metadata = FIRStorageMetadata()
@@ -90,8 +108,9 @@ class SetupVC: UIViewController, UIImagePickerControllerDelegate, UINavigationCo
                         }
                     })
                 }
-        } else {
-            print("Grandon: username cannot be empty.")
+            } else {
+                print("Grandon: username cannot be empty.")
+            }
         }
     }
     

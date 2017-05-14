@@ -39,19 +39,6 @@ class MainVC: UIViewController, UITableViewDataSource, UITableViewDelegate {
         
     }
     
-//    override func viewDidAppear(_ animated: Bool) {
-//        DataService.ds.REF_USERS.observe(.value, with: { (snapshot) in
-//            if let snapshot = snapshot.children.allObjects as? [FIRDataSnapshot] {
-//                for snap in snapshot {
-//                    print("SNAP: \(snap)")
-//                    if let snapValue = snap.value {
-//                        print("SNAPVALUE: \(snapValue)")
-//                    }
-//                }
-//            }
-//        })
-//    }
-
     func numberOfSections(in tableView: UITableView) -> Int {
         return 1
     }
