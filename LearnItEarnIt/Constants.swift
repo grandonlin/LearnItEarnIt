@@ -9,3 +9,5 @@
 import Foundation
 
 let KEY_UID = "uid"
+
+typealias completed = UInt

@@ -17,27 +17,32 @@ class ProfileVC: UIViewController, UIImagePickerControllerDelegate, UINavigation
     @IBOutlet weak var recentCompletedImg: UIImageView!
     @IBOutlet weak var genderLbl: UILabel!
 
-    static var imageCache: NSCache<NSString, UIImage> = NSCache()
+//    static var imageCache: NSCache<NSString, UIImage> = NSCache()
     
     var profile: Profile!
+    var handle: UInt!
+    var ref: FIRDatabaseReference!
 //    var profileDownloaded = false
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
-//        if profileDownloaded {
-//            if let img = ProfileVC.imageCache.object(forKey: self.profile.profileImgUrl as NSString) {
-//                profileImg.image = img
-//            }
-//        } else {
-            downloadProfileData()
-//        }
+        handle = UInt(0)
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(true)
         
+        downloadProfileData()
+    }
+    
+    override func viewDidDisappear(_ animated: Bool) {
+        ref.removeObserver(withHandle: handle)
     }
 
     func downloadProfileData() {
         let profileKey = KeychainWrapper.standard.string(forKey: KEY_UID)!
-        print("profileKey is set as: \(profileKey)")
+        print("Grandon(ProfileVC): profileKey is set as: \(profileKey)")
         
         //Download image
 //        DataService.ds.REF_USERS.observe(.value, with: { (snapshot) in
@@ -76,17 +81,17 @@ class ProfileVC: UIViewController, UIImagePickerControllerDelegate, UINavigation
 //        })
         
         //Download profile data
-        let ref = DataService.ds.REF_USERS.child(profileKey).child("profile")
-        ref.observe(.value, with: { (snapshot) in
+        ref = DataService.ds.REF_USERS.child(profileKey).child("profile")
+        handle = ref.observe(.value, with: { (snapshot) in
             if let profileDict = snapshot.value as? Dictionary<String, Any> {
-                print("Grandon: snapshot is \(snapshot)")
+                print("Grandon(ProfileVC): snapshot is \(snapshot)")
                 self.profile = Profile(profileKey: profileKey, profileData: profileDict)
                 self.genderLbl.text = self.profile.gender
                 self.profileUserLbl.text = self.profile.userName
                 let profileRef = FIRStorage.storage().reference(forURL: self.profile.profileImgUrl)
                 profileRef.data(withMaxSize: 1024 * 1024, completion: { (data, error) in
                     if error != nil {
-                        print("Grandon: the error is \(error)")
+                        print("Grandon(ProfileVC): the error is \(error)")
                     } else {
                         if let img = UIImage(data: data!) {
                             self.profileImg.image = img
@@ -106,13 +111,14 @@ class ProfileVC: UIViewController, UIImagePickerControllerDelegate, UINavigation
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if let destination = segue.destination as? SetupVC {
-            if let image = self.profileImg.image, let username = self.profileUserLbl.text, let gender = self.genderLbl.text {
+            if let image = self.profileImg.image, let username = self.profileUserLbl.text, let gender = self.genderLbl.text?.capitalized {
                 destination.profileImg = image
                 destination.userName = username
                 destination.genderSelected = gender
                 destination.newProfileSetup = false
             }
         }
+        
     }
     
     @IBAction func backBtnTapped(_ sender: Any) {

@@ -27,15 +27,23 @@ class LoginVC: UIViewController {
     var gender: String!
     var coverPhotoUrl: String!
     var facebookProfileImg: UIImage!
+    var ref: FIRDatabaseReference!
+    var handle: UInt!
+    var userExist: Bool!
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
+       handle = UInt(0)
+        
         
     }
     
-    override func viewDidAppear(_ animated: Bool) {
-        super.viewDidAppear(true)
+
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(true)
+        
         
         if let _ = KeychainWrapper.standard.string(forKey: KEY_UID) {
             performSegue(withIdentifier: "MainVC", sender: nil)
@@ -68,58 +76,12 @@ class LoginVC: UIViewController {
         let facebookLogin = FBSDKLoginManager()
         facebookLogin.logIn(withReadPermissions: ["email"], from: self) { (result, error) in
             if error != nil {
-                print("Grandon: unable to authenticate with Facebook - \(error)")
+                print("Grandon(LoginVC): unable to authenticate with Facebook - \(error)")
             } else if result?.isCancelled == true {
-                print("Grandon: user cancelled Facebook authentication")
+                print("Grandon(LoginVC): user cancelled Facebook authentication")
             } else {
-                print("Grandon: successfully authenticate with Facebook")
+                print("Grandon(LoginVC): successfully authenticate with Facebook")
                 let credential = FIRFacebookAuthProvider.credential(withAccessToken: FBSDKAccessToken.current().tokenString)
-                FBSDKGraphRequest.init(graphPath: "me", parameters: ["fields": "name,gender,picture"], tokenString: FBSDKAccessToken.current().tokenString, version: nil, httpMethod: nil).start(completionHandler: { (connection, result, error) in
-                    if error != nil {
-                        print("Grandon: error is \(error)")
-                    } else {
-                        if let resultDict = result as? Dictionary<String, Any> {
-                            self.username = resultDict["name"] as? String
-                            self.gender = resultDict["gender"] as? String
-                            if let pictureDict = resultDict["picture"] as? Dictionary<String, Any> {
-                                print("Grandon: pictureDict is \(pictureDict)")
-                                if let data = pictureDict["data"] as? Dictionary<String, Any> {
-                                    print("Grandon: data is \(data)")
-                                    if let url = data["url"] as? String {
-                                    print("Grandon: url is \(url)")
-                                        let imageUrl = URL(string: url)!
-                                        DispatchQueue.global(qos: .userInitiated).async {
-                                            let imageData = NSData(contentsOf: imageUrl)
-                                            DispatchQueue.main.sync {
-                                                let img = UIImage(data: imageData as! Data)
-                                                
-                                                self.testImageView.image = img
-                                                let profileImage = self.testImageView.image
-                                                if let profileImageData = UIImageJPEGRepresentation(profileImage!, 1.0) {
-                                                    print("Grandon: This is true")
-                                                    let imgUid = NSUUID().uuidString
-                                                    print("Grandon: imgUid is \(imgUid)")
-                                                    let metadata = FIRStorageMetadata()
-                                                    metadata.contentType = "image/jpeg"
-                                                    print("Grandon: the metadata content type is \(metadata.contentType) ")
-                                                    DataService.ds.STORAGE_PROFILE_IMAGE.child(imgUid).put(profileImageData, metadata: metadata) { (metadata, error) in
-                                                        if error != nil {
-                                                            print("Grandon: unable to upload image \(error)")
-                                                        } else {
-                                                            let uploadedImageUrl = metadata?.downloadURL()?.absoluteString
-                                                            self.coverPhotoUrl = uploadedImageUrl
-                                                            print(self.coverPhotoUrl)
-                                                        }
-                                                    }
-                                                }
-                                            }
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    }
-                })
                 self.firebaseSignIn(with: credential)
             }
         }
@@ -128,19 +90,20 @@ class LoginVC: UIViewController {
     func firebaseSignIn(with credential: FIRAuthCredential) {
         FIRAuth.auth()?.signIn(with: credential, completion: { (user, error) in
             if let error =  error {
-                print("Grandon: unable to authenticate with Firebase - \(error)")
+                print("Grandon(LoginVC): unable to authenticate with Firebase - \(error)")
             } else {
-                print("Grandon: successfully authenticated with Firebase")
+                print("Grandon(LoginVC): successfully authenticated with Firebase")
                 if let user = user {
-                    print("Grandon: userID is \(user.uid)")
-                    if DataService.ds.existingUserDetermined(uid: user.uid) == true {
-                        print("Grandon: true")
+                    print("Grandon(LoginVC): userID is \(user.uid)")
+                    
+                    self.ref = DataService.ds.REF_USERS.child(user.uid).child("profile")
+                    if DataService.ds.existingUserDetermined(profileKey: user.uid, ref: self.ref) == true {
+                        print("Grandon(LoginVC): true")
                         self.completeSignIn(id: user.uid)
                     } else {
-                        print("Grandon: false")
-                        let profileDict = ["gender": self.gender, "userName": self.username, "profileImgUrl": self.coverPhotoUrl, "recentCompletionImgUrl": ""]
-                        print("Grandon: the coverphotoUrl is \(self.coverPhotoUrl)")
-                        self.newFBUserSignIn(id: user.uid, profileData: profileDict as! Dictionary<String, String>)
+                        print("Grandon(LoginVC): false")
+                        let profileDict = ["gender": "", "userName": "", "profileImgUrl": "", "recentCompletionImgUrl": ""]
+                        self.newFBUserSignIn(id: user.uid, profileData: profileDict)
                         
                     }
                 }
@@ -186,5 +149,5 @@ class LoginVC: UIViewController {
         errMsgStackView.isHidden = false
     }
     
-
+    
 }

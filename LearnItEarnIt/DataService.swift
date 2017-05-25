@@ -6,11 +6,13 @@
 //  Copyright © 2017 Grandon Lin. All rights reserved.
 //
 
-import Foundation
+import UIKit
 import Firebase
 
 let DB_BASE = FIRDatabase.database().reference()
 let STORAGE_BASE = FIRStorage.storage().reference()
+
+var userName: String!
 
 class DataService {
     
@@ -52,19 +54,27 @@ class DataService {
         
     }
     
-    func existingUserDetermined(uid: String) -> Bool {
-        var userExist = false
+    func existingUserDetermined(profileKey: String, ref: FIRDatabaseReference) -> Bool {
         
-        self._REF_USERS.observe(.value, with: { (snapshot) in
-            if let snapShot = snapshot.children.allObjects as? [FIRDataSnapshot] {
-                for snap in snapShot {
-                    let id = snap.key
-                    if id == uid {
-                        userExist = true
-                    }
+        ref.observe(.value, with: { (snapshot) in
+            if let profileDict = snapshot.value as? Dictionary<String, String> {
+                print("Grandon(DataService): existing user snap is \(profileDict)")
+                let username = profileDict["userName"]
+                print("Grandon(DataService): username in profileDict is \(username)")
+                if username != "" && username != nil {
+                    userName = username
                 }
             }
         })
-        return userExist
+        print("Grandon(DataService): userName is \(userName)")
+
+        if userName != "" && userName != nil {
+            
+            return true
+        } else {
+            return false
+        }
     }
+
+
 }
