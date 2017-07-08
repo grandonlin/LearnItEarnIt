@@ -17,6 +17,7 @@ class MainVC: UIViewController, UITableViewDataSource, UITableViewDelegate {
 
     @IBOutlet weak var tableView: UITableView!
     @IBOutlet weak var likeNumLbl: UILabel!
+    @IBOutlet weak var segment: UISegmentedControl!
     
     var posts = [Post]()
     var postKey: String!
@@ -39,19 +40,19 @@ class MainVC: UIViewController, UITableViewDataSource, UITableViewDelegate {
         tableView.dataSource = self
 
         postRef = DataService.ds.REF_POSTS
-        postRef.queryOrdered(byChild: "created").observe(.value, with: { (snapshot) in
-            if let snapshot = snapshot.children.allObjects as? [FIRDataSnapshot] {
-                for snap in snapshot {
-                    if let postDict = snap.value as? Dictionary<String, Any> {
-                        let key = snap.key
-                        let post = Post(key: key, postDict: postDict)
-                        self.posts.insert(post, at: 0)
-                    }
-                }
-            }
-            self.tableView.reloadData()
-        })
-        
+//        postRef.queryOrdered(byChild: "created").observe(.value, with: { (snapshot) in
+//            if let snapshot = snapshot.children.allObjects as? [FIRDataSnapshot] {
+//                for snap in snapshot {
+//                    if let postDict = snap.value as? Dictionary<String, Any> {
+//                        let key = snap.key
+//                        let post = Post(key: key, postDict: postDict)
+//                        self.posts.insert(post, at: 0)
+//                    }
+//                }
+//            }
+//            self.tableView.reloadData()
+//        })
+        fetchData()
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -101,42 +102,51 @@ class MainVC: UIViewController, UITableViewDataSource, UITableViewDelegate {
     }
     
 
+    @IBAction func listChange(_ sender: Any) {
+        fetchData()
+    }
     
-//    func fetchData() {
-//        
-//        if segment.selectedSegmentIndex == 0 {
-//            postRef.queryOrdered(byChild: "created").observe(.value, with: { (snapshot) in
-//                if let snapshot = snapshot.children.allObjects as? [FIRDataSnapshot] {
-//                    for snap in snapshot {
-//                        if let postDict = snap.value as? Dictionary<String, Any> {
-//                            if let likesCount = postDict["likes"] as? Int {
-//                                print("Grandon(MainVC): current like count is \(likesCount)")
-//                            }
-//                            let key = snap.key
-//                            let post = Post(key: key, postDict: postDict)
-//                            self.posts.insert(post, at: 0)
-//                        }
-//                    }
-//                }
-//            })
-//        } else if segment.selectedSegmentIndex == 1 {
-//            postRef.queryOrdered(byChild: "likes").observe(.value, with: { (snapshot) in
-//                if let snapshot = snapshot.children.allObjects as? [FIRDataSnapshot] {
-//                    for snap in snapshot {
-//                        if let postDict = snap.value as? Dictionary<String, Any> {
-//                            if let likesCount = postDict["likes"] as? Int {
-//                                print("Grandon(MainVC): current like count is \(likesCount)")
-//                            }
-//                            let key = snap.key
-//                            let post = Post(key: key, postDict: postDict)
-//                            self.posts.insert(post, at: 0)
-//                        }
-//                    }
-//                }
-//            })
-//        }
-//        postRef.removeObserver(withHandle: HANDLE)
-//    }
+    func fetchData() {
+        
+        if segment.selectedSegmentIndex == 0 {
+            self.posts.removeAll()
+            postRef.queryOrdered(byChild: "created").observe(.value, with: { (snapshot) in
+                if let snapshot = snapshot.children.allObjects as? [FIRDataSnapshot] {
+                    for snap in snapshot {
+                        if let postDict = snap.value as? Dictionary<String, Any> {
+                            if let likesCount = postDict["likes"] as? Int {
+                                print("Grandon(MainVC): current like count is \(likesCount)")
+                            }
+                            let key = snap.key
+                            let post = Post(key: key, postDict: postDict)
+                            
+                            self.posts.insert(post, at: 0)
+                        }
+                    }
+                }
+                
+                self.tableView.reloadData()
+            })
+        } else if segment.selectedSegmentIndex == 1 {
+            self.posts.removeAll()
+            postRef.queryOrdered(byChild: "likes").observe(.value, with: { (snapshot) in
+                if let snapshot = snapshot.children.allObjects as? [FIRDataSnapshot] {
+                    for snap in snapshot {
+                        if let postDict = snap.value as? Dictionary<String, Any> {
+                            if let likesCount = postDict["likes"] as? Int {
+                                print("Grandon(MainVC): current like count is \(likesCount)")
+                            }
+                            let key = snap.key
+                            let post = Post(key: key, postDict: postDict)
+                            self.posts.insert(post, at: 0)
+                        }
+                    }
+                }
+                self.tableView.reloadData()
+            })
+        }
+        
+    }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if let destination = segue.destination as? PostVC {

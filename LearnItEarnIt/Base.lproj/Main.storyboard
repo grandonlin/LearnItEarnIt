@@ -481,6 +481,9 @@
                                             <segment title="Hot"/>
                                         </segments>
                                         <color key="tintColor" red="0.40549758076667786" green="0.20261433720588684" blue="0.72877007722854614" alpha="0.83389008620000005" colorSpace="custom" customColorSpace="sRGB"/>
+                                        <connections>
+                                            <action selector="listChange:" destination="BYZ-38-t0r" eventType="valueChanged" id="oik-Z5-Fxw"/>
+                                        </connections>
                                     </segmentedControl>
                                     <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="323" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="vjg-gb-jz2">
                                         <rect key="frame" x="0.0" y="50" width="375" height="529"/>
@@ -490,7 +493,7 @@
                                                 <rect key="frame" x="0.0" y="28" width="375" height="323"/>
                                                 <autoresizingMask key="autoresizingMask"/>
                                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" alpha="0.90000000000000002" contentMode="center" tableViewCell="NpS-Qk-nsx" id="6lJ-8d-JfG">
-                                                    <rect key="frame" x="0.0" y="0.0" width="375" height="322"/>
+                                                    <rect key="frame" x="0.0" y="0.0" width="375" height="322.5"/>
                                                     <autoresizingMask key="autoresizingMask"/>
                                                     <subviews>
                                                         <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="i6Y-am-ZBi">
@@ -582,6 +585,7 @@
                         </constraints>
                     </view>
                     <connections>
+                        <outlet property="segment" destination="Bk3-Wk-Yhk" id="UxP-Bc-G0X"/>
                         <outlet property="tableView" destination="vjg-gb-jz2" id="4bP-l2-ppv"/>
                         <segue destination="MW7-7d-RIg" kind="show" identifier="PostVC" id="g8N-DX-cOu"/>
                         <segue destination="eJa-h1-mvy" kind="show" identifier="ProfileVC" id="2Q0-co-os9"/>
@@ -1221,7 +1225,7 @@
                                         <rect key="frame" x="0.0" y="28" width="359" height="424"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="idk-6b-iJ6" id="mka-lE-N5t">
-                                            <rect key="frame" x="0.0" y="0.0" width="359" height="423"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="359" height="423.5"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="r5C-Hx-6QS">
