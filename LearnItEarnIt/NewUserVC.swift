@@ -10,7 +10,7 @@ import UIKit
 import Firebase
 import SwiftKeychainWrapper
 
-class NewUserVC: UIViewController {
+class NewUserVC: UIViewController, UITextFieldDelegate {
 
     @IBOutlet weak var usernameTextField: UITextField!
     @IBOutlet weak var passwordTextField: UITextField!
@@ -25,6 +25,10 @@ class NewUserVC: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        usernameTextField.delegate = self
+        passwordTextField.delegate = self
+        emailTextField.delegate = self
 
     }
 
@@ -41,9 +45,9 @@ class NewUserVC: UIViewController {
                     self.errMsgLbl.text = error.localizedDescription
                 } else {
                     print("Grandon: successfully create a new user")
-                    let defaultProfileImgUrl = "https://firebasestorage.googleapis.com/v0/b/learnitearnit-2223f.appspot.com/o/profile_pic%2FSnowflake.tif?alt=media&token=0fe82a6c-8a8a-4a32-b688-7781b65f22cc"
+                    let defaultProfileImgUrl = "https://firebasestorage.googleapis.com/v0/b/learnitearnit-2223f.appspot.com/o/profile_pic%2FnewProfileImage?alt=media&token=6fc887bc-9833-4d60-925f-16bc73a0bad0"
                     let username = self.userName
-                    let profileData = ["userName": username, "profileImgUrl": defaultProfileImgUrl, "gender": "", "recentCompletionImgUrl": ""]
+                    let profileData = ["userName": username, "profileImgUrl": defaultProfileImgUrl, "gender": "", "recentCompletionImgUrl": "https://firebasestorage.googleapis.com/v0/b/learnitearnit-2223f.appspot.com/o/profile_pic%2FdefaultCompletionImage.jpg?alt=media&token=90f151a9-65c9-4b1b-b706-eaae1f6170a1"]
                     if let user = user {
                         print("User.uid is: \(user.uid)")
                         self.completeSignIn(id: user.uid, profileData: profileData as! Dictionary<String, String>)
@@ -101,4 +105,12 @@ class NewUserVC: UIViewController {
         
     }
     
+    func textFieldShouldBeginEditing(_ textField: UITextField) -> Bool {
+        return true
+    }
+    
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        textField.resignFirstResponder()
+        return true
+    }
 }

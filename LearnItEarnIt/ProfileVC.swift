@@ -22,7 +22,10 @@ class ProfileVC: UIViewController, UIImagePickerControllerDelegate, UINavigation
     var profile: Profile!
     var handle: UInt!
     var ref: FIRDatabaseReference!
+    var completionImage: UIImage!
 //    var profileDownloaded = false
+    
+    
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -34,6 +37,9 @@ class ProfileVC: UIViewController, UIImagePickerControllerDelegate, UINavigation
         super.viewWillAppear(true)
         
         downloadProfileData()
+
+
+
     }
     
     override func viewDidDisappear(_ animated: Bool) {
@@ -99,6 +105,16 @@ class ProfileVC: UIViewController, UIImagePickerControllerDelegate, UINavigation
                         }
                     }
                 })
+                let completionRef = FIRStorage.storage().reference(forURL: self.profile.recentCompletionImgUrl)
+                completionRef.data(withMaxSize: 1024 * 1024, completion: { (data, error) in
+                    if error != nil {
+                        print("Grandon(ProfileVC): the error is \(error)")
+                    } else {
+                        if let img = UIImage(data: data!) {
+                            self.recentCompletedImg.image = img
+                        }
+                    }
+                })
             }
         })
         
@@ -116,6 +132,11 @@ class ProfileVC: UIViewController, UIImagePickerControllerDelegate, UINavigation
                 destination.userName = username
                 destination.genderSelected = gender
                 destination.newProfileSetup = false
+            }
+        }
+        if let destination = segue.destination as? RecentCompletionVC {
+            if let image = self.recentCompletedImg.image {
+                destination.completionImage = image
             }
         }
         

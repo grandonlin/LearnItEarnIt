@@ -16,6 +16,7 @@ class Profile {
     private var _profileImgUrl: String!
     private var _gender: String!
     private var _recentCompletionImgUrl: String!
+    private var _existingUser: Bool!
     
     var profilekey: String {
         return _profileKey
@@ -60,29 +61,5 @@ class Profile {
             self._recentCompletionImgUrl = recentCompletionImageUrl
         }
      }
-    
-//    func existingUserDetermined(profileKey: String, ref: FIRDatabaseReference) -> Bool {
-//        var userExist: Bool!
-//        ref.observe(.value, with: { (snapshot) in
-//            if let profileDict = snapshot.value as? Dictionary<String, String> {
-//                print("Grandon(MainVC): existing user snap is \(profileDict)")
-//                if let username = profileDict["userName"] {
-//                    print("Grandon(MainVC): username in profileDict is \(username)")
-//                    if username != "" {
-//                        userExist = true
-//                    }
-//                }
-//            }
-//        })
-////        print("Grandon(MainVC): userExist is \(userExist)")
-//        
-//        if userExist == true {
-//            return true
-//        } else {
-//            return false
-//        }
-//        
-//        
-//    }
 
 }

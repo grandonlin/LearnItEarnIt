@@ -10,7 +10,7 @@ import UIKit
 import Firebase
 import SwiftKeychainWrapper
 
-class SetupVC: UIViewController, UIImagePickerControllerDelegate, UINavigationControllerDelegate, UIPickerViewDataSource, UIPickerViewDelegate {
+class SetupVC: UIViewController, UIImagePickerControllerDelegate, UINavigationControllerDelegate, UIPickerViewDataSource, UIPickerViewDelegate, UITextFieldDelegate {
 
     @IBOutlet weak var userNameTextField: UITextField!
     @IBOutlet weak var genderPickerView: UIPickerView!
@@ -24,7 +24,15 @@ class SetupVC: UIViewController, UIImagePickerControllerDelegate, UINavigationCo
     let genders = ["Male", "Female"]
     var genderSelected: String! = "Male"
     var userName: String!
-    var newProfileSetup: Bool! = false
+    var newProfileSetup: Bool!
+    var imageUrl: String!
+    var newProfileImage: Bool! = false
+//    var imageData1: Data!
+//    var imgUid1: String!
+//    var metadata1: FIRStorageMetadata!
+    var indicator = UIActivityIndicatorView()
+    
+    let profileKey = KeychainWrapper.standard.string(forKey: KEY_UID)!
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -33,29 +41,42 @@ class SetupVC: UIViewController, UIImagePickerControllerDelegate, UINavigationCo
         imagePicker.allowsEditing = true
         imagePicker.delegate = self
         
+        userNameTextField.delegate = self
+        
+        indicator.center = self.view.center
+        indicator.activityIndicatorViewStyle = .whiteLarge
+        self.view.addSubview(indicator)
+        
         genderPickerView.dataSource = self
         genderPickerView.delegate = self
         
         userNameTextField.text = userName
         profileImageView.image = profileImg
         
-        if genderSelected == "Male" {
-            genderPickerView.selectRow(0, inComponent: 0, animated: true)
-        } else {
+        if genderSelected == "Female" {
             genderPickerView.selectRow(1, inComponent: 0, animated: true)
+        } else {
+            genderPickerView.selectRow(0, inComponent: 0, animated: true)
         }
         
         if newProfileSetup == true {
             backBtnImageView.isHidden = true
-            saveBtnView.isEnabled = false
             signOutBtnView.isHidden = true
         } else {
             backBtnImageView.isHidden = false
-            saveBtnView.isEnabled = true
             signOutBtnView.isHidden = false
         }
         
         
+    }
+    
+    func textFieldShouldBeginEditing(_ textField: UITextField) -> Bool {
+        return true
+    }
+    
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        textField.resignFirstResponder()
+        return true
     }
     
     func numberOfComponents(in pickerView: UIPickerView) -> Int {
@@ -80,50 +101,55 @@ class SetupVC: UIViewController, UIImagePickerControllerDelegate, UINavigationCo
     }
 
     func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [String : Any]) {
-        if let image = info[UIImagePickerControllerEditedImage] as? UIImage {
-            profileImageView.image = image
-            profileImg = image
-        } else {
-            print("Grandon: a valid image wasn't selected")
-        }
+            if let selectedProfileImg = info[UIImagePickerControllerEditedImage] as? UIImage {
+                profileImageView.image = selectedProfileImg
+                profileImg = selectedProfileImg
+                self.newProfileImage = true
+//                imageData1 = UIImageJPEGRepresentation(profileImg, 0.5)
+//                imgUid1 = NSUUID().uuidString
+//                metadata1 = FIRStorageMetadata()
+//                metadata1.contentType = "image/jpeg"
+            } else {
+                print("Grandon: a valid image wasn't selected")
+            }
         imagePicker.dismiss(animated: true, completion: nil)
     }
-    
-    func uploadProfileData() {
-        if userNameTextField.text != nil && userNameTextField.text != "" {
-            if profileImageView.image != nil {
-                if let imageData = UIImageJPEGRepresentation(profileImg, 0.3) {
-                    let imgUid = NSUUID().uuidString
-                    let metadata = FIRStorageMetadata()
-                    metadata.contentType = "image/jpeg"
-                    DataService.ds.STORAGE_PROFILE_IMAGE.child(imgUid).put(imageData, metadata: metadata, completion: { (metadata, error) in
-                        if let error = error {
-                            print("Grandon: unable to upload data - \(error)")
-                        } else {
-                            print("Grandon: successfully upload data")
-                            let downloadURL = metadata?.downloadURL()!.absoluteString
-                            let newProfileData = ["gender": self.genderSelected, "profileImgUrl": downloadURL!, "recentCompletionImgUrl": "", "userName": self.userName] as [String : String]
-                            let profileKey = KeychainWrapper.standard.string(forKey: KEY_UID)!
-                            DataService.ds.REF_USERS.child(profileKey).child("profile").updateChildValues(newProfileData)
+        
+    @IBAction func saveBtnTapped(_ sender: Any) {
+        if let username = userNameTextField.text {
+            if username != "" {
+                if self.newProfileImage == true {
+                    indicator.startAnimating()
+                    if let imageData = UIImageJPEGRepresentation(profileImg, 0.5) {
+                        let imgUid = NSUUID().uuidString
+                        let metadata = FIRStorageMetadata()
+                        metadata.contentType = "image/jpeg"
+                        DataService.ds.STORAGE_PROFILE_IMAGE.child(imgUid).put(imageData, metadata: metadata) {
+                            (data, error) in
+                            if error != nil {
+                                print("Grandon(SetupVC): unable to upload profile image.")
+                            } else {
+                                print("Grandon(SetupVC): successfully upload profile image.")
+                                self.imageUrl = data?.downloadURL()?.absoluteString
+                                print("Grandon(SetupVC): the current gender selected is \(self.genderSelected)")
+                                let newProfileData = ["gender": self.genderSelected, "userName": self.userNameTextField.text, "profileImgUrl": self.imageUrl]
+                                DataService.ds.REF_USERS.child(self.profileKey).child("profile").updateChildValues(newProfileData)
+                                self.indicator.stopAnimating()
+                            }
                         }
-                    })
+                    }
+                } else {
+                    let newProfileData = ["gender": self.genderSelected, "userName": userNameTextField.text!]
+                    DataService.ds.REF_USERS.child(self.profileKey).child("profile").updateChildValues(newProfileData)
+                    print("Grandon(SetupVC): profile image not changed.")
                 }
+                performSegue(withIdentifier: "MainVC", sender: genderSelected)
             } else {
-                print("Grandon: username cannot be empty.")
+                print("Grandon: please enter your user name")
             }
+
         }
     }
-    
-    @IBAction func saveBtnTapped(_ sender: Any) {
-        uploadProfileData()
-        performSegue(withIdentifier: "ProfileVC", sender: genderSelected)
-    }
-    
-//    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-//        if let destination = segue.destination as? ProfileVC {
-//            
-//        }
-//    }
     
     @IBAction func backBtnTapped(_ sender: Any) {
         dismiss(animated: true, completion: nil)
@@ -140,5 +166,6 @@ class SetupVC: UIViewController, UIImagePickerControllerDelegate, UINavigationCo
         
     }
     
+
     
 }

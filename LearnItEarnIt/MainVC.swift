@@ -17,50 +17,61 @@ class MainVC: UIViewController, UITableViewDataSource, UITableViewDelegate {
 
     @IBOutlet weak var tableView: UITableView!
     @IBOutlet weak var likeNumLbl: UILabel!
-
     
     var posts = [Post]()
+    var postKey: String!
     var postTitle: String!
     var profile: Profile!
     var username: String!
     var gender: String!
     var coverPhotoUrl: String!
     var facebookProfileImg: UIImage!
+    var defaultCompletionImgUrl: String!
     var userExist: Bool!
     var ref: FIRDatabaseReference!
-    var handle: UInt!
+    var postRef: FIRDatabaseReference!
+    let profileKey = KeychainWrapper.standard.string(forKey: KEY_UID)!
     
     override func viewDidLoad() {
         super.viewDidLoad()
 
         tableView.delegate = self
         tableView.dataSource = self
-        
-        let post1 = Post(title: "Something Funny")
-        posts.append(post1)
-        let post2 = Post(title: "Mini Motorcycle by Lighter")
-        posts.append(post2)
-        
-        handle = UInt(0)
+
+        postRef = DataService.ds.REF_POSTS
+        postRef.queryOrdered(byChild: "created").observe(.value, with: { (snapshot) in
+            if let snapshot = snapshot.children.allObjects as? [FIRDataSnapshot] {
+                for snap in snapshot {
+                    if let postDict = snap.value as? Dictionary<String, Any> {
+                        let key = snap.key
+                        let post = Post(key: key, postDict: postDict)
+                        self.posts.insert(post, at: 0)
+                    }
+                }
+            }
+            self.tableView.reloadData()
+        })
         
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(true)
         
-        let profileKey = KeychainWrapper.standard.string(forKey: KEY_UID)!
-        print("Grandon(MainVC): profileKey in MainVC is \(profileKey)")
         ref = DataService.ds.REF_USERS.child(profileKey).child("profile")
-        profile = Profile(profileKey: profileKey)
-        if DataService.ds.existingUserDetermined(profileKey: profileKey, ref: ref) != true {
-            print("Grandon(MainVC), this is false")
-            createFBProfile(id: profileKey)
-        }
+        DataService.ds.REF_USERS.observeSingleEvent(of: .value, with: { (snapshot) in
+            if let profileDict = snapshot.value as? Dictionary<String, String> {
+                print("Grandon(MainVC): existing user snap is \(profileDict)")
+                let username = profileDict["userName"]
+                print("Grandon(MainVC): username in profileDict is \(username)")
+                if username == "" || username == nil {
+                    self.createFBProfile(id: self.profileKey)
+                }
+            }
+        })
     }
     
     override func viewDidDisappear(_ animated: Bool) {
-        
-        ref.removeObserver(withHandle: handle)
+        ref.removeObserver(withHandle: HANDLE)
     }
     
     func numberOfSections(in tableView: UITableView) -> Int {
@@ -71,27 +82,67 @@ class MainVC: UIViewController, UITableViewDataSource, UITableViewDelegate {
         return posts.count
     }
     
+    
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let post = posts[indexPath.row]
         if let cell = tableView.dequeueReusableCell(withIdentifier: "PostCell") as? PostCell {
-            let post = posts[indexPath.row]
             cell.configureCell(post: post)
             return cell
         }
-        return UITableViewCell()
+        return PostCell()
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        let postCell = posts[indexPath.row]
-        postTitle = postCell.title
-        performSegue(withIdentifier: "PostVC", sender: postCell)
+        let post = posts[indexPath.row]
+        postKey = post.key
+        print("Grandon(MainVC): post key is \(postKey)")
+        postTitle = post.title
+        performSegue(withIdentifier: "PostVC", sender: post)
     }
+    
+
+    
+//    func fetchData() {
+//        
+//        if segment.selectedSegmentIndex == 0 {
+//            postRef.queryOrdered(byChild: "created").observe(.value, with: { (snapshot) in
+//                if let snapshot = snapshot.children.allObjects as? [FIRDataSnapshot] {
+//                    for snap in snapshot {
+//                        if let postDict = snap.value as? Dictionary<String, Any> {
+//                            if let likesCount = postDict["likes"] as? Int {
+//                                print("Grandon(MainVC): current like count is \(likesCount)")
+//                            }
+//                            let key = snap.key
+//                            let post = Post(key: key, postDict: postDict)
+//                            self.posts.insert(post, at: 0)
+//                        }
+//                    }
+//                }
+//            })
+//        } else if segment.selectedSegmentIndex == 1 {
+//            postRef.queryOrdered(byChild: "likes").observe(.value, with: { (snapshot) in
+//                if let snapshot = snapshot.children.allObjects as? [FIRDataSnapshot] {
+//                    for snap in snapshot {
+//                        if let postDict = snap.value as? Dictionary<String, Any> {
+//                            if let likesCount = postDict["likes"] as? Int {
+//                                print("Grandon(MainVC): current like count is \(likesCount)")
+//                            }
+//                            let key = snap.key
+//                            let post = Post(key: key, postDict: postDict)
+//                            self.posts.insert(post, at: 0)
+//                        }
+//                    }
+//                }
+//            })
+//        }
+//        postRef.removeObserver(withHandle: HANDLE)
+//    }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if let destination = segue.destination as? PostVC {
-            let title = postTitle
-            destination.vcTitle = title
+            destination.vcTitle = postTitle
+            destination.postKey = postKey
         }
-        
     }
     
     @IBAction func profileBtnTapped(_ sender: Any) {
@@ -132,8 +183,9 @@ class MainVC: UIViewController, UITableViewDataSource, UITableViewDelegate {
                                                     print("Grandon(MainVC): unable to upload image \(error)")
                                                 } else {
                                                     self.coverPhotoUrl = metadata?.downloadURL()!.absoluteString
+                                                    self.defaultCompletionImgUrl = "https://firebasestorage.googleapis.com/v0/b/learnitearnit-2223f.appspot.com/o/profile_pic%2FdefaultCompletionImage.jpg?alt=media&token=90f151a9-65c9-4b1b-b706-eaae1f6170a1"
                                                     print("Grandon(MainVC): coverPhotoUrl is \(self.coverPhotoUrl!)")
-                                                    let profileDict = ["userName": self.username!, "gender": self.gender!, "profileImgUrl": self.coverPhotoUrl!, "recentCompletionImgUrl": ""]
+                                                    let profileDict = ["userName": self.username!, "gender": self.gender!, "profileImgUrl": self.coverPhotoUrl!, "recentCompletionImgUrl": self.defaultCompletionImgUrl]
                                                     print("Grandon(MainVC): username is \(self.username), gender is \(self.gender), profileImgUrl is \(self.coverPhotoUrl)")
                                                     self.ref.updateChildValues(profileDict)
                                                     
@@ -152,6 +204,9 @@ class MainVC: UIViewController, UITableViewDataSource, UITableViewDelegate {
         })
     }
     
+    @IBAction func addBtnPressed(_ sender: Any) {
+        performSegue(withIdentifier: "PostCreateVC", sender: sender)
+    }
     
     
 }

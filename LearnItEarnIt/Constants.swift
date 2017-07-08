@@ -9,5 +9,6 @@
 import Foundation
 
 let KEY_UID = "uid"
+let HANDLE = UInt(0)
 
 typealias completed = UInt

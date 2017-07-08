@@ -12,7 +12,7 @@ import FBSDKCoreKit
 import FBSDKLoginKit
 import SwiftKeychainWrapper
 
-class LoginVC: UIViewController {
+class LoginVC: UIViewController, UITextFieldDelegate {
 
     @IBOutlet weak var emailTextField: UITextField!
     @IBOutlet weak var passwordTextField: UITextField!
@@ -21,33 +21,51 @@ class LoginVC: UIViewController {
     @IBOutlet weak var errMsgStackView: UIStackView!
     @IBOutlet weak var testImageView: UIImageView!
     
-    var activityIndicator: UIActivityIndicatorView = UIActivityIndicatorView()
     var profile: Profile!
     var username: String!
     var gender: String!
     var coverPhotoUrl: String!
     var facebookProfileImg: UIImage!
-    var ref: FIRDatabaseReference!
     var handle: UInt!
     var userExist: Bool!
+    var indicator = UIActivityIndicatorView()
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
-       handle = UInt(0)
+        emailTextField.delegate = self
+        passwordTextField.delegate = self
+        
+        
+        emailTextField.text = ""
+        passwordTextField.text = ""
+        handle = UInt(0)
+        indicator.center = self.view.center
+        indicator.activityIndicatorViewStyle = .whiteLarge
+        self.view.addSubview(indicator)
         
         
     }
     
-
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(true)
+        if let _ = KeychainWrapper.standard.string(forKey: KEY_UID) {
+            performSegue(withIdentifier: "MainVC", sender: nil)
+        }
+    }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(true)
         
-        
-        if let _ = KeychainWrapper.standard.string(forKey: KEY_UID) {
-            performSegue(withIdentifier: "MainVC", sender: nil)
-        }
+    }
+    
+    func textFieldShouldBeginEditing(_ textField: UITextField) -> Bool {
+        return true
+    }
+    
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        textField.resignFirstResponder()
+        return true
     }
     
     @IBAction func signInTapped(_ sender: Any) {
@@ -83,6 +101,7 @@ class LoginVC: UIViewController {
                 print("Grandon(LoginVC): successfully authenticate with Facebook")
                 let credential = FIRFacebookAuthProvider.credential(withAccessToken: FBSDKAccessToken.current().tokenString)
                 self.firebaseSignIn(with: credential)
+                
             }
         }
     }
@@ -95,17 +114,22 @@ class LoginVC: UIViewController {
                 print("Grandon(LoginVC): successfully authenticated with Firebase")
                 if let user = user {
                     print("Grandon(LoginVC): userID is \(user.uid)")
-                    
-                    self.ref = DataService.ds.REF_USERS.child(user.uid).child("profile")
-                    if DataService.ds.existingUserDetermined(profileKey: user.uid, ref: self.ref) == true {
-                        print("Grandon(LoginVC): true")
-                        self.completeSignIn(id: user.uid)
-                    } else {
-                        print("Grandon(LoginVC): false")
-                        let profileDict = ["gender": "", "userName": "", "profileImgUrl": "", "recentCompletionImgUrl": ""]
-                        self.newFBUserSignIn(id: user.uid, profileData: profileDict)
-                        
-                    }
+                    let ref = DataService.ds.REF_USERS
+                    ref.observeSingleEvent(of: .value, with: { (snapshot) in
+                        if let userDict = snapshot.value as? Dictionary<String, Any> {
+                            print("Grandon(LoginVC): existing user snap is \(userDict)")
+                            let userID = userDict["\(user.uid)"]
+                            print("Grandon(DataService): username in profileDict is \(userID)")
+                            if userID == nil {
+                                let profileDict = ["gender": "", "userName": "", "profileImgUrl": "", "recentCompletionImgUrl": ""]
+                                self.indicator.startAnimating()
+                                self.newFBUserSignIn(id: user.uid, profileData: profileDict)
+                            } else {
+                                self.indicator.startAnimating()
+                                self.completeSignIn(id: user.uid)
+                            }
+                        }
+                    })
                 }
             }
         })
@@ -113,12 +137,13 @@ class LoginVC: UIViewController {
     
     func completeSignIn(id: String) {
         KeychainWrapper.standard.set(id, forKey: KEY_UID)
-        performSegue(withIdentifier: "MainVC", sender: AnyObject.self)
+        performSegue(withIdentifier: "MainVC", sender: nil)
     }
     
     func newFBUserSignIn(id: String, profileData: Dictionary<String, String>) {
         KeychainWrapper.standard.set(id, forKey: KEY_UID)
         DataService.ds.createFirebaseDBUser(uid: id, profileData: profileData)
+        self.indicator.stopAnimating()
         performSegue(withIdentifier: "MainVC", sender: nil)
     }
 
@@ -148,6 +173,4 @@ class LoginVC: UIViewController {
         errorView.isHidden = false
         errMsgStackView.isHidden = false
     }
-    
-    
 }

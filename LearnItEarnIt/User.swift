@@ -9,6 +9,7 @@
 import Foundation
 
 class User {
+    
     private var _userId: String!
     
     var userId: String {

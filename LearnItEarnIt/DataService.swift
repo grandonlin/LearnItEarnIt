@@ -8,6 +8,7 @@
 
 import UIKit
 import Firebase
+import SwiftKeychainWrapper
 
 let DB_BASE = FIRDatabase.database().reference()
 let STORAGE_BASE = FIRStorage.storage().reference()
@@ -17,7 +18,8 @@ var userName: String!
 class DataService {
     
     static let ds = DataService()
-    
+    let uid = KeychainWrapper.standard.string(forKey: KEY_UID)
+
     //DB references
     private var _REF_BASE = DB_BASE
     private var _REF_USERS = DB_BASE.child("users")
@@ -33,6 +35,15 @@ class DataService {
     
     var REF_USERS: FIRDatabaseReference {
         return _REF_USERS
+    }
+    
+    var REF_USERS_CURRENT: FIRDatabaseReference {
+        let user = DataService.ds._REF_USERS.child(uid!)
+        return user
+    }
+    
+    var REF_USERS_CURRENT_LIKE: FIRDatabaseReference {
+        return REF_USERS_CURRENT.child("myLikes")
     }
     
     var REF_POSTS: FIRDatabaseReference {
@@ -52,29 +63,29 @@ class DataService {
 //        REF_USERS.child(uid).child("profile").child("\(profileKey)").updateChildValues(profileData)
         REF_USERS.child(uid).child("profile").updateChildValues(profileData)
         
+        
     }
     
-    func existingUserDetermined(profileKey: String, ref: FIRDatabaseReference) -> Bool {
-        
-        ref.observe(.value, with: { (snapshot) in
-            if let profileDict = snapshot.value as? Dictionary<String, String> {
-                print("Grandon(DataService): existing user snap is \(profileDict)")
-                let username = profileDict["userName"]
-                print("Grandon(DataService): username in profileDict is \(username)")
-                if username != "" && username != nil {
-                    userName = username
-                }
-            }
-        })
-        print("Grandon(DataService): userName is \(userName)")
-
-        if userName != "" && userName != nil {
-            
-            return true
-        } else {
-            return false
-        }
-    }
+//    func existingUserDetermined(profileKey: String, ref: FIRDatabaseReference) -> Bool {
+//        
+//        ref.observe(.value, with: { (snapshot) in
+//            if let profileDict = snapshot.value as? Dictionary<String, String> {
+//                print("Grandon(DataService): existing user snap is \(profileDict)")
+//                let username = profileDict["userName"]
+//                print("Grandon(DataService): username in profileDict is \(username)")
+//                if username != "" && username != nil {
+//                    userName = username
+//                }
+//            }
+//        })
+//        print("Grandon(DataService): userName is \(userName)")
+//
+//        if userName != "" && userName != nil {
+//            return true
+//        } else {
+//            return false
+//        }
+//    }
 
 
 }

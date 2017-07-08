@@ -27,6 +27,8 @@
 		C163733D1EB1458800CF68BD /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = C163733C1EB1458800CF68BD /* Constants.swift */; };
 		C16373401EB190A500CF68BD /* DataService.swift in Sources */ = {isa = PBXBuildFile; fileRef = C163733F1EB190A500CF68BD /* DataService.swift */; };
 		C16373421EB3608A00CF68BD /* NewUserVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = C16373411EB3608A00CF68BD /* NewUserVC.swift */; };
+		C178A6031EF478BF00B97F43 /* RecentCompletionVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = C178A6021EF478BF00B97F43 /* RecentCompletionVC.swift */; };
+		C178A6051F0DBD7100B97F43 /* postCreateVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = C178A6041F0DBD7100B97F43 /* postCreateVC.swift */; };
 		C1CC26AE1EB4A56A00CFA708 /* SetupVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1CC26AD1EB4A56A00CFA708 /* SetupVC.swift */; };
 		C1CC26B11EB5973200CFA708 /* Profile.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1CC26B01EB5973200CFA708 /* Profile.swift */; };
 		C1CC26B51EB8A1FE00CFA708 /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1CC26B41EB8A1FE00CFA708 /* User.swift */; };
@@ -56,6 +58,8 @@
 		C163733C1EB1458800CF68BD /* Constants.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
 		C163733F1EB190A500CF68BD /* DataService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DataService.swift; sourceTree = "<group>"; };
 		C16373411EB3608A00CF68BD /* NewUserVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NewUserVC.swift; sourceTree = "<group>"; };
+		C178A6021EF478BF00B97F43 /* RecentCompletionVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RecentCompletionVC.swift; sourceTree = "<group>"; };
+		C178A6041F0DBD7100B97F43 /* postCreateVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = postCreateVC.swift; sourceTree = "<group>"; };
 		C1CC26AD1EB4A56A00CFA708 /* SetupVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SetupVC.swift; sourceTree = "<group>"; };
 		C1CC26AF1EB578F900CFA708 /* LearnItEarnIt.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = LearnItEarnIt.entitlements; sourceTree = "<group>"; };
 		C1CC26B01EB5973200CFA708 /* Profile.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Profile.swift; sourceTree = "<group>"; };
@@ -129,6 +133,8 @@
 				C15BF60D1EAE135C0057310D /* ProfileVC.swift */,
 				C1CC26AD1EB4A56A00CFA708 /* SetupVC.swift */,
 				C15BF6011EAB6A210057310D /* PostVC.swift */,
+				C178A6021EF478BF00B97F43 /* RecentCompletionVC.swift */,
+				C178A6041F0DBD7100B97F43 /* postCreateVC.swift */,
 			);
 			name = Controller;
 			sourceTree = "<group>";
@@ -311,6 +317,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				C178A6051F0DBD7100B97F43 /* postCreateVC.swift in Sources */,
 				C1CC26B11EB5973200CFA708 /* Profile.swift in Sources */,
 				C15BF60E1EAE135C0057310D /* ProfileVC.swift in Sources */,
 				C16373401EB190A500CF68BD /* DataService.swift in Sources */,
@@ -326,6 +333,7 @@
 				C16373421EB3608A00CF68BD /* NewUserVC.swift in Sources */,
 				C15BF6001EAB0A660057310D /* PostCell.swift in Sources */,
 				C1CC26B51EB8A1FE00CFA708 /* User.swift in Sources */,
+				C178A6031EF478BF00B97F43 /* RecentCompletionVC.swift in Sources */,
 				C15BF60A1EAC3DD50057310D /* ProductCell.swift in Sources */,
 				C15BF6081EAB74C90057310D /* Post.swift in Sources */,
 				C15BF6021EAB6A210057310D /* PostVC.swift in Sources */,
@@ -455,6 +463,7 @@
 				CODE_SIGN_ENTITLEMENTS = LearnItEarnIt/LearnItEarnIt.entitlements;
 				DEVELOPMENT_TEAM = UM5SX26C6N;
 				INFOPLIST_FILE = LearnItEarnIt/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.grandonlin.LearnItEarnIt;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -470,6 +479,7 @@
 				CODE_SIGN_ENTITLEMENTS = LearnItEarnIt/LearnItEarnIt.entitlements;
 				DEVELOPMENT_TEAM = UM5SX26C6N;
 				INFOPLIST_FILE = LearnItEarnIt/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.grandonlin.LearnItEarnIt;
 				PRODUCT_NAME = "$(TARGET_NAME)";
