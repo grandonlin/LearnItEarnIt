@@ -10,8 +10,8 @@ import UIKit
 import Firebase
 import SwiftKeychainWrapper
 
-let DB_BASE = FIRDatabase.database().reference()
-let STORAGE_BASE = FIRStorage.storage().reference()
+let DB_BASE = Database.database().reference()
+let STORAGE_BASE = Storage.storage().reference()
 
 var userName: String!
 
@@ -29,24 +29,24 @@ class DataService {
     //STORAGE references
     private var _STORAGE_PROFILE_IMAGE = STORAGE_BASE.child("profile_pic")
     
-    var REF_BASE: FIRDatabaseReference {
+    var REF_BASE: DatabaseReference {
         return _REF_BASE
     }
     
-    var REF_USERS: FIRDatabaseReference {
+    var REF_USERS: DatabaseReference {
         return _REF_USERS
     }
     
-    var REF_USERS_CURRENT: FIRDatabaseReference {
+    var REF_USERS_CURRENT: DatabaseReference {
         let user = DataService.ds._REF_USERS.child(uid!)
         return user
     }
     
-    var REF_USERS_CURRENT_LIKE: FIRDatabaseReference {
+    var REF_USERS_CURRENT_LIKE: DatabaseReference {
         return REF_USERS_CURRENT.child("myLikes")
     }
     
-    var REF_POSTS: FIRDatabaseReference {
+    var REF_POSTS: DatabaseReference {
         return _REF_POSTS
     }
     
@@ -54,7 +54,7 @@ class DataService {
 //        return _REF_PROFILE
 //    }
     
-    var STORAGE_PROFILE_IMAGE: FIRStorageReference {
+    var STORAGE_PROFILE_IMAGE: StorageReference {
         return _STORAGE_PROFILE_IMAGE
     }
     

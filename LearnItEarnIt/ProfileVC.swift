@@ -21,7 +21,7 @@ class ProfileVC: UIViewController, UIImagePickerControllerDelegate, UINavigation
     
     var profile: Profile!
     var handle: UInt!
-    var ref: FIRDatabaseReference!
+    var ref: DatabaseReference!
     var completionImage: UIImage!
 //    var profileDownloaded = false
     
@@ -94,8 +94,8 @@ class ProfileVC: UIViewController, UIImagePickerControllerDelegate, UINavigation
                 self.profile = Profile(profileKey: profileKey, profileData: profileDict)
                 self.genderLbl.text = self.profile.gender
                 self.profileUserLbl.text = self.profile.userName
-                let profileRef = FIRStorage.storage().reference(forURL: self.profile.profileImgUrl)
-                profileRef.data(withMaxSize: 1024 * 1024, completion: { (data, error) in
+                let profileRef = Storage.storage().reference(forURL: self.profile.profileImgUrl)
+                profileRef.getData(maxSize: 1024 * 1024, completion: { (data, error) in
                     if error != nil {
                         print("Grandon(ProfileVC): the error is \(error)")
                     } else {
@@ -105,8 +105,8 @@ class ProfileVC: UIViewController, UIImagePickerControllerDelegate, UINavigation
                         }
                     }
                 })
-                let completionRef = FIRStorage.storage().reference(forURL: self.profile.recentCompletionImgUrl)
-                completionRef.data(withMaxSize: 1024 * 1024, completion: { (data, error) in
+                let completionRef = Storage.storage().reference(forURL: self.profile.recentCompletionImgUrl)
+                completionRef.getData(maxSize: 1024 * 1024, completion: { (data, error) in
                     if error != nil {
                         print("Grandon(ProfileVC): the error is \(error)")
                     } else {

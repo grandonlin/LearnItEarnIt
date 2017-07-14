@@ -21,7 +21,7 @@ class PostVC: UIViewController, UITableViewDelegate, UITableViewDataSource {
     var vcTitle: String!
     let emptyHeartImg = UIImage(named: "empty-heart")
     let filledHeartImg = UIImage(named: "filled-heart")
-    var myLikeRef: FIRDatabaseReference!
+    var myLikeRef: DatabaseReference!
     var initialLike: Bool!
     var finalLike: Bool!
     var likeChange: Bool!
@@ -61,7 +61,7 @@ class PostVC: UIViewController, UITableViewDelegate, UITableViewDataSource {
         let stepRef = DataService.ds.REF_POSTS.child(postKey).child("steps").child("stepDetails")
         stepRef.observe(.value, with: { (snapshot) in
             print("Grandon(PostVC): snapshot is \(snapshot)")
-            if let snapshot = snapshot.children.allObjects as? [FIRDataSnapshot] {
+            if let snapshot = snapshot.children.allObjects as? [DataSnapshot] {
                 for snap in snapshot {
 //                    let stepKey = snap.key
                     if let stepDict = snap.value as? Dictionary<String, Any> {

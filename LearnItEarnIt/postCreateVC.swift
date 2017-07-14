@@ -11,10 +11,15 @@ import SwiftKeychainWrapper
 
 class PostCreateVC: UIViewController {
     
+    @IBOutlet weak var textView: UITextView!
+    @IBOutlet weak var postCreateImage: UIImageView!
+    @IBOutlet weak var postNameTextField: UITextField!
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-
-        // Do any additional setup after loading the view.
+        
+        
+        
     }
 
     @IBAction func postPressed(_ sender: Any) {
@@ -23,6 +28,11 @@ class PostCreateVC: UIViewController {
         let postKey = "34nnf923"
         DataService.ds.REF_POSTS.child(postKey).updateChildValues(created)
         print(created)
+    }
+    
+    @IBAction func nextBtnPressed(_ sender: Any) {
+        
+        performSegue(withIdentifier: "DetailStepVC", sender: nil)
     }
     
     @IBAction func backBtnPressed(_ sender: Any) {

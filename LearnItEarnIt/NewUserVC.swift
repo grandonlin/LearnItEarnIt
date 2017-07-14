@@ -38,7 +38,7 @@ class NewUserVC: UIViewController, UITextFieldDelegate {
         email = emailTextField.text
         
          if userName != "" && password != "" && email != "" {
-            FIRAuth.auth()?.createUser(withEmail: email, password: password, completion: { (user, error) in
+            Auth.auth().createUser(withEmail: email, password: password, completion: { (user, error) in
                 if let error = error {
                     print("Grandon: \(error)")
                     self.showErrorView()
@@ -51,7 +51,7 @@ class NewUserVC: UIViewController, UITextFieldDelegate {
                     if let user = user {
                         print("User.uid is: \(user.uid)")
                         self.completeSignIn(id: user.uid, profileData: profileData as! Dictionary<String, String>)
-                        FIRAuth.auth()?.currentUser?.sendEmailVerification(completion: { (error) in
+                        Auth.auth().currentUser?.sendEmailVerification(completion: { (error) in
                             if error == nil {
                                 print("Grandon: sent email verification")
                             } else {

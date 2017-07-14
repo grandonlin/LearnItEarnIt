@@ -56,7 +56,9 @@ class LoginVC: UIViewController, UITextFieldDelegate {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(true)
-        
+//        if let _ = KeychainWrapper.standard.string(forKey: KEY_UID) {
+//            performSegue(withIdentifier: "MainVC", sender: nil)
+//        }
     }
     
     func textFieldShouldBeginEditing(_ textField: UITextField) -> Bool {
@@ -70,7 +72,7 @@ class LoginVC: UIViewController, UITextFieldDelegate {
     
     @IBAction func signInTapped(_ sender: Any) {
         if let email = emailTextField.text, let password = passwordTextField.text {
-            FIRAuth.auth()?.signIn(withEmail: email, password: password, completion: { (user, error) in
+            Auth.auth().signIn(withEmail: email, password: password, completion: { (user, error) in
                 if error == nil {
                     print("Grandon: successfully sign in!")
                     if let user = user {
@@ -99,15 +101,15 @@ class LoginVC: UIViewController, UITextFieldDelegate {
                 print("Grandon(LoginVC): user cancelled Facebook authentication")
             } else {
                 print("Grandon(LoginVC): successfully authenticate with Facebook")
-                let credential = FIRFacebookAuthProvider.credential(withAccessToken: FBSDKAccessToken.current().tokenString)
+                let credential = FacebookAuthProvider.credential(withAccessToken: FBSDKAccessToken.current().tokenString)
                 self.firebaseSignIn(with: credential)
                 
             }
         }
     }
     
-    func firebaseSignIn(with credential: FIRAuthCredential) {
-        FIRAuth.auth()?.signIn(with: credential, completion: { (user, error) in
+    func firebaseSignIn(with credential: AuthCredential) {
+        Auth.auth().signIn(with: credential, completion: { (user, error) in
             if let error =  error {
                 print("Grandon(LoginVC): unable to authenticate with Firebase - \(error)")
             } else {
@@ -153,7 +155,7 @@ class LoginVC: UIViewController, UITextFieldDelegate {
     
     @IBAction func forgetPwBtnTapped(_ sender: Any) {
         if let email = emailTextField.text {
-            FIRAuth.auth()?.sendPasswordReset(withEmail: email, completion: { (error) in
+            Auth.auth().sendPasswordReset(withEmail: email, completion: { (error) in
                 if error != nil {
                     print("Grandon: unable to send password reset email - \(error)")
                 } else {

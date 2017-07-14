@@ -13,13 +13,17 @@ import FBSDKCoreKit
 import FBSDKLoginKit
 import SwiftKeychainWrapper
 
-class MainVC: UIViewController, UITableViewDataSource, UITableViewDelegate {
+class MainVC: UIViewController, UITableViewDataSource, UITableViewDelegate, UISearchBarDelegate {
 
     @IBOutlet weak var tableView: UITableView!
     @IBOutlet weak var likeNumLbl: UILabel!
     @IBOutlet weak var segment: UISegmentedControl!
+    @IBOutlet weak var searchBar: UISearchBar!
     
+    var inSearchMode = false
+    var post: Post!
     var posts = [Post]()
+    var filterPosts = [Post]()
     var postKey: String!
     var postTitle: String!
     var profile: Profile!
@@ -28,9 +32,8 @@ class MainVC: UIViewController, UITableViewDataSource, UITableViewDelegate {
     var coverPhotoUrl: String!
     var facebookProfileImg: UIImage!
     var defaultCompletionImgUrl: String!
-    var userExist: Bool!
-    var ref: FIRDatabaseReference!
-    var postRef: FIRDatabaseReference!
+    var ref: DatabaseReference!
+    var postRef: DatabaseReference!
     let profileKey = KeychainWrapper.standard.string(forKey: KEY_UID)!
     
     override func viewDidLoad() {
@@ -38,6 +41,8 @@ class MainVC: UIViewController, UITableViewDataSource, UITableViewDelegate {
 
         tableView.delegate = self
         tableView.dataSource = self
+        searchBar.delegate = self
+        searchBar.returnKeyType = UIReturnKeyType.done
 
         postRef = DataService.ds.REF_POSTS
 //        postRef.queryOrdered(byChild: "created").observe(.value, with: { (snapshot) in
@@ -59,13 +64,14 @@ class MainVC: UIViewController, UITableViewDataSource, UITableViewDelegate {
         super.viewWillAppear(true)
         
         ref = DataService.ds.REF_USERS.child(profileKey).child("profile")
-        DataService.ds.REF_USERS.observeSingleEvent(of: .value, with: { (snapshot) in
-            if let profileDict = snapshot.value as? Dictionary<String, String> {
+        ref.observeSingleEvent(of: .value, with: { (snapshot) in
+            if let profileDict = snapshot.value as? Dictionary<String, Any> {
                 print("Grandon(MainVC): existing user snap is \(profileDict)")
-                let username = profileDict["userName"]
-                print("Grandon(MainVC): username in profileDict is \(username)")
-                if username == "" || username == nil {
-                    self.createFBProfile(id: self.profileKey)
+                if let username = profileDict["userName"] as? String {
+                    print("Grandon(MainVC): username in profileDict is \(username)")
+                    if username == "" {
+                        self.createFBProfile(id: self.profileKey)
+                    }
                 }
             }
         })
@@ -80,43 +86,73 @@ class MainVC: UIViewController, UITableViewDataSource, UITableViewDelegate {
     }
 
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return posts.count
+        if inSearchMode {
+            return filterPosts.count
+        } else {
+            return posts.count
+        }
     }
     
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let post = posts[indexPath.row]
         if let cell = tableView.dequeueReusableCell(withIdentifier: "PostCell") as? PostCell {
-            cell.configureCell(post: post)
+            let post: Post!
+            if inSearchMode {
+                post = filterPosts[indexPath.row]
+                cell.configureCell(post: post)
+            } else {
+                post = posts[indexPath.row]
+                cell.configureCell(post: post)
+            }
+
             return cell
         }
         return PostCell()
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        let post = posts[indexPath.row]
+        var post: Post!
+        if inSearchMode {
+            post = filterPosts[indexPath.row]
+        } else {
+            post = posts[indexPath.row]
+        }
+        
         postKey = post.key
         print("Grandon(MainVC): post key is \(postKey)")
         postTitle = post.title
         performSegue(withIdentifier: "PostVC", sender: post)
     }
     
+    func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
+        view.endEditing(true)
+    }
+    
+    func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
+        if searchBar.text == nil || searchBar.text == "" {
+            inSearchMode = false
+            tableView.reloadData()
+            view.endEditing(true)
+        } else {
+            inSearchMode = true
+            let lower = searchBar.text!.lowercased()
+            filterPosts = posts.filter({$0.title.range(of: lower) != nil })
+            tableView.reloadData()
+        }
+    }
+
 
     @IBAction func listChange(_ sender: Any) {
         fetchData()
     }
     
     func fetchData() {
-        
         if segment.selectedSegmentIndex == 0 {
             self.posts.removeAll()
             postRef.queryOrdered(byChild: "created").observe(.value, with: { (snapshot) in
-                if let snapshot = snapshot.children.allObjects as? [FIRDataSnapshot] {
+                if let snapshot = snapshot.children.allObjects as? [DataSnapshot] {
                     for snap in snapshot {
                         if let postDict = snap.value as? Dictionary<String, Any> {
-                            if let likesCount = postDict["likes"] as? Int {
-                                print("Grandon(MainVC): current like count is \(likesCount)")
-                            }
                             let key = snap.key
                             let post = Post(key: key, postDict: postDict)
                             
@@ -130,12 +166,9 @@ class MainVC: UIViewController, UITableViewDataSource, UITableViewDelegate {
         } else if segment.selectedSegmentIndex == 1 {
             self.posts.removeAll()
             postRef.queryOrdered(byChild: "likes").observe(.value, with: { (snapshot) in
-                if let snapshot = snapshot.children.allObjects as? [FIRDataSnapshot] {
+                if let snapshot = snapshot.children.allObjects as? [DataSnapshot] {
                     for snap in snapshot {
                         if let postDict = snap.value as? Dictionary<String, Any> {
-                            if let likesCount = postDict["likes"] as? Int {
-                                print("Grandon(MainVC): current like count is \(likesCount)")
-                            }
                             let key = snap.key
                             let post = Post(key: key, postDict: postDict)
                             self.posts.insert(post, at: 0)
@@ -164,14 +197,21 @@ class MainVC: UIViewController, UITableViewDataSource, UITableViewDelegate {
             if error != nil {
                 print("Grandon(MainVC): error is \(error)")
             } else {
+                print("Grandon(MainVC): The result is \(result)")
                 if let resultDict = result as? Dictionary<String, Any> {
-                    self.username = resultDict["name"] as! String
-                    self.gender = resultDict["gender"] as! String
-                    self.gender = self.gender.capitalized
+                    if let name = resultDict["name"] as? String {
+                        self.username = name
+                    }
+                    if let gender = resultDict["gender"] as? String {
+                        self.gender = gender.capitalized
+                    }
+//                    self.username = resultDict["name"] as! String
+//                    self.gender = resultDict["gender"] as! String
+//                    self.gender = self.gender.capitalized
                     if let pictureDict = resultDict["picture"] as? Dictionary<String, Any> {
-                        print("Grandon(MainVC): pictureDict is \(pictureDict)")
+//                        print("Grandon(MainVC): pictureDict is \(pictureDict)")
                         if let data = pictureDict["data"] as? Dictionary<String, Any> {
-                            print("Grandon(MainVC): data is \(data)")
+//                            print("Grandon(MainVC): data is \(data)")
                             if let url = data["url"] as? String {
                                 print("Grandon(MainVC): url is \(url)")
                                 let imageUrl = URL(string: url)!
@@ -179,16 +219,11 @@ class MainVC: UIViewController, UITableViewDataSource, UITableViewDelegate {
                                     let imageData = NSData(contentsOf: imageUrl)
                                     DispatchQueue.main.sync {
                                         let img = UIImage(data: imageData as! Data)
-//                                        self.testImageView.image = img
-//                                        let profileImage = self.testImageView.image
                                         if let profileImageData = UIImageJPEGRepresentation(img!, 1.0) {
-//                                            print("Grandon: This is true")
                                             let imgUid = NSUUID().uuidString
-//                                            print("Grandon: imgUid is \(imgUid)")
-                                            let metadata = FIRStorageMetadata()
+                                            let metadata = StorageMetadata()
                                             metadata.contentType = "image/jpeg"
-//                                            print("Grandon: the metadata content type is \(metadata.contentType) ")
-                                            DataService.ds.STORAGE_PROFILE_IMAGE.child(imgUid).put(profileImageData, metadata: metadata) { (metadata, error) in
+                                            DataService.ds.STORAGE_PROFILE_IMAGE.child(imgUid).putData(profileImageData, metadata: metadata) { (metadata, error) in
                                                 if error != nil {
                                                     print("Grandon(MainVC): unable to upload image \(error)")
                                                 } else {
@@ -215,7 +250,7 @@ class MainVC: UIViewController, UITableViewDataSource, UITableViewDelegate {
     }
     
     @IBAction func addBtnPressed(_ sender: Any) {
-        performSegue(withIdentifier: "PostCreateVC", sender: sender)
+        performSegue(withIdentifier: "PostCreateVC", sender: nil)
     }
     
     

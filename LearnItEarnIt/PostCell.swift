@@ -21,8 +21,8 @@ class PostCell: UITableViewCell {
         likeNumLbl.text = "\(post.likes)"
         
         let imageUrl = post.postImgUrl
-        let cellImgRef = FIRStorage.storage().reference(forURL: imageUrl)
-        cellImgRef.data(withMaxSize: 2 * 1024 * 1024) { (data, error) in
+        let cellImgRef = Storage.storage().reference(forURL: imageUrl)
+        cellImgRef.getData(maxSize: 2 * 1024 * 1024) { (data, error) in
             if error != nil {
                 print("Grandon: not able to create image")
             } else {

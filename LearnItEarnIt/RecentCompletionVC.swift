@@ -48,23 +48,26 @@ class RecentCompletionVC: UIViewController, UIImagePickerControllerDelegate, UIN
             , completion: nil)
     }
     
-    @IBAction func saveBtnPressed(_ sender: Any) {
+    @IBAction func saveBtnPressed(_ sender: UIButton) {
         indicator.startAnimating()
-        let imageData = UIImageJPEGRepresentation(completionImageView.image!, 0.5)
-        let imageUid = NSUUID().uuidString
-        let metadata = FIRStorageMetadata()
-        metadata.contentType = "image/jpeg"
-        DataService.ds.STORAGE_PROFILE_IMAGE.child(imageUid).put(imageData!, metadata: metadata) { (data, error) in
-            if error != nil {
-                print("Grandon(Recent): unable to upload picture.")
-            } else {
-                let imageUrl = data?.downloadURL()?.absoluteString
-                let completionImgDic = ["recentCompletionImgUrl": imageUrl]
-            DataService.ds.REF_USERS.child(self.profileKey).child("profile").updateChildValues(completionImgDic)
-                self.indicator.stopAnimating()
+        
+        if let imageData = UIImageJPEGRepresentation(completionImageView.image!, 0.5) {
+            let imageUid = NSUUID().uuidString
+            let metadata = StorageMetadata()
+            metadata.contentType = "image/jpeg"
+            DataService.ds.STORAGE_PROFILE_IMAGE.child(imageUid).putData(imageData, metadata: metadata) { (metadata, error) in
+                if error != nil {
+                    print("Grandon(RecentVC): unable to upload picture.")
+                } else {
+                    let imageUrl = metadata?.downloadURL()?.absoluteString
+                    let completionImgDic = ["recentCompletionImgUrl": imageUrl!]
+                    DataService.ds.REF_USERS.child(self.profileKey).child("profile").updateChildValues(completionImgDic)
+                    self.indicator.stopAnimating()
+                }
             }
+            performSegue(withIdentifier: "ProfileVC", sender: AnyObject.self)
+
         }
-        performSegue(withIdentifier: "ProfileVC", sender: AnyObject.self)
     }
 
     @IBAction func backBtnPressed(_ sender: Any) {

@@ -20,8 +20,8 @@ class ProductCell: UITableViewCell {
         stepDescription.text = step.stepDescription
         
         let imageUrl = step.stepImgUrl
-        let imageRef = FIRStorage.storage().reference(forURL: imageUrl)
-        imageRef.data(withMaxSize: 2 * 1024 * 1024) { (data, error) in
+        let imageRef = Storage.storage().reference(forURL: imageUrl)
+        imageRef.getData(maxSize: 2 * 1024 * 1024) { (data, error) in
             if error != nil {
                 print("Grandon: the error is \(error)")
             } else {

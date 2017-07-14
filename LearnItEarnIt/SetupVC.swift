@@ -120,30 +120,29 @@ class SetupVC: UIViewController, UIImagePickerControllerDelegate, UINavigationCo
             if username != "" {
                 if self.newProfileImage == true {
                     indicator.startAnimating()
-                    if let imageData = UIImageJPEGRepresentation(profileImg, 0.5) {
+                    if let imageData = UIImageJPEGRepresentation(profileImg!, 0.5) {
                         let imgUid = NSUUID().uuidString
-                        let metadata = FIRStorageMetadata()
+                        let metadata = StorageMetadata()
                         metadata.contentType = "image/jpeg"
-                        DataService.ds.STORAGE_PROFILE_IMAGE.child(imgUid).put(imageData, metadata: metadata) {
+                        DataService.ds.STORAGE_PROFILE_IMAGE.child(imgUid).putData(imageData, metadata: metadata) {
                             (data, error) in
                             if error != nil {
                                 print("Grandon(SetupVC): unable to upload profile image.")
                             } else {
                                 print("Grandon(SetupVC): successfully upload profile image.")
                                 self.imageUrl = data?.downloadURL()?.absoluteString
-                                print("Grandon(SetupVC): the current gender selected is \(self.genderSelected)")
-                                let newProfileData = ["gender": self.genderSelected, "userName": self.userNameTextField.text, "profileImgUrl": self.imageUrl]
+                                let newProfileData = ["gender": self.genderSelected, "userName": username, "profileImgUrl": self.imageUrl!]
                                 DataService.ds.REF_USERS.child(self.profileKey).child("profile").updateChildValues(newProfileData)
                                 self.indicator.stopAnimating()
                             }
                         }
                     }
                 } else {
-                    let newProfileData = ["gender": self.genderSelected, "userName": userNameTextField.text!]
+                    let newProfileData = ["gender": self.genderSelected, "userName": username]
                     DataService.ds.REF_USERS.child(self.profileKey).child("profile").updateChildValues(newProfileData)
                     print("Grandon(SetupVC): profile image not changed.")
                 }
-                performSegue(withIdentifier: "MainVC", sender: genderSelected)
+                performSegue(withIdentifier: "MainVC", sender: AnyObject.self)
             } else {
                 print("Grandon: please enter your user name")
             }
@@ -157,7 +156,7 @@ class SetupVC: UIViewController, UIImagePickerControllerDelegate, UINavigationCo
 
     @IBAction func signOutBtnTapped(_ sender: Any) {
         do {
-            try FIRAuth.auth()?.signOut()
+            try Auth.auth().signOut()
             KeychainWrapper.standard.removeObject(forKey: KEY_UID)
             performSegue(withIdentifier: "LoginVC", sender: nil)
         } catch let err as NSError {

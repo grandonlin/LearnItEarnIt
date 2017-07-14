@@ -34,7 +34,17 @@
 			<key>isShown</key>
 			<false/>
 		</dict>
+		<key>SZTextView.xcscheme</key>
+		<dict>
+			<key>isShown</key>
+			<false/>
+		</dict>
 		<key>SwiftKeychainWrapper.xcscheme</key>
+		<dict>
+			<key>isShown</key>
+			<false/>
+		</dict>
+		<key>nanopb.xcscheme</key>
 		<dict>
 			<key>isShown</key>
 			<false/>
@@ -52,12 +62,12 @@
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>493D8EB4F9D70F780BF4E190B8CD093F</key>
+		<key>7C4B5AFE014FB74D654D0F5019EE4EFB</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>6C130A237B16E2E7DADC96455C1F64A9</key>
+		<key>B69E70807B35A5EFCB0CA5537F74C39F</key>
 		<dict>
 			<key>primary</key>
 			<true/>
@@ -73,6 +83,16 @@
 			<true/>
 		</dict>
 		<key>C052BEBFBD0AB5218CC64BA3450F6547</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>E4DD95323C54A78F879DAB0F1508B8E7</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>F194AD9E5505B8389AFF287C5CD1E115</key>
 		<dict>
 			<key>primary</key>
 			<true/>

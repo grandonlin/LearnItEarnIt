@@ -12,5 +12,6 @@ target 'LearnItEarnIt' do
   pod 'Firebase/Auth'
   pod 'FBSDKLoginKit'
   pod 'SwiftKeychainWrapper', :git => 'https://github.com/jrendel/SwiftKeychainWrapper.git', :branch => 'master'
+  pod 'SZTextView'
   
 end
