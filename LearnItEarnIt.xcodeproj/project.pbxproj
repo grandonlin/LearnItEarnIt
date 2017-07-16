@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		A70FCC0E2B11EB04A560239E /* Pods_LearnItEarnIt.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 76088AC4C7211978A73A6E0E /* Pods_LearnItEarnIt.framework */; };
+		C11AD9161F1A913600CC8D73 /* StepCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C11AD9151F1A913600CC8D73 /* StepCell.swift */; };
 		C15BF5E51EAAF6F60057310D /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = C15BF5E41EAAF6F60057310D /* AppDelegate.swift */; };
 		C15BF5E71EAAF6F60057310D /* MainVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = C15BF5E61EAAF6F60057310D /* MainVC.swift */; };
 		C15BF5EA1EAAF6F60057310D /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = C15BF5E81EAAF6F60057310D /* Main.storyboard */; };
@@ -38,6 +39,7 @@
 /* Begin PBXFileReference section */
 		76088AC4C7211978A73A6E0E /* Pods_LearnItEarnIt.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_LearnItEarnIt.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		85451FB6E8DEFB98F6CF38D4 /* Pods-LearnItEarnIt.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-LearnItEarnIt.release.xcconfig"; path = "Pods/Target Support Files/Pods-LearnItEarnIt/Pods-LearnItEarnIt.release.xcconfig"; sourceTree = "<group>"; };
+		C11AD9151F1A913600CC8D73 /* StepCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StepCell.swift; sourceTree = "<group>"; };
 		C15BF5E11EAAF6F60057310D /* LearnItEarnIt.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = LearnItEarnIt.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		C15BF5E41EAAF6F60057310D /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		C15BF5E61EAAF6F60057310D /* MainVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainVC.swift; sourceTree = "<group>"; };
@@ -150,6 +152,7 @@
 				C15BF6031EAB701B0057310D /* FancyBtn.swift */,
 				C15BF6091EAC3DD50057310D /* ProductCell.swift */,
 				C15BF60F1EAE174B0057310D /* CircleView.swift */,
+				C11AD9151F1A913600CC8D73 /* StepCell.swift */,
 			);
 			name = View;
 			sourceTree = "<group>";
@@ -329,6 +332,7 @@
 				C15BF6041EAB701B0057310D /* FancyBtn.swift in Sources */,
 				C15BF6121EAEFBCD0057310D /* LoginVC.swift in Sources */,
 				C15BF5FE1EAB04E10057310D /* CircleButton.swift in Sources */,
+				C11AD9161F1A913600CC8D73 /* StepCell.swift in Sources */,
 				C15BF60C1EAC3F3F0057310D /* Step.swift in Sources */,
 				C15BF5E71EAAF6F60057310D /* MainVC.swift in Sources */,
 				C15BF5E51EAAF6F60057310D /* AppDelegate.swift in Sources */,

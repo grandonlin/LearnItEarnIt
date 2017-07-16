@@ -116,6 +116,7 @@ class SetupVC: UIViewController, UIImagePickerControllerDelegate, UINavigationCo
     }
         
     @IBAction func saveBtnTapped(_ sender: Any) {
+        
         if let username = userNameTextField.text {
             if username != "" {
                 if self.newProfileImage == true {
@@ -124,30 +125,31 @@ class SetupVC: UIViewController, UIImagePickerControllerDelegate, UINavigationCo
                         let imgUid = NSUUID().uuidString
                         let metadata = StorageMetadata()
                         metadata.contentType = "image/jpeg"
-                        DataService.ds.STORAGE_PROFILE_IMAGE.child(imgUid).putData(imageData, metadata: metadata) {
+                        DataService.ds.STORAGE_PROFILE_IMAGE.child(profileKey).child(imgUid).putData(imageData, metadata: metadata) {
                             (data, error) in
                             if error != nil {
                                 print("Grandon(SetupVC): unable to upload profile image.")
                             } else {
                                 print("Grandon(SetupVC): successfully upload profile image.")
                                 self.imageUrl = data?.downloadURL()?.absoluteString
-                                let newProfileData = ["gender": self.genderSelected, "userName": username, "profileImgUrl": self.imageUrl!]
+                                let newProfileData = ["gender": self.genderSelected!, "userName": username, "profileImgUrl": self.imageUrl!]
                                 DataService.ds.REF_USERS.child(self.profileKey).child("profile").updateChildValues(newProfileData)
                                 self.indicator.stopAnimating()
                             }
                         }
                     }
                 } else {
-                    let newProfileData = ["gender": self.genderSelected, "userName": username]
+                    let newProfileData = ["gender": self.genderSelected!, "userName": username]
                     DataService.ds.REF_USERS.child(self.profileKey).child("profile").updateChildValues(newProfileData)
                     print("Grandon(SetupVC): profile image not changed.")
                 }
-                performSegue(withIdentifier: "MainVC", sender: AnyObject.self)
+                performSegue(withIdentifier: "ProfileVC", sender: AnyObject.self)
             } else {
                 print("Grandon: please enter your user name")
             }
 
         }
+        
     }
     
     @IBAction func backBtnTapped(_ sender: Any) {

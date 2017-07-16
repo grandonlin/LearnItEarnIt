@@ -14,6 +14,7 @@ class Post {
     private var _postImgUrl: String!
     private var _created: String!
     private var _key: String!
+    private var _postDescription: String!
     
     var title: String {
         return _title
@@ -35,23 +36,29 @@ class Post {
         return _created
     }
     
-    init() {
-//        self._title = title
-//        self._postImgUrl = postImgUrl
-//        self._likes = likes
-//        let dateFormatter = DateFormatter()
-//        dateFormatter.dateStyle = .medium
-//        dateFormatter.timeStyle = .medium
-//        self._created = NSDate()
-//        dateFormatter.string(from: self._created as Date)
-        
+    var postDescription: String {
+        return _postDescription
     }
     
+    init(key: String) {
+        self._key = key
+        self._created = "\(NSDate())"
+    }
+    
+//    init(key: String, postTitle: String, postImgUrl: String, postDesc: String) {
+//        self._key = key
+//        self._created = "\(NSDate())"
+//        self._title = postTitle
+//        self._postImgUrl = postImgUrl
+//        self._likes = 0
+//    }
+    
+    //Initiating after downloading data from Firebase
     init(key: String, postDict: Dictionary<String, Any>) {
         self._key = key
         
-        if let postDescription = postDict["postDescription"] as? String {
-            self._title = postDescription
+        if let postTitle = postDict["postTitle"] as? String {
+            self._title = postTitle
         }
         
         if let likes = postDict["likes"] as? Int {

@@ -106,16 +106,16 @@ class PostVC: UIViewController, UITableViewDelegate, UITableViewDataSource {
                     let filledHeartImg = UIImage(named: "filled-heart")
                     self.likeBtnImg.setImage(filledHeartImg, for: .normal)
                     likes = likes + 1
-                    DataService.ds.REF_USERS_CURRENT_LIKE.child(self.postKey).setValue(true)
+                    DataService.ds.REF_USERS_CURRENT_LIKE.child(self.postKey!).setValue(true)
                     self.finalLike = true
                 } else {
                     let emptyHeartImg = UIImage(named: "empty-heart")
                     self.likeBtnImg.setImage(emptyHeartImg, for: .normal)
                     likes = likes - 1
-                    DataService.ds.REF_USERS_CURRENT_LIKE.child(self.postKey).removeValue()
+                    DataService.ds.REF_USERS_CURRENT_LIKE.child(self.postKey!).removeValue()
                     self.finalLike = false
                 }
-                let likeData = ["likes": likes]
+                let likeData = ["likes": likes!]
                 DataService.ds.REF_POSTS.child(self.postKey).updateChildValues(likeData)
             }
         })

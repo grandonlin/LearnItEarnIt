@@ -227,11 +227,9 @@ class MainVC: UIViewController, UITableViewDataSource, UITableViewDelegate, UISe
                                                 if error != nil {
                                                     print("Grandon(MainVC): unable to upload image \(error)")
                                                 } else {
-                                                    self.coverPhotoUrl = metadata?.downloadURL()!.absoluteString
+                                                    self.coverPhotoUrl = metadata?.downloadURL()?.absoluteString
                                                     self.defaultCompletionImgUrl = "https://firebasestorage.googleapis.com/v0/b/learnitearnit-2223f.appspot.com/o/profile_pic%2FdefaultCompletionImage.jpg?alt=media&token=90f151a9-65c9-4b1b-b706-eaae1f6170a1"
-                                                    print("Grandon(MainVC): coverPhotoUrl is \(self.coverPhotoUrl!)")
-                                                    let profileDict = ["userName": self.username!, "gender": self.gender!, "profileImgUrl": self.coverPhotoUrl!, "recentCompletionImgUrl": self.defaultCompletionImgUrl]
-                                                    print("Grandon(MainVC): username is \(self.username), gender is \(self.gender), profileImgUrl is \(self.coverPhotoUrl)")
+                                                    let profileDict = ["userName": self.username!, "gender": self.gender!, "profileImgUrl": self.coverPhotoUrl!, "recentCompletionImgUrl": self.defaultCompletionImgUrl!]
                                                     self.ref.updateChildValues(profileDict)
                                                     
                                                 }

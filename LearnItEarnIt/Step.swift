@@ -13,6 +13,8 @@ class Step {
     private var _detailDescription: String!
     private var _stepDescription: String!
     private var _stepImgUrl: String!
+    private var _stepImage: UIImage
+    private var _postId: String!
     
 //    var detailDescription: String {
 //        return _detailDescription
@@ -30,6 +32,24 @@ class Step {
         return _stepImgUrl
     }
     
+    var stepImage: UIImage {
+        return _stepImage
+    }
+    
+    var postId: String {
+        return _postId
+    }
+    
+    //Initiate when creating steps
+    init(postId: String, stepNum: Int, stepDesc: String, stepImg: UIImage) {
+        self._postId = postId
+        self._stepNum = stepNum
+        self._stepDescription = stepDesc
+        self._stepImage = stepImg
+    }
+    
+    
+    //Initiate after downloading from Firebase
     init(stepDetails: Dictionary<String, Any>) {
 //        self._detailDescription = detailDesc
         
@@ -45,4 +65,6 @@ class Step {
             self._stepImgUrl = stepImageUrl
         }
     }
+    
+    
 }

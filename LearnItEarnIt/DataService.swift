@@ -28,6 +28,8 @@ class DataService {
     
     //STORAGE references
     private var _STORAGE_PROFILE_IMAGE = STORAGE_BASE.child("profile_pic")
+    private var _POST_IMAGE = STORAGE_BASE.child("post_pic")
+    private var _STEP_IMAGE = STORAGE_BASE.child("step_pic")
     
     var REF_BASE: DatabaseReference {
         return _REF_BASE
@@ -56,6 +58,14 @@ class DataService {
     
     var STORAGE_PROFILE_IMAGE: StorageReference {
         return _STORAGE_PROFILE_IMAGE
+    }
+    
+    var POST_IMAGE: StorageReference {
+        return _POST_IMAGE
+    }
+    
+    var STEP_IMAGE: StorageReference {
+        return _STEP_IMAGE
     }
     
     func createFirebaseDBUser(uid: String, profileData: Dictionary<String, String>) {
