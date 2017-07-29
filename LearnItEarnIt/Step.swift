@@ -10,7 +10,7 @@ import UIKit
 
 class Step {
     private var _stepNum: Int!
-    private var _detailDescription: String!
+//    private var _detailDescription: String!
     private var _stepDescription: String!
     private var _stepImgUrl: String!
     private var _stepImage: UIImage
@@ -52,6 +52,7 @@ class Step {
     //Initiate after downloading from Firebase
     init(stepDetails: Dictionary<String, Any>) {
 //        self._detailDescription = detailDesc
+        self._postId = nil
         
         if let stepDesc = stepDetails["stepDescription"] as? String {
             self._stepDescription = stepDesc
@@ -64,6 +65,8 @@ class Step {
         if let stepImageUrl = stepDetails["stepImgUrl"] as? String {
             self._stepImgUrl = stepImageUrl
         }
+        
+        self._stepImage = UIImage()
     }
     
     
