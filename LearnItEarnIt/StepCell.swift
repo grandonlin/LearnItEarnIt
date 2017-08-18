@@ -14,6 +14,8 @@ class StepCell: UITableViewCell, UITextViewDelegate {
     @IBOutlet weak var stepLbl: UILabel!
     @IBOutlet weak var stepImg: UIImageView!
     @IBOutlet weak var stepDescTextView: UITextView!
+    @IBOutlet weak var deleteImgBtn: UIButton!
+    
     
     var selectedIndex: Int!
     
@@ -25,8 +27,24 @@ class StepCell: UITableViewCell, UITextViewDelegate {
 //        stepImg.addGestureRecognizer(tapGesture)
 //        stepImg.isUserInteractionEnabled = true
         
+        let tapRecognizer = UITapGestureRecognizer(target: self, action: #selector(handleBackgroundTap))
+        tapRecognizer.cancelsTouchesInView = false
+        self.addGestureRecognizer(tapRecognizer)
+        
         stepDescTextView.delegate = self
         
+        let toolBar = UIToolbar()
+        toolBar.sizeToFit()
+        
+        let doneButton = UIBarButtonItem(barButtonSystemItem: .done, target: self, action: #selector(doneClicked))
+        
+        toolBar.setItems([doneButton], animated: false)
+        
+        self.stepDescTextView.inputAccessoryView = toolBar
+        
+        NotificationCenter.default.addObserver(self, selector: #selector(keyboardUP), name: NSNotification.Name.UIKeyboardWillShow, object: nil)
+        
+        NotificationCenter.default.addObserver(self, selector: #selector(keyboardDOWN), name: NSNotification.Name.UIKeyboardWillHide, object: nil)
     }
     
 //    func initCell(step: Step) {
@@ -35,37 +53,57 @@ class StepCell: UITableViewCell, UITextViewDelegate {
 //        stepDescTextView.text = ""
 //    }
     
+    func handleBackgroundTap(sender: UITapGestureRecognizer) {
+        self.stepDescTextView.resignFirstResponder()
+    }
+    
     func configureCell(step: Step) {
         stepLbl.text = "Step \(step.stepNum)"
         stepImg.image = step.stepImage
         stepDescTextView.text = step.stepDescription
     }
     
+    func loadCell(step: Step) {
+        stepLbl.text = "Step \(step.stepNum)"
+        stepDescTextView.text = step.stepDescription
+        let stepImgRef = Storage.storage().reference(forURL: step.stepImgUrl)
+        stepImgRef.getData(maxSize: 1024 * 1024, completion: { (data, error) in
+            if error != nil {
+                print("Grandon(StepCell): the error is \(error)")
+            } else {
+                if let img = UIImage(data: data!) {
+                    self.stepImg.image = img
+                }
+            }
+        })
+    }
+    
     func textViewShouldBeginEditing(_ textView: UITextView) -> Bool {
+        
+        stepDescTextView.becomeFirstResponder()
         return true
     }
     
-    func textViewDidEndEditing(_ textView: UITextView) {
-        stepDescTextView.resignFirstResponder()
+    func keyboardUP(notification: Notification) {
+        if let keyboardSize = (notification.userInfo?[UIKeyboardFrameBeginUserInfoKey] as? NSValue)?.cgRectValue {
+            //                self.stackView.frame.origin.y = 0
+            self.frame.origin.y -= keyboardSize.height - 50
+        }
     }
     
+    func keyboardDOWN(notification: Notification) {
+        if let keyboardSize = (notification.userInfo?[UIKeyboardFrameBeginUserInfoKey] as? NSValue)?.cgRectValue {
+            self.frame.origin.y += keyboardSize.height - 50
+        }
+    }
     
-//    func imageTapped(sender: UITapGestureRecognizer) {
-//        selectedIndex = self.stepImg.tag
-//        
-//    }
-//    
-//    func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [String : Any]) {
-//        if let selectedImage: UIImage = info[UIImagePickerControllerOriginalImage] as? UIImage {
-//            self.stepImg.image = selectedImage
-//            
-//        }
-//        imagePicker.dismiss(animated: true, completion: nil)
-//    }
+    func doneClicked() {
+        stepDescTextView.endEditing(true)
+    }
     
-    
-    
-    
-    
+    @IBAction func deleteBtnTapped(_ sender: Any) {
+    }
+
+
 
 }

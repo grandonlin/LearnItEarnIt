@@ -15,6 +15,7 @@ class Step {
     private var _stepImgUrl: String!
     private var _stepImage: UIImage
     private var _postId: String!
+    private var _hasImg: Bool!
     
 //    var detailDescription: String {
 //        return _detailDescription
@@ -25,7 +26,12 @@ class Step {
     }
     
     var stepDescription: String {
-        return _stepDescription
+        get {
+            return _stepDescription
+        }
+        set {
+            return _stepDescription = newValue
+        }
     }
     
     var stepImgUrl: String {
@@ -33,11 +39,25 @@ class Step {
     }
     
     var stepImage: UIImage {
-        return _stepImage
+        get {
+            return _stepImage
+        }
+        set {
+            return _stepImage = newValue
+        }
     }
     
     var postId: String {
         return _postId
+    }
+    
+    var hasImg: Bool {
+        get {
+            return _hasImg
+        }
+        set {
+            return _hasImg = newValue
+        }
     }
     
     //Initiate when creating steps
@@ -46,6 +66,7 @@ class Step {
         self._stepNum = stepNum
         self._stepDescription = stepDesc
         self._stepImage = stepImg
+        self._hasImg = false
     }
     
     
@@ -68,6 +89,7 @@ class Step {
         
         self._stepImage = UIImage()
     }
+    
     
     
 }

@@ -15,6 +15,7 @@ class Post {
     private var _created: String!
     private var _key: String!
     private var _postDescription: String!
+    private var _isNew: Bool!
     
     var title: String {
         return _title
@@ -40,9 +41,19 @@ class Post {
         return _postDescription
     }
     
+    var isNew: Bool {
+        get {
+            return _isNew
+        }
+        set {
+            return _isNew = newValue
+        }
+    }
+    
     init(key: String) {
         self._key = key
         self._created = "\(NSDate())"
+        self._isNew = true
     }
     
 //    init(key: String, postTitle: String, postImgUrl: String, postDesc: String) {
@@ -74,6 +85,5 @@ class Post {
         }
         
     }
-    
     
 }

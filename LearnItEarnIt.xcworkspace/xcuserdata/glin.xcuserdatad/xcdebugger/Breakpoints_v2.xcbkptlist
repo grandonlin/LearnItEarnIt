@@ -10,11 +10,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "LearnItEarnIt/MainVC.swift"
-            timestampString = "521829230.760562"
+            timestampString = "524029260.279433"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "242"
-            endingLineNumber = "242"
+            startingLineNumber = "241"
+            endingLineNumber = "241"
             landmarkName = "createFBProfile(id:)"
             landmarkType = "7">
          </BreakpointContent>

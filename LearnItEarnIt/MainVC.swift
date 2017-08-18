@@ -155,7 +155,6 @@ class MainVC: UIViewController, UITableViewDataSource, UITableViewDelegate, UISe
                         if let postDict = snap.value as? Dictionary<String, Any> {
                             let key = snap.key
                             let post = Post(key: key, postDict: postDict)
-                            
                             self.posts.insert(post, at: 0)
                         }
                     }
