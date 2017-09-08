@@ -14,11 +14,12 @@ class DetailStepVC: UIViewController, UITableViewDelegate, UITableViewDataSource
     @IBOutlet weak var postTitleLbl: UILabel!
     @IBOutlet weak var tableView: UITableView!
     @IBOutlet weak var cancelBtn: UIButton!
+    @IBOutlet weak var adjustBtn: UIButton!
+    
     
     var postTitle: String!
     var postId: String!
     var completionImgName: String!
-//    var steps = [Step]()
     var imagePicker: UIImagePickerController!
     var selectedIndex: Int!
     var stepCell: StepCell!
@@ -37,20 +38,14 @@ class DetailStepVC: UIViewController, UITableViewDelegate, UITableViewDataSource
         
         tableView.delegate = self
         tableView.dataSource = self
-        postTitleLbl.text = postTitle
         
-
-//        if steps.count == 0 {
-//            let step = Step(postId: postId, stepNum: 1, stepDesc: "", stepImg: UIImage(named: "emptyImage")!)
-//            steps.append(step)
-//        }
+        postTitleLbl.text = postTitle
 
         print("Grandon(DetailStepVC): The steps array is: \(steps[0].stepNum), \(steps[0].stepImage), \(steps[0].stepDescription)")
+        
+        
 
     }
-    
-
-    
     
     func numberOfSections(in tableView: UITableView) -> Int {
         return 1
@@ -67,26 +62,69 @@ class DetailStepVC: UIViewController, UITableViewDelegate, UITableViewDataSource
             tapGesture.numberOfTapsRequired = 1
             cell.stepImg.addGestureRecognizer(tapGesture)
             cell.stepImg.isUserInteractionEnabled = true
-            
             let step = steps[indexPath.row]
-            cell.stepLbl.text = "Step \(step.stepNum)"
             cell.stepDescTextView.delegate = self
 //            cell.selectedIndex = selectedIndex
             cell.configureCell(step: step)
             
-//            if step.hasImg {
-//                cell.stepImg.removeGestureRecognizer(tapGesture)
-//                cell.stepImg.isUserInteractionEnabled = false
-//                cell.deleteImgBtn.isHidden = false
-//            } else {
-//                cell.stepImg.addGestureRecognizer(tapGesture)
-//                cell.stepImg.isUserInteractionEnabled = true
-//                cell.deleteImgBtn.isHidden = true
-//            }
-//            cell.stepLbl.text = "Step \(indexPath.row + 1)"
+
             return cell
         }
         return StepCell()
+    }
+    
+    func tableView(_ tableView: UITableView, canMoveRowAt indexPath: IndexPath) -> Bool {
+        return true
+    }
+    
+    func tableView(_ tableView: UITableView, moveRowAt sourceIndexPath: IndexPath, to destinationIndexPath: IndexPath) {
+        let sourceStep = steps[sourceIndexPath.row]
+        print("Grandon(DetailStepVC): the sourceIndexPath is \(sourceIndexPath.row)")
+        print("Grandon(DetailStepVC): the destinationIndexPath is \(destinationIndexPath.row)")
+//        let destinationStep = steps[destinationIndexPath.row]
+//            0     1      2      3      4      5
+//        [Step1, Step2, Step3, Step4, Step5, Step6]
+//        [Step1, Step4, Step3, Step4, Step5, Step6]
+
+        if sourceIndexPath.row > destinationIndexPath.row {
+            steps.insert(sourceStep, at: destinationIndexPath.row)
+            steps.remove(at: sourceIndexPath.row + 1)
+            
+//            destinationStep.stepNum = destinationIndexPath.row + 1
+            for step in steps {
+                
+                if step.stepNum > destinationIndexPath.row && step.stepNum <= sourceIndexPath.row {
+                    print("Grandon(DetailStepVC): step \(step.stepNum) is going to be changed")
+                    step.stepNum += 1
+                    updateStepDetail(step: step)
+                }
+            }
+            print("Grandon(DetailStepVC): the destination index path is now \(destinationIndexPath.row)")
+            let destStep = steps[destinationIndexPath.row]
+            destStep.stepNum = destinationIndexPath.row + 1
+            updateStepDetail(step: destStep)
+            print("Grandon(DetailStepVC): this is step number \(destStep.stepNum), step description is \(destStep.stepDescription)")
+            
+        } else {
+            steps.insert(sourceStep, at: destinationIndexPath.row + 1)
+            steps.remove(at: sourceIndexPath.row)
+//                0       1      2      3      4      5
+//            [Step1, Step2, Step3, Step4, Step5, Step6]
+//            [Step1, Step3, Step4, Step2, Step5, Step6]
+            for step in steps {
+                if step.stepNum > sourceIndexPath.row + 1 && step.stepNum <= destinationIndexPath.row + 1 {
+                    print("Grandon(DetailStepVC): step \(step.stepNum) is going to be changed")
+                    step.stepNum -= 1
+                    updateStepDetail(step: step)
+                }
+                print("Grandon(DetailStepVC): this is step number \(step.stepNum), step description is \(step.stepDescription)")
+            }
+        }
+        print("Grandon(DetailStepVC): the destination index path is now \(destinationIndexPath.row)")
+        let destStep = steps[destinationIndexPath.row]
+        destStep.stepNum = destinationIndexPath.row + 1
+        updateStepDetail(step: destStep)
+        print("Grandon(DetailStepVC): this is step number \(destStep.stepNum), step description is \(destStep.stepDescription)")
     }
     
     func textViewDidEndEditing(_ textView: UITextView) {
@@ -99,11 +137,10 @@ class DetailStepVC: UIViewController, UITableViewDelegate, UITableViewDataSource
             step.stepDescription = stepCell.stepDescTextView.text
             steps[ip.row] = step
             print("Grandon(DetailStepVC): the step information is \(step.stepNum), \(step.stepDescription)")
-            DataService.ds.REF_POSTS.child(self.postId).child("steps").child("stepDetails").child("step\(selectedIndex+1)").child("stepDescription").setValue(step.stepDescription)
+            DataService.ds.REF_POSTS.child(self.postId).child("steps").child("stepDetails").child("step\(step.stepNum)").child("stepDescription").setValue(step.stepDescription)
             textView.resignFirstResponder()
         }
     }
- 
     
     @IBAction func addStepBtnPressed(_ sender: Any) {
         let newStep = Step(postId: postId, stepNum: steps.count + 1, stepDesc: "", stepImg: UIImage(named: "emptyImage")!)
@@ -120,15 +157,87 @@ class DetailStepVC: UIViewController, UITableViewDelegate, UITableViewDataSource
         DataService.ds.REF_POSTS.child(self.postId).child("steps").child("stepDetails").child("step\(steps.count)").updateChildValues(step)
     }
     
+    func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCellEditingStyle, forRowAt indexPath: IndexPath) {
+        tableView.beginUpdates()
+        tableView.deleteRows(at: [indexPath], with: .fade)
+        
+        for step in steps {
+            if !(step.stepNum <= indexPath.row) {
+                step.stepNum = step.stepNum - 1
+            }
+        }
+        steps.remove(at: indexPath.row)
+        tableView.reloadData()
+        tableView.endUpdates()
+        
+    }
+    
     @IBAction func adjustStepBtnPressed(_ sender: Any) {
+        if tableView.isEditing {
+            adjustBtn.setTitle("Adjust Steps", for: .normal)
+            tableView.setEditing(false, animated: true)
+            tableView.reloadData()
+            
+        } else {
+            tableView.setEditing(true, animated: true)
+            adjustBtn.setTitle("Complete Editing", for: .normal)
+        }
     }
     
     @IBAction func postBtnPressed(_ sender: Any) {
+        var missingImgCount = 0
+        var missingDescCount = 0
+        let imgAlert = UIAlertController(title: "Missing Image", message: "One of yous steps do not have an image, are you sure?", preferredStyle: .alert)
+        let descAlert = UIAlertController(title: "Missing Description", message: "One of your steps do not have a description, are you sure?", preferredStyle: .alert)
+        
+        let descConfirmHandler = { (action: UIAlertAction) -> Void in
+            self.performSegue(withIdentifier: "PostVC", sender: nil)
+        }
+        
+        let imageConfirmHandler = { (action: UIAlertAction) -> Void in
+            self.performSegue(withIdentifier: "PostVC", sender: nil)
+        }
+        
+        let descAndImgHandler = { (action: UIAlertAction) -> Void in
+            imgAlert.addAction(UIAlertAction(title: "Yes", style: .default, handler: imageConfirmHandler))
+            imgAlert.addAction(UIAlertAction(title: "Cancel", style: .default, handler: nil))
+            self.present(imgAlert, animated: true, completion: nil)
+        }
+        
         for step in steps {
+            let stepImg = step.stepImage
             let stepDesc = step.stepDescription
-            if stepDesc == "" {
-                print("Grandon(DetailStepVC): Step \(step.stepNum) does not have a description, are you sure")
+            if stepImg == UIImage(named: "emptyImage") {
+                missingImgCount += 1
             }
+            
+            if stepDesc == "" {
+                missingDescCount += 1
+            }
+        }
+        print("Grandon(DetailStepVC): missing image count is \(missingImgCount), missing description count is \(missingDescCount)")
+        
+        if missingImgCount == 0 && missingDescCount == 0 {
+            performSegue(withIdentifier: "PostVC", sender: nil)
+        } else if missingDescCount != 0 && missingImgCount == 0 {
+            descAlert.addAction(UIAlertAction(title: "Yes", style: .default, handler: descConfirmHandler))
+            descAlert.addAction(UIAlertAction(title: "Cancel", style: .default, handler: nil))
+            self.present(descAlert, animated: true, completion: nil)
+        } else if missingImgCount != 0 && missingDescCount == 0 {
+            imgAlert.addAction(UIAlertAction(title: "Yes", style: .default, handler: imageConfirmHandler))
+            imgAlert.addAction(UIAlertAction(title: "Cancel", style: .default, handler: nil))
+            self.present(imgAlert, animated: true, completion: nil)
+        } else if missingDescCount != 0 && missingImgCount != 0 {
+            descAlert.addAction(UIAlertAction(title: "Yes", style: .default, handler: descAndImgHandler))
+            descAlert.addAction(UIAlertAction(title: "Cancel", style: .default, handler: nil))
+            self.present(descAlert, animated: true, completion: nil)
+        }
+    }
+    
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        if let destination = segue.destination as? PostVC {
+            destination.postKey = postId
+            destination.isNewPost = true
         }
     }
     
@@ -151,7 +260,7 @@ class DetailStepVC: UIViewController, UITableViewDelegate, UITableViewDataSource
                 print("Grandon(DetailStepVC): not able to delete \(error)")
             }
         }
-        DataService.ds.STEP_IMAGE.child(postId).parent()?.delete { (error) in
+        DataService.ds.STEP_IMAGE.child(postId).delete { (error) in
             if error != nil {
                 print("Grandon(DetailStepVC): unable to delete \(error)")
             }
@@ -210,6 +319,27 @@ class DetailStepVC: UIViewController, UITableViewDelegate, UITableViewDataSource
             
         }
         dismiss(animated: true, completion: nil)
+    }
+    
+    func updateStepDetail(step: Step) {
+        if let imageData = UIImageJPEGRepresentation(step.stepImage, 0.5) {
+            let stepNumber = "Step \(step.stepNum)"
+            print("Grandon(DetailStepVC): now step number is \(stepNumber)")
+            let metadata = StorageMetadata()
+            metadata.contentType = "image/jpeg"
+            DataService.ds.STEP_IMAGE.child(postId).child(stepNumber).putData(imageData, metadata: metadata) {
+                (data, error) in
+                if error != nil {
+                    print("Grandon(DetailStepVC): unable to upload profile image.")
+                } else {
+                    print("Grandon(DetailStepVC): successfully upload profile image.")
+                    let imageUrl = data?.downloadURL()?.absoluteString
+                    print("Grandon(DetailStepVC): the image url is \(imageUrl!)")
+                    let updatedStep = ["stepDescription": step.stepDescription, "stepImgUrl": imageUrl!, "stepNum" : step.stepNum] as [String : Any]
+                    DataService.ds.REF_POSTS.child(self.postId).child("steps").child("stepDetails").child("step\(step.stepNum)").updateChildValues(updatedStep)
+                }
+            }
+        }
     }
 }
 

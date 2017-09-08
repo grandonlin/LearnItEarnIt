@@ -22,7 +22,12 @@ class Step {
 //    }
     
     var stepNum: Int {
-        return _stepNum
+        get {
+            return _stepNum
+        }
+        set {
+            return _stepNum = newValue
+        }
     }
     
     var stepDescription: String {

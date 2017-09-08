@@ -479,7 +479,7 @@
 				CODE_SIGN_ENTITLEMENTS = LearnItEarnIt/LearnItEarnIt.entitlements;
 				DEVELOPMENT_TEAM = UM5SX26C6N;
 				INFOPLIST_FILE = LearnItEarnIt/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.2;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.grandonlin.LearnItEarnIt;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -495,7 +495,7 @@
 				CODE_SIGN_ENTITLEMENTS = LearnItEarnIt/LearnItEarnIt.entitlements;
 				DEVELOPMENT_TEAM = UM5SX26C6N;
 				INFOPLIST_FILE = LearnItEarnIt/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.2;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.grandonlin.LearnItEarnIt;
 				PRODUCT_NAME = "$(TARGET_NAME)";

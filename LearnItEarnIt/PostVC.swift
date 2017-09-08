@@ -25,6 +25,7 @@ class PostVC: UIViewController, UITableViewDelegate, UITableViewDataSource {
     var initialLike: Bool!
     var finalLike: Bool!
     var likeChange: Bool!
+    var isNewPost: Bool = false
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -47,6 +48,14 @@ class PostVC: UIViewController, UITableViewDelegate, UITableViewDataSource {
                 self.finalLike = true
             }
         })
+        
+        let postTitleRef = DataService.ds.REF_POSTS.child(postKey).child("postTitle")
+        postTitleRef.observeSingleEvent(of: .value, with: { (snapshot) in
+            if let postTitle = snapshot.value as? String {
+                self.postTitleLbl.text = postTitle
+            }
+        })
+        
         
         let detailDescRef = DataService.ds.REF_POSTS.child(postKey).child("steps")
         detailDescRef.observeSingleEvent(of: .value, with: { (snapshot) in
@@ -124,11 +133,16 @@ class PostVC: UIViewController, UITableViewDelegate, UITableViewDataSource {
     }
     
     @IBAction func backBtnPressed(_ sender: Any) {
-        if initialLike != finalLike {
+        if isNewPost {
             performSegue(withIdentifier: "MainVC", sender: sender)
         } else {
-            dismiss(animated: true, completion: nil)
+            if initialLike != finalLike {
+                performSegue(withIdentifier: "MainVC", sender: sender)
+            } else {
+                dismiss(animated: true, completion: nil)
+            }
         }
+        
     }
     
 }

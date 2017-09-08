@@ -6,7 +6,7 @@
 //  Copyright © 2017 Grandon Lin. All rights reserved.
 //
 
-import Foundation
+import UIKit
 
 let KEY_UID = "uid"
 let HANDLE = UInt(0)

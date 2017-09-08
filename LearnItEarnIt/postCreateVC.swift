@@ -48,6 +48,7 @@ class PostCreateVC: UIViewController, UITextViewDelegate, UIImagePickerControlle
         tapRecognizer.cancelsTouchesInView = false
         self.view.addGestureRecognizer(tapRecognizer)
         
+        //Uncover the content behind the keyboard
         NotificationCenter.default.addObserver(self, selector: #selector(keyboardUP), name: NSNotification.Name.UIKeyboardWillShow, object: nil)
         
         NotificationCenter.default.addObserver(self, selector: #selector(keyboardDOWN), name: NSNotification.Name.UIKeyboardWillHide, object: nil)
@@ -61,6 +62,10 @@ class PostCreateVC: UIViewController, UITextViewDelegate, UIImagePickerControlle
         
         textView.inputAccessoryView = toolBar
         postTitleTextField.inputAccessoryView = toolBar
+        
+        if steps.count == 0 {
+            post.isNew = true
+        }
         
     }
     

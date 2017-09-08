@@ -6,6 +6,7 @@
 //  Copyright © 2017 Grandon Lin. All rights reserved.
 //
 
-import Foundation
+import UIKit
 
 var steps = [Step]()
+

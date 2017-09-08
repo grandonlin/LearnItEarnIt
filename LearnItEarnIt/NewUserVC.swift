@@ -15,9 +15,7 @@ class NewUserVC: UIViewController, UITextFieldDelegate {
     @IBOutlet weak var usernameTextField: UITextField!
     @IBOutlet weak var passwordTextField: UITextField!
     @IBOutlet weak var emailTextField: UITextField!
-    @IBOutlet weak var errorView: UIView!
-    @IBOutlet weak var errorMsgStackView: UIStackView!
-    @IBOutlet weak var errMsgLbl: UILabel!
+    @IBOutlet weak var fullView: UIStackView!
     
     var userName: String!
     var password: String!
@@ -30,8 +28,28 @@ class NewUserVC: UIViewController, UITextFieldDelegate {
         passwordTextField.delegate = self
         emailTextField.delegate = self
 
+        NotificationCenter.default.addObserver(self, selector: #selector(keyboardUp), name: NSNotification.Name.UIKeyboardWillShow, object: nil)
+        
+        NotificationCenter.default.addObserver(self, selector: #selector(keyboardDown), name: NSNotification.Name.UIKeyboardWillHide, object: nil)
     }
 
+    func keyboardUp(notification: Notification) {
+        if passwordTextField.isEditing {
+            if let keyboardSize = (notification.userInfo?[UIKeyboardFrameBeginUserInfoKey] as? NSValue)?.cgRectValue {
+                self.fullView.frame.origin.y -= keyboardSize.height - 70
+            }
+        }
+    }
+    
+    func keyboardDown(notification: Notification) {
+        if !passwordTextField.isEditing {
+            if let keyboardSize = (notification.userInfo?[UIKeyboardFrameBeginUserInfoKey] as? NSValue)?.cgRectValue {
+                self.fullView.frame.origin.y += keyboardSize.height - 70
+            }
+        }
+        
+    }
+    
     @IBAction func createUserBtnTapped(_ sender: Any) {
         userName = usernameTextField.text
         password = passwordTextField.text
@@ -40,9 +58,7 @@ class NewUserVC: UIViewController, UITextFieldDelegate {
          if userName != "" && password != "" && email != "" {
             Auth.auth().createUser(withEmail: email, password: password, completion: { (user, error) in
                 if let error = error {
-                    print("Grandon: \(error)")
-                    self.showErrorView()
-                    self.errMsgLbl.text = error.localizedDescription
+                    self.sendAlertWithoutHandler(alertTitle: "Error", alertMessage: error.localizedDescription, actionTitle: ["OK"])
                 } else {
                     print("Grandon: successfully create a new user")
                     let defaultProfileImgUrl = "https://firebasestorage.googleapis.com/v0/b/learnitearnit-2223f.appspot.com/o/profile_pic%2FnewProfileImage?alt=media&token=6fc887bc-9833-4d60-925f-16bc73a0bad0"
@@ -55,21 +71,18 @@ class NewUserVC: UIViewController, UITextFieldDelegate {
                             if error == nil {
                                 print("Grandon: sent email verification")
                             } else {
-                                print("Grandon: unable to send email verification - \(error)")
+                                self.sendAlertWithoutHandler(alertTitle: "Not able to send email verification", alertMessage: (error?.localizedDescription)!, actionTitle: ["OK"])
                             }
                         })
                     }
                 }
             })
          } else if userName == nil || userName == "" {
-            self.showErrorView()
-            errMsgLbl.text = "Please enter Username"
+            self.sendAlertWithoutHandler(alertTitle: "Missing Username", alertMessage: "Please enter Username", actionTitle: ["OK"])
          } else if email == nil || email == "" {
-            self.showErrorView()
-            errMsgLbl.text = "Please enter Email Address"
+            self.sendAlertWithoutHandler(alertTitle: "Missing Email Address", alertMessage: "Please enter email address", actionTitle: ["OK"])
          } else if password == nil || password == "" {
-            self.showErrorView()
-            errMsgLbl.text = "Please enter Password"
+            self.sendAlertWithoutHandler(alertTitle: "Missing Password", alertMessage: "Please enter Password", actionTitle: ["OK"])
         }
     }
     
@@ -93,17 +106,6 @@ class NewUserVC: UIViewController, UITextFieldDelegate {
             }
         }
     }
-
-    @IBAction func errorCancelBtnTapped(_ sender: Any) {
-        self.errorView.isHidden = true
-        self.errorMsgStackView.isHidden = true
-    }
-
-    func showErrorView() {
-        errorView.isHidden = false
-        errorMsgStackView.isHidden = false
-        
-    }
     
     func textFieldShouldBeginEditing(_ textField: UITextField) -> Bool {
         return true
@@ -112,5 +114,13 @@ class NewUserVC: UIViewController, UITextFieldDelegate {
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         textField.resignFirstResponder()
         return true
+    }
+    
+    func sendAlertWithoutHandler(alertTitle: String, alertMessage: String, actionTitle: [String]) {
+        let alert = UIAlertController(title: alertTitle, message: alertMessage, preferredStyle: .alert)
+        for action in actionTitle {
+            alert.addAction(UIAlertAction(title: action, style: .default, handler: nil))
+        }
+        self.present(alert, animated: true, completion: nil)
     }
 }

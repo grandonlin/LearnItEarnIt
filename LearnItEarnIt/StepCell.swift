@@ -45,6 +45,8 @@ class StepCell: UITableViewCell, UITextViewDelegate {
         NotificationCenter.default.addObserver(self, selector: #selector(keyboardUP), name: NSNotification.Name.UIKeyboardWillShow, object: nil)
         
         NotificationCenter.default.addObserver(self, selector: #selector(keyboardDOWN), name: NSNotification.Name.UIKeyboardWillHide, object: nil)
+        
+        
     }
     
 //    func initCell(step: Step) {
@@ -81,12 +83,13 @@ class StepCell: UITableViewCell, UITextViewDelegate {
     func textViewShouldBeginEditing(_ textView: UITextView) -> Bool {
         
         stepDescTextView.becomeFirstResponder()
+        
         return true
     }
     
     func keyboardUP(notification: Notification) {
+        
         if let keyboardSize = (notification.userInfo?[UIKeyboardFrameBeginUserInfoKey] as? NSValue)?.cgRectValue {
-            //                self.stackView.frame.origin.y = 0
             self.frame.origin.y -= keyboardSize.height - 50
         }
     }
@@ -101,8 +104,6 @@ class StepCell: UITableViewCell, UITextViewDelegate {
         stepDescTextView.endEditing(true)
     }
     
-    @IBAction func deleteBtnTapped(_ sender: Any) {
-    }
 
 
 
