@@ -56,6 +56,12 @@ class NewUserVC: UIViewController, UITextFieldDelegate {
         email = emailTextField.text
         
          if userName != "" && password != "" && email != "" {
+            KeychainWrapper.standard.set(userName, forKey: CURRENT_USERNAME)
+            currentUsername = KeychainWrapper.standard.string(forKey: CURRENT_USERNAME)
+            KeychainWrapper.standard.set(email, forKey: CURRENT_EMAIL)
+            currentEmail = KeychainWrapper.standard.string(forKey: CURRENT_EMAIL)
+            KeychainWrapper.standard.set(password, forKey: CURRENT_PASSWORD)
+            currentPassword = KeychainWrapper.standard.string(forKey: CURRENT_PASSWORD)
             Auth.auth().createUser(withEmail: email, password: password, completion: { (user, error) in
                 if let error = error {
                     self.sendAlertWithoutHandler(alertTitle: "Error", alertMessage: error.localizedDescription, actionTitle: ["OK"])
@@ -94,6 +100,7 @@ class NewUserVC: UIViewController, UITextFieldDelegate {
     func completeSignIn(id: String, profileData: Dictionary<String, String>) {
         KeychainWrapper.standard.set(id, forKey: KEY_UID)
         DataService.ds.createFirebaseDBUser(uid: id, profileData: profileData)
+        
         performSegue(withIdentifier: "SetupVC", sender: nil)
     }
     

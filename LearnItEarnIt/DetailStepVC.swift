@@ -8,6 +8,7 @@
 
 import UIKit
 import Firebase
+import SwiftKeychainWrapper
 
 class DetailStepVC: UIViewController, UITableViewDelegate, UITableViewDataSource, UITextViewDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate {
 
@@ -26,9 +27,7 @@ class DetailStepVC: UIViewController, UITableViewDelegate, UITableViewDataSource
     var stepImgName: String!
     var ref: DatabaseReference!
 //    var stepCount = 1
-    
- 
-    
+
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -42,9 +41,6 @@ class DetailStepVC: UIViewController, UITableViewDelegate, UITableViewDataSource
         postTitleLbl.text = postTitle
 
         print("Grandon(DetailStepVC): The steps array is: \(steps[0].stepNum), \(steps[0].stepImage), \(steps[0].stepDescription)")
-        
-        
-
     }
     
     func numberOfSections(in tableView: UITableView) -> Int {
@@ -66,7 +62,6 @@ class DetailStepVC: UIViewController, UITableViewDelegate, UITableViewDataSource
             cell.stepDescTextView.delegate = self
 //            cell.selectedIndex = selectedIndex
             cell.configureCell(step: step)
-            
 
             return cell
         }
@@ -155,6 +150,8 @@ class DetailStepVC: UIViewController, UITableViewDelegate, UITableViewDataSource
         
         let step = ["stepDescription": "", "stepImgUrl": "https://firebasestorage.googleapis.com/v0/b/learnitearnit-2223f.appspot.com/o/emptyImage.png?alt=media&token=a683e44f-e9ab-4ecc-a5a4-19ad16411a49", "stepNum" : steps.count] as [String : Any]
         DataService.ds.REF_POSTS.child(self.postId).child("steps").child("stepDetails").child("step\(steps.count)").updateChildValues(step)
+        
+        tableView.scrollToRow(at: indexPath, at: .middle, animated: true)
     }
     
     func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCellEditingStyle, forRowAt indexPath: IndexPath) {
@@ -232,6 +229,10 @@ class DetailStepVC: UIViewController, UITableViewDelegate, UITableViewDataSource
             descAlert.addAction(UIAlertAction(title: "Cancel", style: .default, handler: nil))
             self.present(descAlert, animated: true, completion: nil)
         }
+        
+        steps.removeAll()
+//        KeychainWrapper.standard.set(Int(self.postId)!, forKey: POST_COUNT)
+        
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
@@ -241,15 +242,7 @@ class DetailStepVC: UIViewController, UITableViewDelegate, UITableViewDataSource
         }
     }
     
-    
     @IBAction func backBtnPressed(_ sender: Any) {
-//        DataService.ds.POST_IMAGE.child(self.postId).delete { (error) in
-//            if error != nil {
-//                print("Grandon(postCreateVC): not able to delete")
-//            }
-//        }
-//        DataService.ds.REF_USERS_CURRENT.child("myPost").child(self.postId).removeValue()
-//        DataService.ds.REF_POSTS.child(self.postId).removeValue()
         dismiss(animated: true, completion: nil)
     }
     
@@ -274,20 +267,11 @@ class DetailStepVC: UIViewController, UITableViewDelegate, UITableViewDataSource
         let location = sender.location(in: tableView)
         let ip = tableView.indexPathForRow(at: location)!
         selectedIndex = ip.row
-        print("Grandon(DetailStepVC): the current selected index is \(selectedIndex)")
         present(imagePicker, animated: true, completion: nil)
     }
 
     func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [String : Any]) {
         if let selectedImage = info[UIImagePickerControllerOriginalImage] as? UIImage {
-//            var v: UIView = UIImageView()
-//            repeat { v = v.superview!} while !(v is UITableViewCell)
-//            let cell = v as! StepCell
-//            let ip = tableView.indexPath(for: cell)!
-//            let step = steps[ip.row]
-//            step.stepImage = selectedImage
-//            steps[ip.row] = step
-            
             let index = NSIndexPath(row: selectedIndex, section: 0) as IndexPath
             if let cell = tableView(tableView, cellForRowAt: index) as? StepCell {
                 cell.stepImg.image = selectedImage
@@ -324,7 +308,7 @@ class DetailStepVC: UIViewController, UITableViewDelegate, UITableViewDataSource
     func updateStepDetail(step: Step) {
         if let imageData = UIImageJPEGRepresentation(step.stepImage, 0.5) {
             let stepNumber = "Step \(step.stepNum)"
-            print("Grandon(DetailStepVC): now step number is \(stepNumber)")
+//            print("Grandon(DetailStepVC): now step number is \(stepNumber)")
             let metadata = StorageMetadata()
             metadata.contentType = "image/jpeg"
             DataService.ds.STEP_IMAGE.child(postId).child(stepNumber).putData(imageData, metadata: metadata) {

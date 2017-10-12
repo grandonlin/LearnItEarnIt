@@ -18,7 +18,7 @@ var userName: String!
 class DataService {
     
     static let ds = DataService()
-    let uid = KeychainWrapper.standard.string(forKey: KEY_UID)
+    var uid = KeychainWrapper.standard.string(forKey: KEY_UID)
 
     //DB references
     private var _REF_BASE = DB_BASE

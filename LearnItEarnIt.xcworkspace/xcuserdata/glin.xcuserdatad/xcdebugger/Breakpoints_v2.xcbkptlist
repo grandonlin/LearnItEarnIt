@@ -10,11 +10,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "LearnItEarnIt/MainVC.swift"
-            timestampString = "524029260.279433"
+            timestampString = "529465588.518696"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "241"
-            endingLineNumber = "241"
+            startingLineNumber = "298"
+            endingLineNumber = "298"
             landmarkName = "createFBProfile(id:)"
             landmarkType = "7">
          </BreakpointContent>
@@ -42,11 +42,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "LearnItEarnIt/LoginVC.swift"
-            timestampString = "526509605.693129"
+            timestampString = "528032180.770201"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "132"
-            endingLineNumber = "132"
+            startingLineNumber = "136"
+            endingLineNumber = "136"
             landmarkName = "firebaseSignIn(with:)"
             landmarkType = "7">
             <Locations>
@@ -105,13 +105,13 @@
             shouldBeEnabled = "No"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "LearnItEarnIt/DetailStepVC.swift"
-            timestampString = "526094559.917"
+            filePath = "LearnItEarnIt/DetailSettingVC.swift"
+            timestampString = "528204411.139635"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "114"
-            endingLineNumber = "114"
-            landmarkName = "tableView(_:moveRowAt:to:)"
+            startingLineNumber = "177"
+            endingLineNumber = "177"
+            landmarkName = "authBtnPressed(_:)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
@@ -121,13 +121,13 @@
             shouldBeEnabled = "No"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "LearnItEarnIt/DetailStepVC.swift"
-            timestampString = "526094559.917"
+            filePath = "LearnItEarnIt/MyPostTVC.swift"
+            timestampString = "529466620.892438"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "124"
-            endingLineNumber = "124"
-            landmarkName = "tableView(_:moveRowAt:to:)"
+            startingLineNumber = "101"
+            endingLineNumber = "101"
+            landmarkName = "tableView(_:didSelectRowAt:)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>

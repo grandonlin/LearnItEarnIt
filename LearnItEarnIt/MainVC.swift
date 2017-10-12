@@ -19,10 +19,11 @@ class MainVC: UIViewController, UITableViewDataSource, UITableViewDelegate, UISe
     @IBOutlet weak var likeNumLbl: UILabel!
     @IBOutlet weak var segment: UISegmentedControl!
     @IBOutlet weak var searchBar: UISearchBar!
+    @IBOutlet weak var activityIndicatorView: UIActivityIndicatorView!
     
     var inSearchMode = false
     var post: Post!
-    var posts = [Post]()
+//    var posts = [Post]()
     var filterPosts = [Post]()
     var postKey: String!
     var postTitle: String!
@@ -35,6 +36,7 @@ class MainVC: UIViewController, UITableViewDataSource, UITableViewDelegate, UISe
     var ref: DatabaseReference!
     var postRef: DatabaseReference!
     let profileKey = KeychainWrapper.standard.string(forKey: KEY_UID)!
+    var indicator = UIActivityIndicatorView()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -43,6 +45,29 @@ class MainVC: UIViewController, UITableViewDataSource, UITableViewDelegate, UISe
         tableView.dataSource = self
         searchBar.delegate = self
         searchBar.returnKeyType = UIReturnKeyType.done
+   
+//        var container: UIView = UIView()
+//        container.frame = self.view.frame
+//        container.center = self.view.center
+//        container.backgroundColor = UIColor(white: 0xffffff, alpha: 0.3)
+//        
+//        var loadingView: UIView = UIView()
+//        loadingView.frame = CGRect(x: 0, y: 0, width: 80, height: 80)
+//        loadingView.center = self.view.center
+//        loadingView.backgroundColor = UIColor(white: 0x444444, alpha: 0.7)
+//        loadingView.clipsToBounds = true
+//        loadingView.layer.cornerRadius = 10
+        
+//        indicator.frame = self.view.frame
+        indicator.center = self.view.center
+        indicator.frame = CGRect(x: self.view.center.x, y: self.view.center.y, width: 4.0, height: 4.0)
+        indicator.hidesWhenStopped = true
+        indicator.activityIndicatorViewStyle = .whiteLarge
+        self.view.addSubview(indicator)
+        
+//        loadingView.addSubview(indicator)
+//        container.addSubview(loadingView)
+//        self.view.addSubview(container)
 
         postRef = DataService.ds.REF_POSTS
 //        postRef.queryOrdered(byChild: "created").observe(.value, with: { (snapshot) in
@@ -57,7 +82,22 @@ class MainVC: UIViewController, UITableViewDataSource, UITableViewDelegate, UISe
 //            }
 //            self.tableView.reloadData()
 //        })
-        fetchData()
+        
+        
+        indicator.startAnimating()
+//        fetchData()
+        
+        DispatchQueue.global().async {
+            self.fetchData()
+            
+//            for index in 1...1000000 {
+//                print(index)
+//            }
+            DispatchQueue.main.async {
+                self.indicator.stopAnimating()
+            }
+        }
+        
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -75,10 +115,21 @@ class MainVC: UIViewController, UITableViewDataSource, UITableViewDelegate, UISe
                 }
             }
         })
+        
+        
+    }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(true)
+//        indicator.stopAnimating()
+        self.fetchData()
     }
     
     override func viewDidDisappear(_ animated: Bool) {
+//        self.posts.removeAll()
+        print("Grandon(MainVC): is this removed?")
         ref.removeObserver(withHandle: HANDLE)
+        postRef.removeObserver(withHandle: HANDLE)
     }
     
     func numberOfSections(in tableView: UITableView) -> Int {
@@ -112,6 +163,7 @@ class MainVC: UIViewController, UITableViewDataSource, UITableViewDelegate, UISe
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         var post: Post!
+        print("Grandon(MainVC): there are \(posts.count) records, indexPath.row is \(indexPath.row)")
         if inSearchMode {
             post = filterPosts[indexPath.row]
         } else {
@@ -135,8 +187,13 @@ class MainVC: UIViewController, UITableViewDataSource, UITableViewDelegate, UISe
             view.endEditing(true)
         } else {
             inSearchMode = true
-            let lower = searchBar.text!.lowercased()
-            filterPosts = posts.filter({$0.title.range(of: lower) != nil })
+//            let lower = searchBar.text!.lowercased()
+//            filterPosts = posts.filter({$0.title.range(of: lower) != nil })
+            filterPosts = posts.filter({ (post) -> Bool in
+                let tmp = post as Post
+                let range = tmp.title.lowercased().contains(searchText.lowercased())
+                return range
+            })
             tableView.reloadData()
         }
     }
@@ -147,37 +204,38 @@ class MainVC: UIViewController, UITableViewDataSource, UITableViewDelegate, UISe
     }
     
     func fetchData() {
+        posts.removeAll()
         if segment.selectedSegmentIndex == 0 {
-            self.posts.removeAll()
-            postRef.queryOrdered(byChild: "created").observe(.value, with: { (snapshot) in
+            postRef.queryOrderedByKey().observeSingleEvent(of: .value, with: { (snapshot) in
                 if let snapshot = snapshot.children.allObjects as? [DataSnapshot] {
                     for snap in snapshot {
                         if let postDict = snap.value as? Dictionary<String, Any> {
                             let key = snap.key
                             let post = Post(key: key, postDict: postDict)
-                            self.posts.insert(post, at: 0)
+                            posts.insert(post, at: 0)
                         }
                     }
                 }
-                
+                let lastPostId = Int(posts[0].key)!
+                print("Grandon(MainVC): the last post id is \(lastPostId)")
+                KeychainWrapper.standard.set(lastPostId, forKey: LAST_POST)
                 self.tableView.reloadData()
             })
         } else if segment.selectedSegmentIndex == 1 {
-            self.posts.removeAll()
             postRef.queryOrdered(byChild: "likes").observe(.value, with: { (snapshot) in
                 if let snapshot = snapshot.children.allObjects as? [DataSnapshot] {
                     for snap in snapshot {
                         if let postDict = snap.value as? Dictionary<String, Any> {
                             let key = snap.key
                             let post = Post(key: key, postDict: postDict)
-                            self.posts.insert(post, at: 0)
+                            posts.insert(post, at: 0)
+                            
                         }
                     }
                 }
                 self.tableView.reloadData()
             })
         }
-        
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
@@ -219,15 +277,15 @@ class MainVC: UIViewController, UITableViewDataSource, UITableViewDelegate, UISe
                                     DispatchQueue.main.sync {
                                         let img = UIImage(data: imageData as! Data)
                                         if let profileImageData = UIImageJPEGRepresentation(img!, 1.0) {
-                                            let imgUid = NSUUID().uuidString
+                                            
                                             let metadata = StorageMetadata()
                                             metadata.contentType = "image/jpeg"
-                                            DataService.ds.STORAGE_PROFILE_IMAGE.child(imgUid).putData(profileImageData, metadata: metadata) { (metadata, error) in
+                                            DataService.ds.STORAGE_PROFILE_IMAGE.child(self.profileKey).putData(profileImageData, metadata: metadata) { (metadata, error) in
                                                 if error != nil {
                                                     print("Grandon(MainVC): unable to upload image \(error)")
                                                 } else {
                                                     self.coverPhotoUrl = metadata?.downloadURL()?.absoluteString
-                                                    self.defaultCompletionImgUrl = "https://firebasestorage.googleapis.com/v0/b/learnitearnit-2223f.appspot.com/o/profile_pic%2FdefaultCompletionImage.jpg?alt=media&token=90f151a9-65c9-4b1b-b706-eaae1f6170a1"
+                                                    self.defaultCompletionImgUrl = "https://firebasestorage.googleapis.com/v0/b/learnitearnit-2223f.appspot.com/o/emptyImage.png?alt=media&token=a683e44f-e9ab-4ecc-a5a4-19ad16411a49"
                                                     let profileDict = ["userName": self.username!, "gender": self.gender!, "profileImgUrl": self.coverPhotoUrl!, "recentCompletionImgUrl": self.defaultCompletionImgUrl!]
                                                     self.ref.updateChildValues(profileDict)
                                                     

@@ -10,5 +10,9 @@ import UIKit
 
 let KEY_UID = "uid"
 let HANDLE = UInt(0)
+let CURRENT_USERNAME = "current username"
+let CURRENT_PASSWORD = "current password"
+let CURRENT_EMAIL = "current email"
+let LAST_POST = "last post"
 
 typealias completed = UInt

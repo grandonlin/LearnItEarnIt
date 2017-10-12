@@ -18,13 +18,14 @@ class PostCreateVC: UIViewController, UITextViewDelegate, UIImagePickerControlle
     @IBOutlet weak var postImage: UIImageView!
     @IBOutlet weak var stackView: UIStackView!
     @IBOutlet weak var topSpace: NSLayoutConstraint!
+    @IBOutlet weak var activityIndicatorView: UIActivityIndicatorView!
 
-    
     var imagePicker: UIImagePickerController!
     var indicator = UIActivityIndicatorView()
     var post: Post!
     var postId: String!
     var completionImgName: String!
+    var lastPost: Int! = 0
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -40,7 +41,11 @@ class PostCreateVC: UIViewController, UITextViewDelegate, UIImagePickerControlle
         indicator.activityIndicatorViewStyle = .whiteLarge
         self.view.addSubview(indicator)
         
-        postId = NSUUID().uuidString
+        lastPost = KeychainWrapper.standard.integer(forKey: LAST_POST)
+        print("Grandon(postCreateVC): postCount is now \(lastPost)")
+        postId = "\(lastPost + 1)"
+        
+//        postId = NSUUID().uuidString
         post = Post(key: postId)
         
         let tapRecognizer = UITapGestureRecognizer(target: self, action: #selector(handleBackgroundTap))
@@ -64,7 +69,7 @@ class PostCreateVC: UIViewController, UITextViewDelegate, UIImagePickerControlle
         postTitleTextField.inputAccessoryView = toolBar
         
         if steps.count == 0 {
-            post.isNew = true
+            self.post.isNew = true
         }
         
     }
@@ -101,22 +106,26 @@ class PostCreateVC: UIViewController, UITextViewDelegate, UIImagePickerControlle
     
     @IBAction func nextBtnPressed(_ sender: Any) {
         guard let postTitle = postTitleTextField.text, postTitle != "" else {
-            print("Grandon: post title must be entered")
+            let titleAlert = UIAlertController(title: "Missing Title", message: "Please give your post a cool name.", preferredStyle: .alert)
+            titleAlert.addAction(UIAlertAction(title: "Cancel", style: .default, handler: nil))
+            self.present(titleAlert, animated: true, completion: nil)
             return
         }
         guard let postDesc = textView.text, postDesc != "" else {
-            print("Grandon: post description is not entered")
+            let descAlert = UIAlertController(title: "Missing Description", message: "Post description is not entered.", preferredStyle: .alert)
+            descAlert.addAction(UIAlertAction(title: "Cancel", style: .default, handler: nil))
+            self.present(descAlert, animated: true, completion: nil)
             return
         }
         
-        indicator.startAnimating()
+        activityIndicatorView.startAnimating()
         
         if self.post.isNew {
             let stepToBeInit = Step(postId: self.postId, stepNum: 1, stepDesc: "", stepImg: UIImage(named: "emptyImage")!)
             steps.append(stepToBeInit)
         }
         
-        DataService.ds.REF_USERS_CURRENT.child("myPost").child(postId).setValue(true)
+        DataService.ds.REF_USERS_CURRENT.child("myPost").child(postId).setValue(post.created)
         
         if let postImg = postImage.image {
             if let imgData = UIImageJPEGRepresentation(postImg, 0.5) {
@@ -125,10 +134,12 @@ class PostCreateVC: UIViewController, UITextViewDelegate, UIImagePickerControlle
                 metadata.contentType = "image/jpeg"
                 DataService.ds.POST_IMAGE.child(postId).child(completionImgName).putData(imgData, metadata: metadata) { (data, error) in
                     if error != nil {
-                        print("Grandon(postCreateVC): not able to upload image")
+                        let imgAlert = UIAlertController(title: "Error", message: "\(error?.localizedDescription)", preferredStyle: .alert)
+                        imgAlert.addAction(UIAlertAction(title: "Cancel", style: .default, handler: nil))
+                        self.present(imgAlert, animated: true, completion: nil)
+//                        print("Grandon(postCreateVC): not able to upload image")
                     } else {
                         let imgUrl = data?.downloadURL()?.absoluteString
-                        print("Grandon(postCreateVC): this post is new: \(self.post.isNew)")
                         if self.post.isNew {
                             let step = ["stepDescription": "", "stepImgUrl": "https://firebasestorage.googleapis.com/v0/b/learnitearnit-2223f.appspot.com/o/emptyImage.png?alt=media&token=a683e44f-e9ab-4ecc-a5a4-19ad16411a49", "stepNum" : 1] as [String : Any]
                             let postDict = ["completionImgUrl": imgUrl!, "created": self.post.created, "likes": 0, "postTitle": postTitle, "steps": ["detailDescription" : postDesc, "stepDetails": ["step1": step]]] as [String : Any]
@@ -146,7 +157,7 @@ class PostCreateVC: UIViewController, UITextViewDelegate, UIImagePickerControlle
             }
         }
         
-        indicator.stopAnimating()
+        activityIndicatorView.stopAnimating()
         performSegue(withIdentifier: "DetailStepVC", sender: sender)
         
     }
@@ -176,7 +187,19 @@ class PostCreateVC: UIViewController, UITextViewDelegate, UIImagePickerControlle
     }
     
     @IBAction func backBtnPressed(_ sender: Any) {
-        
+        let postRef = DataService.ds.REF_POSTS
+        postRef.observeSingleEvent(of: .value, with: { (snapshot) in
+            if let snapShot = snapshot.children.allObjects as? [DataSnapshot] {
+                for snap in snapShot {
+                    if snap.key == self.postId {
+                        DataService.ds.REF_USERS_CURRENT.child("myPost").child(self.postId).removeValue()
+                        DataService.ds.REF_POSTS.child(self.postId).removeValue()
+                        DataService.ds.POST_IMAGE.child(self.postId).child(self.completionImgName).delete(completion: nil)
+                        break
+                    }
+                }
+            }
+        })
         dismiss(animated: true, completion: nil)
     }
     

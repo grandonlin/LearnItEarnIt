@@ -19,7 +19,6 @@ class LoginVC: UIViewController, UITextFieldDelegate {
 
     
     var profile: Profile!
-    var username: String!
     var gender: String!
     var coverPhotoUrl: String!
     var facebookProfileImg: UIImage!
@@ -72,6 +71,10 @@ class LoginVC: UIViewController, UITextFieldDelegate {
 //        newLearnerAlert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
         
         if let email = emailTextField.text, let password = passwordTextField.text {
+            KeychainWrapper.standard.set(email, forKey: CURRENT_EMAIL)
+            currentEmail = KeychainWrapper.standard.string(forKey: CURRENT_EMAIL)
+            KeychainWrapper.standard.set(password, forKey: CURRENT_PASSWORD)
+            currentPassword = KeychainWrapper.standard.string(forKey: CURRENT_PASSWORD)
             Auth.auth().signIn(withEmail: email, password: password, completion: { (user, error) in
                 if error == nil {
 //                    print("Grandon: successfully sign in!")
@@ -84,7 +87,7 @@ class LoginVC: UIViewController, UITextFieldDelegate {
 //                        self.present(errorAlert, animated: true, completion: nil)
                     print("Grandon: unable to sign in user - \(error)")
                     if error.debugDescription.contains("The password is invalid") {
-                        self.sendAlertWithoutHandler(alertTitle: "Login Fail", alertMessage: "Forget your password? Select 'Forget Password? to reset your password'", actionTitle: ["OK"])
+                        self.sendAlertWithoutHandler(alertTitle: "Login Fail", alertMessage: "Forget your password? Select 'Forget Password?' to reset your password.", actionTitle: ["OK"])
 //                        self.present(forgetPwdAlert, animated: true, completion: nil)
                     } else if error.debugDescription.contains("There is no user record") {
                         self.sendAlertWithoutHandler(alertTitle: "Login Fail", alertMessage: "The email address entered does not exist. Please enter your email address again.", actionTitle: ["OK"])
@@ -115,9 +118,10 @@ class LoginVC: UIViewController, UITextFieldDelegate {
             } else {
                 let credential = FacebookAuthProvider.credential(withAccessToken: FBSDKAccessToken.current().tokenString)
                 self.firebaseSignIn(with: credential)
-                
+//                self.performSegue(withIdentifier: "MainVC", sender: nil)
             }
         }
+        
     }
     
     func firebaseSignIn(with credential: AuthCredential) {
@@ -151,6 +155,8 @@ class LoginVC: UIViewController, UITextFieldDelegate {
     
     func completeSignIn(id: String) {
         KeychainWrapper.standard.set(id, forKey: KEY_UID)
+        DataService.ds.uid = KeychainWrapper.standard.string(forKey: KEY_UID)
+        print("Grandon(LoginVC): the new uid is \(KeychainWrapper.standard.string(forKey: KEY_UID))")
         performSegue(withIdentifier: "MainVC", sender: nil)
     }
     

@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import Firebase
 
 class Post {
     private var _title: String!
@@ -52,7 +53,7 @@ class Post {
     
     init(key: String) {
         self._key = key
-        self._created = "\(NSDate())"
+        self._created = "\(NSDate().timeCreated())"
         self._isNew = true
     }
     
@@ -81,9 +82,26 @@ class Post {
         }
         
         if let created = postDict["created"] as? String {
-            self._created = created
+            let removeRange = created.range(of: " at")
+            let index = removeRange!.lowerBound
+            let dateCreated = created.substring(to: index)
+            self._created = dateCreated
+        }
+        
+        if let postStep = postDict["steps"] as? Dictionary<String, Any> {
+            let postDesc = postStep["detailDescription"] as! String
+            self._postDescription = postDesc
         }
         
     }
     
+}
+
+extension NSDate {
+    func timeCreated() -> String {
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateStyle = .long
+        dateFormatter.timeStyle = .medium
+        return dateFormatter.string(from: self as Date)
+    }
 }

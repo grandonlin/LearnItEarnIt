@@ -13,7 +13,7 @@ class Step {
 //    private var _detailDescription: String!
     private var _stepDescription: String!
     private var _stepImgUrl: String!
-    private var _stepImage: UIImage
+    private var _stepImage: UIImage!
     private var _postId: String!
     private var _hasImg: Bool!
     

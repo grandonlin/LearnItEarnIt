@@ -84,7 +84,6 @@ class PostVC: UIViewController, UITableViewDelegate, UITableViewDataSource {
             self.tableView.reloadData()
         })
         
-        
     }
     
     func numberOfSections(in tableView: UITableView) -> Int {
@@ -105,6 +104,7 @@ class PostVC: UIViewController, UITableViewDelegate, UITableViewDataSource {
         return ProductCell()
     }
     
+  
     @IBAction func likeBtnPressed(_ sender: Any) {
         let likeRef = DataService.ds.REF_POSTS.child(postKey).child("likes")
         var likes: Int!
@@ -117,6 +117,7 @@ class PostVC: UIViewController, UITableViewDelegate, UITableViewDataSource {
                     likes = likes + 1
                     DataService.ds.REF_USERS_CURRENT_LIKE.child(self.postKey!).setValue(true)
                     self.finalLike = true
+                    
                 } else {
                     let emptyHeartImg = UIImage(named: "empty-heart")
                     self.likeBtnImg.setImage(emptyHeartImg, for: .normal)
@@ -128,21 +129,14 @@ class PostVC: UIViewController, UITableViewDelegate, UITableViewDataSource {
                 DataService.ds.REF_POSTS.child(self.postKey).updateChildValues(likeData)
             }
         })
-
-        
     }
     
     @IBAction func backBtnPressed(_ sender: Any) {
         if isNewPost {
             performSegue(withIdentifier: "MainVC", sender: sender)
         } else {
-            if initialLike != finalLike {
-                performSegue(withIdentifier: "MainVC", sender: sender)
-            } else {
-                dismiss(animated: true, completion: nil)
-            }
+            dismiss(animated: true, completion: nil)
         }
-        
     }
     
 }

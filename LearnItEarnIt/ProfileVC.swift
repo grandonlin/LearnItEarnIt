@@ -23,23 +23,25 @@ class ProfileVC: UIViewController, UIImagePickerControllerDelegate, UINavigation
     var handle: UInt!
     var ref: DatabaseReference!
     var completionImage: UIImage!
-//    var profileDownloaded = false
-    
-    
+    var indicator = UIActivityIndicatorView()
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        handle = UInt(0)
-    }
-    
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(true)
+        indicator.center = self.view.center
+        indicator.frame = CGRect(x: self.view.center.x, y: self.view.center.y, width: 4.0, height: 4.0)
+        indicator.hidesWhenStopped = true
+        indicator.activityIndicatorViewStyle = .whiteLarge
+        self.view.addSubview(indicator)
         
+        indicator.startAnimating()
         downloadProfileData()
+        indicator.stopAnimating()
+    }
 
-
-
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(true)
+        
     }
     
     override func viewDidDisappear(_ animated: Bool) {
@@ -49,43 +51,7 @@ class ProfileVC: UIViewController, UIImagePickerControllerDelegate, UINavigation
     func downloadProfileData() {
         let profileKey = KeychainWrapper.standard.string(forKey: KEY_UID)!
         print("Grandon(ProfileVC): profileKey is set as: \(profileKey)")
-        
-        //Download image
-//        DataService.ds.REF_USERS.observe(.value, with: { (snapshot) in
-//            print("Grandon: the snapshot value is \(snapshot.value!)")
-//            if let snapshot = snapshot.children.allObjects as? [FIRDataSnapshot] {
-//                for snap in snapshot {
-//                    print("SNAPSHOT: \(snap)")
-//                    if let snapProfile = snap.value as? Dictionary<String, Any> {
-//                        if let profileDict = snapProfile["profile"] as? Dictionary<String, Any> {
-//                            print("Profile Dict: \(profileDict)")
-//                            let key = snap.key
-//                            print("Key is \(key)")
-//                            if key == profileKey {
-//                                self.profile = Profile(profileKey: key, profileData: profileDict)
-//                                print(self.profile.profilekey)
-//                                print(self.profile.profileImgUrl)
-//                                self.genderLbl.text = self.profile.gender
-//                                self.profileUserLbl.text = self.profile.userName
-//                                let ref = FIRStorage.storage().reference(forURL: self.profile.profileImgUrl)
-//                                ref.data(withMaxSize: 1024 * 1024) { (data, error) in
-//                                    if error != nil {
-//                                        print("Grandon: the error is \(error)")
-//                                    } else {
-//                                        if let img = UIImage(data: data!) {
-//                                            self.profileImg.image = img
-//                                            ProfileVC.imageCache.setObject(img, forKey: self.profile.profileImgUrl as NSString)
-//                                            self.profileDownloaded = true
-//                                        }
-//                                    }
-//                                }
-//                            }
-//                        }
-//                    }
-//                }
-//            }
-//        })
-        
+                
         //Download profile data
         ref = DataService.ds.REF_USERS.child(profileKey).child("profile")
         handle = ref.observe(.value, with: { (snapshot) in
@@ -117,8 +83,6 @@ class ProfileVC: UIViewController, UIImagePickerControllerDelegate, UINavigation
                 })
             }
         })
-        
-        
     }
 
     @IBAction func settingBtnTapped(_ sender: Any) {
@@ -127,11 +91,10 @@ class ProfileVC: UIViewController, UIImagePickerControllerDelegate, UINavigation
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if let destination = segue.destination as? SetupVC {
-            if let image = self.profileImg.image, let username = self.profileUserLbl.text, let gender = self.genderLbl.text?.capitalized {
-                destination.profileImg = image
+            if let username = self.profileUserLbl.text {
+                print("Grandon(ProfileVC): the username is \(username)")
+                KeychainWrapper.standard.set(username, forKey: CURRENT_USERNAME)
                 destination.userName = username
-                destination.genderSelected = gender
-                destination.newProfileSetup = false
             }
         }
         if let destination = segue.destination as? RecentCompletionVC {

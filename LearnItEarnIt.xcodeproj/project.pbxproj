@@ -8,6 +8,13 @@
 
 /* Begin PBXBuildFile section */
 		A70FCC0E2B11EB04A560239E /* Pods_LearnItEarnIt.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 76088AC4C7211978A73A6E0E /* Pods_LearnItEarnIt.framework */; };
+		C101E5D81F622FD8003CEF0A /* SettingCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C101E5D71F622FD8003CEF0A /* SettingCell.swift */; };
+		C101E5DA1F62349D003CEF0A /* Settings.swift in Sources */ = {isa = PBXBuildFile; fileRef = C101E5D91F62349D003CEF0A /* Settings.swift */; };
+		C101E5DC1F62BC22003CEF0A /* ConfigurationVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = C101E5DB1F62BC22003CEF0A /* ConfigurationVC.swift */; };
+		C101E5DE1F640A50003CEF0A /* MyPostTVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = C101E5DD1F640A50003CEF0A /* MyPostTVC.swift */; };
+		C101E5E01F640AB8003CEF0A /* DetailSettingVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = C101E5DF1F640AB8003CEF0A /* DetailSettingVC.swift */; };
+		C101E5E21F649145003CEF0A /* MyPostCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C101E5E11F649145003CEF0A /* MyPostCell.swift */; };
+		C101E5E41F64E342003CEF0A /* ConfigurationCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C101E5E31F64E342003CEF0A /* ConfigurationCell.swift */; };
 		C11AD9161F1A913600CC8D73 /* StepCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C11AD9151F1A913600CC8D73 /* StepCell.swift */; };
 		C15BF5E51EAAF6F60057310D /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = C15BF5E41EAAF6F60057310D /* AppDelegate.swift */; };
 		C15BF5E71EAAF6F60057310D /* MainVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = C15BF5E61EAAF6F60057310D /* MainVC.swift */; };
@@ -31,7 +38,6 @@
 		C178A6031EF478BF00B97F43 /* RecentCompletionVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = C178A6021EF478BF00B97F43 /* RecentCompletionVC.swift */; };
 		C178A6051F0DBD7100B97F43 /* postCreateVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = C178A6041F0DBD7100B97F43 /* postCreateVC.swift */; };
 		C1A956301F329B4D006DBCE7 /* Global.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1A9562F1F329B4D006DBCE7 /* Global.swift */; };
-		C1A956321F3F54CA006DBCE7 /* Text.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1A956311F3F54CA006DBCE7 /* Text.swift */; };
 		C1AD8E351F170925000B5FB7 /* DetailStepVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1AD8E341F170925000B5FB7 /* DetailStepVC.swift */; };
 		C1CC26AE1EB4A56A00CFA708 /* SetupVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1CC26AD1EB4A56A00CFA708 /* SetupVC.swift */; };
 		C1CC26B11EB5973200CFA708 /* Profile.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1CC26B01EB5973200CFA708 /* Profile.swift */; };
@@ -41,6 +47,13 @@
 /* Begin PBXFileReference section */
 		76088AC4C7211978A73A6E0E /* Pods_LearnItEarnIt.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_LearnItEarnIt.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		85451FB6E8DEFB98F6CF38D4 /* Pods-LearnItEarnIt.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-LearnItEarnIt.release.xcconfig"; path = "Pods/Target Support Files/Pods-LearnItEarnIt/Pods-LearnItEarnIt.release.xcconfig"; sourceTree = "<group>"; };
+		C101E5D71F622FD8003CEF0A /* SettingCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SettingCell.swift; sourceTree = "<group>"; };
+		C101E5D91F62349D003CEF0A /* Settings.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Settings.swift; sourceTree = "<group>"; };
+		C101E5DB1F62BC22003CEF0A /* ConfigurationVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ConfigurationVC.swift; sourceTree = "<group>"; };
+		C101E5DD1F640A50003CEF0A /* MyPostTVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MyPostTVC.swift; sourceTree = "<group>"; };
+		C101E5DF1F640AB8003CEF0A /* DetailSettingVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DetailSettingVC.swift; sourceTree = "<group>"; };
+		C101E5E11F649145003CEF0A /* MyPostCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MyPostCell.swift; sourceTree = "<group>"; };
+		C101E5E31F64E342003CEF0A /* ConfigurationCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ConfigurationCell.swift; sourceTree = "<group>"; };
 		C11AD9151F1A913600CC8D73 /* StepCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StepCell.swift; sourceTree = "<group>"; };
 		C15BF5E11EAAF6F60057310D /* LearnItEarnIt.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = LearnItEarnIt.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		C15BF5E41EAAF6F60057310D /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -66,7 +79,6 @@
 		C178A6021EF478BF00B97F43 /* RecentCompletionVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RecentCompletionVC.swift; sourceTree = "<group>"; };
 		C178A6041F0DBD7100B97F43 /* postCreateVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = postCreateVC.swift; sourceTree = "<group>"; };
 		C1A9562F1F329B4D006DBCE7 /* Global.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Global.swift; sourceTree = "<group>"; };
-		C1A956311F3F54CA006DBCE7 /* Text.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Text.swift; sourceTree = "<group>"; };
 		C1AD8E341F170925000B5FB7 /* DetailStepVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DetailStepVC.swift; sourceTree = "<group>"; };
 		C1CC26AD1EB4A56A00CFA708 /* SetupVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SetupVC.swift; sourceTree = "<group>"; };
 		C1CC26AF1EB578F900CFA708 /* LearnItEarnIt.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = LearnItEarnIt.entitlements; sourceTree = "<group>"; };
@@ -144,6 +156,9 @@
 				C178A6021EF478BF00B97F43 /* RecentCompletionVC.swift */,
 				C178A6041F0DBD7100B97F43 /* postCreateVC.swift */,
 				C1AD8E341F170925000B5FB7 /* DetailStepVC.swift */,
+				C101E5DB1F62BC22003CEF0A /* ConfigurationVC.swift */,
+				C101E5DD1F640A50003CEF0A /* MyPostTVC.swift */,
+				C101E5DF1F640AB8003CEF0A /* DetailSettingVC.swift */,
 			);
 			name = Controller;
 			sourceTree = "<group>";
@@ -157,7 +172,9 @@
 				C15BF6091EAC3DD50057310D /* ProductCell.swift */,
 				C15BF60F1EAE174B0057310D /* CircleView.swift */,
 				C11AD9151F1A913600CC8D73 /* StepCell.swift */,
-				C1A956311F3F54CA006DBCE7 /* Text.swift */,
+				C101E5D71F622FD8003CEF0A /* SettingCell.swift */,
+				C101E5E11F649145003CEF0A /* MyPostCell.swift */,
+				C101E5E31F64E342003CEF0A /* ConfigurationCell.swift */,
 			);
 			name = View;
 			sourceTree = "<group>";
@@ -169,6 +186,7 @@
 				C15BF60B1EAC3F3F0057310D /* Step.swift */,
 				C1CC26B01EB5973200CFA708 /* Profile.swift */,
 				C1CC26B41EB8A1FE00CFA708 /* User.swift */,
+				C101E5D91F62349D003CEF0A /* Settings.swift */,
 			);
 			name = Model;
 			sourceTree = "<group>";
@@ -331,22 +349,28 @@
 			files = (
 				C178A6051F0DBD7100B97F43 /* postCreateVC.swift in Sources */,
 				C1AD8E351F170925000B5FB7 /* DetailStepVC.swift in Sources */,
+				C101E5DA1F62349D003CEF0A /* Settings.swift in Sources */,
 				C1CC26B11EB5973200CFA708 /* Profile.swift in Sources */,
 				C15BF60E1EAE135C0057310D /* ProfileVC.swift in Sources */,
+				C101E5E21F649145003CEF0A /* MyPostCell.swift in Sources */,
 				C16373401EB190A500CF68BD /* DataService.swift in Sources */,
 				C1CC26AE1EB4A56A00CFA708 /* SetupVC.swift in Sources */,
+				C101E5E41F64E342003CEF0A /* ConfigurationCell.swift in Sources */,
+				C101E5DE1F640A50003CEF0A /* MyPostTVC.swift in Sources */,
 				C15BF6041EAB701B0057310D /* FancyBtn.swift in Sources */,
 				C1A956301F329B4D006DBCE7 /* Global.swift in Sources */,
 				C15BF6121EAEFBCD0057310D /* LoginVC.swift in Sources */,
 				C15BF5FE1EAB04E10057310D /* CircleButton.swift in Sources */,
-				C1A956321F3F54CA006DBCE7 /* Text.swift in Sources */,
 				C11AD9161F1A913600CC8D73 /* StepCell.swift in Sources */,
 				C15BF60C1EAC3F3F0057310D /* Step.swift in Sources */,
+				C101E5E01F640AB8003CEF0A /* DetailSettingVC.swift in Sources */,
+				C101E5DC1F62BC22003CEF0A /* ConfigurationVC.swift in Sources */,
 				C15BF5E71EAAF6F60057310D /* MainVC.swift in Sources */,
 				C15BF5E51EAAF6F60057310D /* AppDelegate.swift in Sources */,
 				C163733D1EB1458800CF68BD /* Constants.swift in Sources */,
 				C15BF6101EAE174B0057310D /* CircleView.swift in Sources */,
 				C16373421EB3608A00CF68BD /* NewUserVC.swift in Sources */,
+				C101E5D81F622FD8003CEF0A /* SettingCell.swift in Sources */,
 				C15BF6001EAB0A660057310D /* PostCell.swift in Sources */,
 				C1CC26B51EB8A1FE00CFA708 /* User.swift in Sources */,
 				C178A6031EF478BF00B97F43 /* RecentCompletionVC.swift in Sources */,
