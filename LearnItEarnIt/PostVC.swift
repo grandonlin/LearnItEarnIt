@@ -26,6 +26,8 @@ class PostVC: UIViewController, UITableViewDelegate, UITableViewDataSource {
     var finalLike: Bool!
     var likeChange: Bool!
     var isNewPost: Bool = false
+    var isMyPost: Bool = false
+    var loadingView: LoadingView!
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -35,6 +37,8 @@ class PostVC: UIViewController, UITableViewDelegate, UITableViewDataSource {
         
         postTitleLbl.text = vcTitle
         print("Grandon(PostVC): the post key is \(postKey)")
+        
+        loadingView = LoadingView(uiView: view, message: "Loading...")
         
         myLikeRef = DataService.ds.REF_USERS_CURRENT_LIKE.child(postKey)
         myLikeRef.observeSingleEvent(of: .value, with: { (snapshot) in
@@ -68,7 +72,7 @@ class PostVC: UIViewController, UITableViewDelegate, UITableViewDataSource {
         
         
         let stepRef = DataService.ds.REF_POSTS.child(postKey).child("steps").child("stepDetails")
-        stepRef.observe(.value, with: { (snapshot) in
+        stepRef.queryOrderedByKey().observe(.value, with: { (snapshot) in
             print("Grandon(PostVC): snapshot is \(snapshot)")
             if let snapshot = snapshot.children.allObjects as? [DataSnapshot] {
                 for snap in snapshot {
@@ -83,7 +87,10 @@ class PostVC: UIViewController, UITableViewDelegate, UITableViewDataSource {
             }
             self.tableView.reloadData()
         })
-        
+        loadingView.hide()
+    }
+    
+    override func viewDidAppear(_ animated: Bool) {
     }
     
     func numberOfSections(in tableView: UITableView) -> Int {
@@ -106,6 +113,7 @@ class PostVC: UIViewController, UITableViewDelegate, UITableViewDataSource {
     
   
     @IBAction func likeBtnPressed(_ sender: Any) {
+        loadingView = LoadingView(uiView: view, message: "")
         let likeRef = DataService.ds.REF_POSTS.child(postKey).child("likes")
         var likes: Int!
         likeRef.observeSingleEvent(of: .value, with: { (snapshot) in
@@ -129,6 +137,7 @@ class PostVC: UIViewController, UITableViewDelegate, UITableViewDataSource {
                 DataService.ds.REF_POSTS.child(self.postKey).updateChildValues(likeData)
             }
         })
+        loadingView.hide()
     }
     
     @IBAction func backBtnPressed(_ sender: Any) {
@@ -138,5 +147,4 @@ class PostVC: UIViewController, UITableViewDelegate, UITableViewDataSource {
             dismiss(animated: true, completion: nil)
         }
     }
-    
 }

@@ -52,7 +52,10 @@ class DetailSettingVC: UIViewController, UITextFieldDelegate, UIImagePickerContr
         imagePicker.allowsEditing = true
         
         titleLbl.text = detailSettingTitle
-        print("Grandon: the current username is \(currentUsername)")
+        
+        NotificationCenter.default.addObserver(self, selector: #selector(keyboardUP), name: NSNotification.Name.UIKeyboardWillShow, object: nil)
+        
+        NotificationCenter.default.addObserver(self, selector: #selector(keyboardDOWN), name: NSNotification.Name.UIKeyboardWillHide, object: nil)
         
         existNames = [String]()
         
@@ -107,6 +110,8 @@ class DetailSettingVC: UIViewController, UITextFieldDelegate, UIImagePickerContr
             currentEmail = KeychainWrapper.standard.string(forKey: CURRENT_EMAIL)
         }
         
+        
+        
     }
     
     func textFieldDidEndEditing(_ textField: UITextField) {
@@ -135,6 +140,25 @@ class DetailSettingVC: UIViewController, UITextFieldDelegate, UIImagePickerContr
         return true
     }
     
+    func keyboardUP(notification: Notification) {
+        if confPwTextField.isEditing {
+            if let keyboardSize = (notification.userInfo?[UIKeyboardFrameBeginUserInfoKey] as? NSValue)?.cgRectValue {
+                self.view.frame.origin.y -= keyboardSize.height
+            }
+        }
+        
+    }
+    
+    func keyboardDOWN(notification: Notification) {
+        if confPwTextField.isEditing {
+            if let keyboardSize = (notification.userInfo?[UIKeyboardFrameBeginUserInfoKey] as? NSValue)?.cgRectValue {
+                self.view.frame.origin.y += keyboardSize.height
+            }
+        }
+        
+    }
+    
+
     func numberOfComponents(in pickerView: UIPickerView) -> Int {
         return 1
     }

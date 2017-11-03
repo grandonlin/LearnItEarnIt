@@ -56,12 +56,7 @@ class NewUserVC: UIViewController, UITextFieldDelegate {
         email = emailTextField.text
         
          if userName != "" && password != "" && email != "" {
-            KeychainWrapper.standard.set(userName, forKey: CURRENT_USERNAME)
-            currentUsername = KeychainWrapper.standard.string(forKey: CURRENT_USERNAME)
-            KeychainWrapper.standard.set(email, forKey: CURRENT_EMAIL)
-            currentEmail = KeychainWrapper.standard.string(forKey: CURRENT_EMAIL)
-            KeychainWrapper.standard.set(password, forKey: CURRENT_PASSWORD)
-            currentPassword = KeychainWrapper.standard.string(forKey: CURRENT_PASSWORD)
+            createKeychains(username: userName, email: email, password: password)
             Auth.auth().createUser(withEmail: email, password: password, completion: { (user, error) in
                 if let error = error {
                     self.sendAlertWithoutHandler(alertTitle: "Error", alertMessage: error.localizedDescription, actionTitle: ["OK"])
@@ -95,6 +90,15 @@ class NewUserVC: UIViewController, UITextFieldDelegate {
     
     @IBAction func cancelBtnTapped(_ sender: Any) {
         dismiss(animated: true, completion: nil)
+    }
+    
+    func createKeychains(username: String, email: String, password: String) {
+        KeychainWrapper.standard.set(userName, forKey: CURRENT_USERNAME)
+        currentUsername = KeychainWrapper.standard.string(forKey: CURRENT_USERNAME)
+        KeychainWrapper.standard.set(email, forKey: CURRENT_EMAIL)
+        currentEmail = KeychainWrapper.standard.string(forKey: CURRENT_EMAIL)
+        KeychainWrapper.standard.set(password, forKey: CURRENT_PASSWORD)
+        currentPassword = KeychainWrapper.standard.string(forKey: CURRENT_PASSWORD)
     }
     
     func completeSignIn(id: String, profileData: Dictionary<String, String>) {

@@ -17,6 +17,7 @@ class RecentCompletionVC: UIViewController, UIImagePickerControllerDelegate, UIN
     var imageUrl: String!
     var indicator = UIActivityIndicatorView()
     let profileKey = KeychainWrapper.standard.string(forKey: KEY_UID)!
+    var loadingView: LoadingView!
     
     @IBOutlet weak var completionImageView: UIImageView!
     
@@ -32,8 +33,14 @@ class RecentCompletionVC: UIViewController, UIImagePickerControllerDelegate, UIN
         imagePicker = UIImagePickerController()
         imagePicker.allowsEditing = true
         imagePicker.delegate = self
+        
+        loadingView = LoadingView(uiView: view, message: "Loading...")
     }
 
+    override func viewDidAppear(_ animated: Bool) {
+        loadingView.hide()
+    }
+    
     @IBAction func imagePressed(_ sender: Any) {
         imagePicker.sourceType = .photoLibrary
         present(imagePicker, animated: true, completion: nil)
@@ -49,8 +56,8 @@ class RecentCompletionVC: UIViewController, UIImagePickerControllerDelegate, UIN
     }
     
     @IBAction func saveBtnPressed(_ sender: UIButton) {
-        indicator.startAnimating()
-        
+//        indicator.startAnimating()
+        loadingView.show()
         if let imageData = UIImageJPEGRepresentation(completionImageView.image!, 0.5) {
             let imageUid = NSUUID().uuidString
             let metadata = StorageMetadata()
@@ -65,8 +72,9 @@ class RecentCompletionVC: UIViewController, UIImagePickerControllerDelegate, UIN
                     self.indicator.stopAnimating()
                 }
             }
+            loadingView.hide()
             performSegue(withIdentifier: "ProfileVC", sender: AnyObject.self)
-
+            
         }
     }
 

@@ -50,6 +50,7 @@ class SetupVC: UIViewController, UITextFieldDelegate, UITableViewDataSource, UIT
         
         
     }
+
     
     func numberOfSections(in tableView: UITableView) -> Int {
         return 1

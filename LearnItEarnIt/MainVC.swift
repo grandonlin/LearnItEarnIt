@@ -37,6 +37,7 @@ class MainVC: UIViewController, UITableViewDataSource, UITableViewDelegate, UISe
     var postRef: DatabaseReference!
     let profileKey = KeychainWrapper.standard.string(forKey: KEY_UID)!
     var indicator = UIActivityIndicatorView()
+    var loadingView: LoadingView!
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -45,65 +46,27 @@ class MainVC: UIViewController, UITableViewDataSource, UITableViewDelegate, UISe
         tableView.dataSource = self
         searchBar.delegate = self
         searchBar.returnKeyType = UIReturnKeyType.done
-   
-//        var container: UIView = UIView()
-//        container.frame = self.view.frame
-//        container.center = self.view.center
-//        container.backgroundColor = UIColor(white: 0xffffff, alpha: 0.3)
-//        
-//        var loadingView: UIView = UIView()
-//        loadingView.frame = CGRect(x: 0, y: 0, width: 80, height: 80)
-//        loadingView.center = self.view.center
-//        loadingView.backgroundColor = UIColor(white: 0x444444, alpha: 0.7)
-//        loadingView.clipsToBounds = true
-//        loadingView.layer.cornerRadius = 10
         
 //        indicator.frame = self.view.frame
-        indicator.center = self.view.center
-        indicator.frame = CGRect(x: self.view.center.x, y: self.view.center.y, width: 4.0, height: 4.0)
-        indicator.hidesWhenStopped = true
-        indicator.activityIndicatorViewStyle = .whiteLarge
-        self.view.addSubview(indicator)
+//        indicator.center = self.view.center
+//        indicator.frame = CGRect(x: self.view.center.x, y: self.view.center.y, width: 4.0, height: 4.0)
+//        indicator.hidesWhenStopped = true
+//        indicator.activityIndicatorViewStyle = .whiteLarge
+//        indicator.color = UIColor.red
+//        self.view.addSubview(indicator)
         
-//        loadingView.addSubview(indicator)
-//        container.addSubview(loadingView)
-//        self.view.addSubview(container)
-
         postRef = DataService.ds.REF_POSTS
-//        postRef.queryOrdered(byChild: "created").observe(.value, with: { (snapshot) in
-//            if let snapshot = snapshot.children.allObjects as? [FIRDataSnapshot] {
-//                for snap in snapshot {
-//                    if let postDict = snap.value as? Dictionary<String, Any> {
-//                        let key = snap.key
-//                        let post = Post(key: key, postDict: postDict)
-//                        self.posts.insert(post, at: 0)
-//                    }
-//                }
-//            }
-//            self.tableView.reloadData()
-//        })
         
+//        self.showActivityIndicator()
+        loadingView = LoadingView(uiView: view, message: "Loading...")
         
-        indicator.startAnimating()
-//        fetchData()
-        
-        DispatchQueue.global().async {
-            self.fetchData()
-            
-//            for index in 1...1000000 {
-//                print(index)
-//            }
-            DispatchQueue.main.async {
-                self.indicator.stopAnimating()
-            }
-        }
         
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(true)
         
-        ref = DataService.ds.REF_USERS.child(profileKey).child("profile")
+        ref = DataService.ds.REF_USERS_CURRENT.child("profile")
         ref.observeSingleEvent(of: .value, with: { (snapshot) in
             if let profileDict = snapshot.value as? Dictionary<String, Any> {
                 print("Grandon(MainVC): existing user snap is \(profileDict)")
@@ -116,18 +79,28 @@ class MainVC: UIViewController, UITableViewDataSource, UITableViewDelegate, UISe
             }
         })
         
+        fetchData()
         
     }
     
+    
+    
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(true)
-//        indicator.stopAnimating()
-        self.fetchData()
+        
+        
+        loadingView.hide()
+//
+//        DispatchQueue.global().async {
+//            self.fetchData()
+//            DispatchQueue.main.async {
+//                self.indicator.stopAnimating()
+//            }
+//        }
     }
     
     override func viewDidDisappear(_ animated: Bool) {
 //        self.posts.removeAll()
-        print("Grandon(MainVC): is this removed?")
         ref.removeObserver(withHandle: HANDLE)
         postRef.removeObserver(withHandle: HANDLE)
     }
@@ -143,7 +116,6 @@ class MainVC: UIViewController, UITableViewDataSource, UITableViewDelegate, UISe
             return posts.count
         }
     }
-    
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         if let cell = tableView.dequeueReusableCell(withIdentifier: "PostCell") as? PostCell {
@@ -198,12 +170,12 @@ class MainVC: UIViewController, UITableViewDataSource, UITableViewDelegate, UISe
         }
     }
 
-
     @IBAction func listChange(_ sender: Any) {
         fetchData()
     }
     
     func fetchData() {
+        self.showActivityIndicator()
         posts.removeAll()
         if segment.selectedSegmentIndex == 0 {
             postRef.queryOrderedByKey().observeSingleEvent(of: .value, with: { (snapshot) in
@@ -236,6 +208,7 @@ class MainVC: UIViewController, UITableViewDataSource, UITableViewDelegate, UISe
                 self.tableView.reloadData()
             })
         }
+        self.hideActivityIndicator()
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
@@ -262,9 +235,6 @@ class MainVC: UIViewController, UITableViewDataSource, UITableViewDelegate, UISe
                     if let gender = resultDict["gender"] as? String {
                         self.gender = gender.capitalized
                     }
-//                    self.username = resultDict["name"] as! String
-//                    self.gender = resultDict["gender"] as! String
-//                    self.gender = self.gender.capitalized
                     if let pictureDict = resultDict["picture"] as? Dictionary<String, Any> {
 //                        print("Grandon(MainVC): pictureDict is \(pictureDict)")
                         if let data = pictureDict["data"] as? Dictionary<String, Any> {
@@ -308,6 +278,24 @@ class MainVC: UIViewController, UITableViewDataSource, UITableViewDelegate, UISe
         performSegue(withIdentifier: "PostCreateVC", sender: nil)
     }
     
+    func showActivityIndicator() {
+        DispatchQueue.main.async {
+            
+            self.indicator.activityIndicatorViewStyle = .whiteLarge
+            self.indicator.frame = CGRect(x: 0, y: 0, width: 80, height: 80) //or whatever size you would like
+            self.indicator.center = CGPoint(x: self.view.bounds.size.width / 2, y: self.view.bounds.height / 2)
+            self.indicator.color = UIColor.red
+            self.view.addSubview(self.indicator)
+            self.indicator.startAnimating()
+        }
+    }
+    
+    func hideActivityIndicator() {
+        DispatchQueue.main.async {
+            self.indicator.stopAnimating()
+            self.indicator.removeFromSuperview()
+        }
+    }
     
 }
 

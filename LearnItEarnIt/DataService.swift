@@ -48,14 +48,14 @@ class DataService {
         return REF_USERS_CURRENT.child("myLikes")
     }
     
+    var REF_USERS_CURRENT_POST: DatabaseReference {
+        return REF_USERS_CURRENT.child("myPosts")
+    }
+    
     var REF_POSTS: DatabaseReference {
         return _REF_POSTS
     }
-    
-//    var REF_PROFILE: FIRDatabaseReference {
-//        return _REF_PROFILE
-//    }
-    
+
     var STORAGE_PROFILE_IMAGE: StorageReference {
         return _STORAGE_PROFILE_IMAGE
     }

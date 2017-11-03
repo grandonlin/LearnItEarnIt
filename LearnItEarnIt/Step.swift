@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import Firebase
 
 class Step {
     private var _stepNum: Int!
@@ -16,6 +17,8 @@ class Step {
     private var _stepImage: UIImage!
     private var _postId: String!
     private var _hasImg: Bool!
+    private var _imageData: Data!
+    private var _metaData: StorageMetadata!
     
 //    var detailDescription: String {
 //        return _detailDescription
@@ -40,7 +43,12 @@ class Step {
     }
     
     var stepImgUrl: String {
-        return _stepImgUrl
+        get {
+            return _stepImgUrl
+        }
+        set {
+            return _stepImgUrl = newValue
+        }
     }
     
     var stepImage: UIImage {
@@ -65,13 +73,36 @@ class Step {
         }
     }
     
+    var imageData: Data {
+        get {
+            return _imageData
+        }
+        set {
+            return _imageData = newValue
+        }
+    }
+    
+    var metaData: StorageMetadata {
+        get {
+            return _metaData
+        }
+        set {
+            return _metaData = newValue
+        }
+    }
+    
+    
     //Initiate when creating steps
-    init(postId: String, stepNum: Int, stepDesc: String, stepImg: UIImage) {
+    init(postId: String, stepNum: Int, stepDesc: String, stepImg: UIImage, stepImgUrl: String, imageData: Data, metaData: StorageMetadata) {
         self._postId = postId
         self._stepNum = stepNum
         self._stepDescription = stepDesc
         self._stepImage = stepImg
         self._hasImg = false
+        self._stepImgUrl = stepImgUrl
+        self._imageData = imageData
+        self._metaData = metaData
+        
     }
     
     

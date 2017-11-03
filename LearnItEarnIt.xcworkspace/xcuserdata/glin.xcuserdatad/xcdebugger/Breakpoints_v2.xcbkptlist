@@ -10,11 +10,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "LearnItEarnIt/MainVC.swift"
-            timestampString = "529465588.518696"
+            timestampString = "530657225.426587"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "298"
-            endingLineNumber = "298"
+            startingLineNumber = "266"
+            endingLineNumber = "266"
             landmarkName = "createFBProfile(id:)"
             landmarkType = "7">
          </BreakpointContent>
@@ -26,7 +26,7 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "LearnItEarnIt/DataService.swift"
-            timestampString = "521826737.904262"
+            timestampString = "530243829.190099"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "86"
@@ -41,76 +41,12 @@
             shouldBeEnabled = "No"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "LearnItEarnIt/LoginVC.swift"
-            timestampString = "528032180.770201"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "136"
-            endingLineNumber = "136"
-            landmarkName = "firebaseSignIn(with:)"
-            landmarkType = "7">
-            <Locations>
-               <Location
-                  shouldBeEnabled = "No"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "LearnItEarnIt.LoginVC.(firebaseSignIn (with : __ObjC.FIRAuthCredential) -&gt; ()).(closure #1)"
-                  moduleName = "LearnItEarnIt"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/glin/Documents/Mobile_App_Development/IOS/LearnItEarnIt/LearnItEarnIt/LoginVC.swift"
-                  timestampString = "520573011.756126"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "105"
-                  endingLineNumber = "105"
-                  offsetFromSymbolStart = "1211">
-               </Location>
-               <Location
-                  shouldBeEnabled = "No"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "LearnItEarnIt.LoginVC.(firebaseSignIn (with : __ObjC.FIRAuthCredential) -&gt; ()).(closure #1).(closure #1)"
-                  moduleName = "LearnItEarnIt"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/glin/Documents/Mobile_App_Development/IOS/LearnItEarnIt/LearnItEarnIt/LoginVC.swift"
-                  timestampString = "520573011.757839"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "106"
-                  endingLineNumber = "106"
-                  offsetFromSymbolStart = "23">
-               </Location>
-            </Locations>
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "No"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "LearnItEarnIt/RecentCompletionVC.swift"
-            timestampString = "521601212.65198"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "63"
-            endingLineNumber = "63"
-            landmarkName = "saveBtnPressed(_:)"
-            landmarkType = "7">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "No"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
             filePath = "LearnItEarnIt/DetailSettingVC.swift"
-            timestampString = "528204411.139635"
+            timestampString = "530104952.174302"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "177"
-            endingLineNumber = "177"
+            startingLineNumber = "201"
+            endingLineNumber = "201"
             landmarkName = "authBtnPressed(_:)"
             landmarkType = "7">
          </BreakpointContent>
@@ -121,13 +57,13 @@
             shouldBeEnabled = "No"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "LearnItEarnIt/MyPostTVC.swift"
-            timestampString = "529466620.892438"
+            filePath = "LearnItEarnIt/MainVC.swift"
+            timestampString = "530657225.426587"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "101"
-            endingLineNumber = "101"
-            landmarkName = "tableView(_:didSelectRowAt:)"
+            startingLineNumber = "89"
+            endingLineNumber = "89"
+            landmarkName = "viewDidAppear(_:)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>

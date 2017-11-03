@@ -16,6 +16,7 @@ let personal = Settings(title: "Personal", image: UIImage(named: "personal")!)
 let security = Settings(title: "Security", image: UIImage(named: "security")!)
 let myPost = Settings(title: "My Posts", image: UIImage(named: "post")!)
 let favourite = Settings(title: "My Favourites", image: UIImage(named: "favourite")!)
+let userRef = DataService.ds.REF_USERS
 
 var currentEmail: String!
 var currentUsername: String!
@@ -25,3 +26,5 @@ var posts = [Post]()
 var myPosts = [Post]()
 var myPostIds = [String]()
 var myFavPostIds = [String]()
+var myFavPosts = [Post]()
+var loadingView: LoadingView!

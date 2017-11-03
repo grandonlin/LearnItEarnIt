@@ -20,17 +20,25 @@ class ProductCell: UITableViewCell {
         stepDescription.text = step.stepDescription
         
         let imageUrl = step.stepImgUrl
-        let imageRef = Storage.storage().reference(forURL: imageUrl)
-        imageRef.getData(maxSize: 2 * 1024 * 1024) { (data, error) in
-            if error != nil {
-                print("Grandon: the error is \(error)")
-            } else {
-                if let img = UIImage(data: data!) {
-                    self.stepImg.image = img
+        if imageUrl != INIT_IMG_URL {
+            let imageRef = Storage.storage().reference(forURL: imageUrl)
+            imageRef.getData(maxSize: 2 * 1024 * 1024) { (data, error) in
+                if error != nil {
+                    print("Grandon: the error is \(error)")
+                } else {
+                    if let img = UIImage(data: data!) {
+                        self.stepImg.image = img
+                    }
                 }
             }
+        } else {
+            self.stepImg.frame.size = CGSize(width: 0, height: 0)
+            self.frame.size = CGSize(width: self.frame.width, height: 50)
+            self.stepImg.isHidden = true
         }
+        
     }
+    
 
 
 }

@@ -7,7 +7,6 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		A70FCC0E2B11EB04A560239E /* Pods_LearnItEarnIt.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 76088AC4C7211978A73A6E0E /* Pods_LearnItEarnIt.framework */; };
 		C101E5D81F622FD8003CEF0A /* SettingCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C101E5D71F622FD8003CEF0A /* SettingCell.swift */; };
 		C101E5DA1F62349D003CEF0A /* Settings.swift in Sources */ = {isa = PBXBuildFile; fileRef = C101E5D91F62349D003CEF0A /* Settings.swift */; };
 		C101E5DC1F62BC22003CEF0A /* ConfigurationVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = C101E5DB1F62BC22003CEF0A /* ConfigurationVC.swift */; };
@@ -16,6 +15,24 @@
 		C101E5E21F649145003CEF0A /* MyPostCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C101E5E11F649145003CEF0A /* MyPostCell.swift */; };
 		C101E5E41F64E342003CEF0A /* ConfigurationCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C101E5E31F64E342003CEF0A /* ConfigurationCell.swift */; };
 		C11AD9161F1A913600CC8D73 /* StepCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C11AD9151F1A913600CC8D73 /* StepCell.swift */; };
+		C11AF3C31F9E41AB00389B12 /* SwiftKeychainWrapper.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C11AF3BF1F9E415500389B12 /* SwiftKeychainWrapper.framework */; };
+		C11AF3C41F9E41AB00389B12 /* SwiftKeychainWrapper.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = C11AF3BF1F9E415500389B12 /* SwiftKeychainWrapper.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		C11AF3CA1F9E41E200389B12 /* FBSDKCoreKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C11AF3C81F9E41CD00389B12 /* FBSDKCoreKit.framework */; };
+		C11AF3CB1F9E41E200389B12 /* FBSDKCoreKit.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = C11AF3C81F9E41CD00389B12 /* FBSDKCoreKit.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		C11AF3CE1F9E41F100389B12 /* FBSDKLoginKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C11AF3CC1F9E41E700389B12 /* FBSDKLoginKit.framework */; };
+		C11AF3CF1F9E41F100389B12 /* FBSDKLoginKit.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = C11AF3CC1F9E41E700389B12 /* FBSDKLoginKit.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		C11AF3D21F9E420400389B12 /* SZTextView.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C11AF3D01F9E41FC00389B12 /* SZTextView.framework */; };
+		C11AF3D31F9E420400389B12 /* SZTextView.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = C11AF3D01F9E41FC00389B12 /* SZTextView.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		C11AF3D61F9E421300389B12 /* Bolts.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C11AF3D41F9E420D00389B12 /* Bolts.framework */; };
+		C11AF3D71F9E421300389B12 /* Bolts.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = C11AF3D41F9E420D00389B12 /* Bolts.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		C11AF3DA1F9E422600389B12 /* nanopb.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C11AF3D81F9E421B00389B12 /* nanopb.framework */; };
+		C11AF3DB1F9E422600389B12 /* nanopb.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = C11AF3D81F9E421B00389B12 /* nanopb.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		C11AF3DE1F9E426500389B12 /* GoogleToolboxForMac.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C11AF3DC1F9E425E00389B12 /* GoogleToolboxForMac.framework */; };
+		C11AF3DF1F9E426500389B12 /* GoogleToolboxForMac.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = C11AF3DC1F9E425E00389B12 /* GoogleToolboxForMac.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		C11AF3E21F9E427200389B12 /* GTMSessionFetcher.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C11AF3E01F9E426C00389B12 /* GTMSessionFetcher.framework */; };
+		C11AF3E31F9E427200389B12 /* GTMSessionFetcher.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = C11AF3E01F9E426C00389B12 /* GTMSessionFetcher.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		C11AF3E51F9E42BC00389B12 /* Pods_LearnItEarnIt.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 76088AC4C7211978A73A6E0E /* Pods_LearnItEarnIt.framework */; };
+		C11AF3E61F9E42BC00389B12 /* Pods_LearnItEarnIt.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 76088AC4C7211978A73A6E0E /* Pods_LearnItEarnIt.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		C15BF5E51EAAF6F60057310D /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = C15BF5E41EAAF6F60057310D /* AppDelegate.swift */; };
 		C15BF5E71EAAF6F60057310D /* MainVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = C15BF5E61EAAF6F60057310D /* MainVC.swift */; };
 		C15BF5EA1EAAF6F60057310D /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = C15BF5E81EAAF6F60057310D /* Main.storyboard */; };
@@ -42,7 +59,29 @@
 		C1CC26AE1EB4A56A00CFA708 /* SetupVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1CC26AD1EB4A56A00CFA708 /* SetupVC.swift */; };
 		C1CC26B11EB5973200CFA708 /* Profile.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1CC26B01EB5973200CFA708 /* Profile.swift */; };
 		C1CC26B51EB8A1FE00CFA708 /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1CC26B41EB8A1FE00CFA708 /* User.swift */; };
+		C1DFB2B41F9E68F8009C9D93 /* LoadingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1DFB2B31F9E68F8009C9D93 /* LoadingView.swift */; };
 /* End PBXBuildFile section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		C1BC00FF1F98B99F0041DDE2 /* CopyFiles */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+				C11AF3C41F9E41AB00389B12 /* SwiftKeychainWrapper.framework in CopyFiles */,
+				C11AF3E31F9E427200389B12 /* GTMSessionFetcher.framework in CopyFiles */,
+				C11AF3E61F9E42BC00389B12 /* Pods_LearnItEarnIt.framework in CopyFiles */,
+				C11AF3CB1F9E41E200389B12 /* FBSDKCoreKit.framework in CopyFiles */,
+				C11AF3CF1F9E41F100389B12 /* FBSDKLoginKit.framework in CopyFiles */,
+				C11AF3DB1F9E422600389B12 /* nanopb.framework in CopyFiles */,
+				C11AF3D71F9E421300389B12 /* Bolts.framework in CopyFiles */,
+				C11AF3DF1F9E426500389B12 /* GoogleToolboxForMac.framework in CopyFiles */,
+				C11AF3D31F9E420400389B12 /* SZTextView.framework in CopyFiles */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
 		76088AC4C7211978A73A6E0E /* Pods_LearnItEarnIt.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_LearnItEarnIt.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -55,6 +94,14 @@
 		C101E5E11F649145003CEF0A /* MyPostCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MyPostCell.swift; sourceTree = "<group>"; };
 		C101E5E31F64E342003CEF0A /* ConfigurationCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ConfigurationCell.swift; sourceTree = "<group>"; };
 		C11AD9151F1A913600CC8D73 /* StepCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StepCell.swift; sourceTree = "<group>"; };
+		C11AF3BF1F9E415500389B12 /* SwiftKeychainWrapper.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SwiftKeychainWrapper.framework; path = "../../../../Library/Developer/Xcode/DerivedData/LearnItEarnIt-bqlejvhlbcmkqzcvmyvldsbjbnit/Build/Products/Debug-iphoneos/SwiftKeychainWrapper/SwiftKeychainWrapper.framework"; sourceTree = "<group>"; };
+		C11AF3C81F9E41CD00389B12 /* FBSDKCoreKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = FBSDKCoreKit.framework; path = "../../../../Library/Developer/Xcode/DerivedData/LearnItEarnIt-bqlejvhlbcmkqzcvmyvldsbjbnit/Build/Products/Debug-iphoneos/FBSDKCoreKit/FBSDKCoreKit.framework"; sourceTree = "<group>"; };
+		C11AF3CC1F9E41E700389B12 /* FBSDKLoginKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = FBSDKLoginKit.framework; path = "../../../../Library/Developer/Xcode/DerivedData/LearnItEarnIt-bqlejvhlbcmkqzcvmyvldsbjbnit/Build/Products/Debug-iphoneos/FBSDKLoginKit/FBSDKLoginKit.framework"; sourceTree = "<group>"; };
+		C11AF3D01F9E41FC00389B12 /* SZTextView.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SZTextView.framework; path = "../../../../Library/Developer/Xcode/DerivedData/LearnItEarnIt-bqlejvhlbcmkqzcvmyvldsbjbnit/Build/Products/Debug-iphoneos/SZTextView/SZTextView.framework"; sourceTree = "<group>"; };
+		C11AF3D41F9E420D00389B12 /* Bolts.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Bolts.framework; path = "../../../../Library/Developer/Xcode/DerivedData/LearnItEarnIt-bqlejvhlbcmkqzcvmyvldsbjbnit/Build/Products/Debug-iphoneos/Bolts/Bolts.framework"; sourceTree = "<group>"; };
+		C11AF3D81F9E421B00389B12 /* nanopb.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = nanopb.framework; path = "../../../../Library/Developer/Xcode/DerivedData/LearnItEarnIt-bqlejvhlbcmkqzcvmyvldsbjbnit/Build/Products/Debug-iphoneos/nanopb/nanopb.framework"; sourceTree = "<group>"; };
+		C11AF3DC1F9E425E00389B12 /* GoogleToolboxForMac.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = GoogleToolboxForMac.framework; path = "../../../../Library/Developer/Xcode/DerivedData/LearnItEarnIt-bqlejvhlbcmkqzcvmyvldsbjbnit/Build/Products/Debug-iphoneos/GoogleToolboxForMac/GoogleToolboxForMac.framework"; sourceTree = "<group>"; };
+		C11AF3E01F9E426C00389B12 /* GTMSessionFetcher.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = GTMSessionFetcher.framework; path = "../../../../Library/Developer/Xcode/DerivedData/LearnItEarnIt-bqlejvhlbcmkqzcvmyvldsbjbnit/Build/Products/Debug-iphoneos/GTMSessionFetcher/GTMSessionFetcher.framework"; sourceTree = "<group>"; };
 		C15BF5E11EAAF6F60057310D /* LearnItEarnIt.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = LearnItEarnIt.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		C15BF5E41EAAF6F60057310D /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		C15BF5E61EAAF6F60057310D /* MainVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainVC.swift; sourceTree = "<group>"; };
@@ -84,6 +131,7 @@
 		C1CC26AF1EB578F900CFA708 /* LearnItEarnIt.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = LearnItEarnIt.entitlements; sourceTree = "<group>"; };
 		C1CC26B01EB5973200CFA708 /* Profile.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Profile.swift; sourceTree = "<group>"; };
 		C1CC26B41EB8A1FE00CFA708 /* User.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
+		C1DFB2B31F9E68F8009C9D93 /* LoadingView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoadingView.swift; sourceTree = "<group>"; };
 		D7C9C38294BA99CEF24D18B7 /* Pods-LearnItEarnIt.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-LearnItEarnIt.debug.xcconfig"; path = "Pods/Target Support Files/Pods-LearnItEarnIt/Pods-LearnItEarnIt.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -92,7 +140,15 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				A70FCC0E2B11EB04A560239E /* Pods_LearnItEarnIt.framework in Frameworks */,
+				C11AF3C31F9E41AB00389B12 /* SwiftKeychainWrapper.framework in Frameworks */,
+				C11AF3E21F9E427200389B12 /* GTMSessionFetcher.framework in Frameworks */,
+				C11AF3E51F9E42BC00389B12 /* Pods_LearnItEarnIt.framework in Frameworks */,
+				C11AF3CA1F9E41E200389B12 /* FBSDKCoreKit.framework in Frameworks */,
+				C11AF3CE1F9E41F100389B12 /* FBSDKLoginKit.framework in Frameworks */,
+				C11AF3DA1F9E422600389B12 /* nanopb.framework in Frameworks */,
+				C11AF3D61F9E421300389B12 /* Bolts.framework in Frameworks */,
+				C11AF3DE1F9E426500389B12 /* GoogleToolboxForMac.framework in Frameworks */,
+				C11AF3D21F9E420400389B12 /* SZTextView.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -102,6 +158,14 @@
 		71FA860E226DE34742CCEECD /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				C11AF3E01F9E426C00389B12 /* GTMSessionFetcher.framework */,
+				C11AF3DC1F9E425E00389B12 /* GoogleToolboxForMac.framework */,
+				C11AF3D81F9E421B00389B12 /* nanopb.framework */,
+				C11AF3D41F9E420D00389B12 /* Bolts.framework */,
+				C11AF3D01F9E41FC00389B12 /* SZTextView.framework */,
+				C11AF3CC1F9E41E700389B12 /* FBSDKLoginKit.framework */,
+				C11AF3C81F9E41CD00389B12 /* FBSDKCoreKit.framework */,
+				C11AF3BF1F9E415500389B12 /* SwiftKeychainWrapper.framework */,
 				76088AC4C7211978A73A6E0E /* Pods_LearnItEarnIt.framework */,
 			);
 			name = Frameworks;
@@ -175,6 +239,7 @@
 				C101E5D71F622FD8003CEF0A /* SettingCell.swift */,
 				C101E5E11F649145003CEF0A /* MyPostCell.swift */,
 				C101E5E31F64E342003CEF0A /* ConfigurationCell.swift */,
+				C1DFB2B31F9E68F8009C9D93 /* LoadingView.swift */,
 			);
 			name = View;
 			sourceTree = "<group>";
@@ -230,6 +295,7 @@
 				C15BF5DF1EAAF6F60057310D /* Resources */,
 				22391D21270401F16ABD3787 /* [CP] Embed Pods Frameworks */,
 				B47CF1AADA0C66FDB9D6DC72 /* [CP] Copy Pods Resources */,
+				C1BC00FF1F98B99F0041DDE2 /* CopyFiles */,
 			);
 			buildRules = (
 			);
@@ -376,6 +442,7 @@
 				C178A6031EF478BF00B97F43 /* RecentCompletionVC.swift in Sources */,
 				C15BF60A1EAC3DD50057310D /* ProductCell.swift in Sources */,
 				C15BF6081EAB74C90057310D /* Post.swift in Sources */,
+				C1DFB2B41F9E68F8009C9D93 /* LoadingView.swift in Sources */,
 				C15BF6021EAB6A210057310D /* PostVC.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -499,6 +566,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = D7C9C38294BA99CEF24D18B7 /* Pods-LearnItEarnIt.debug.xcconfig */;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_ENTITLEMENTS = LearnItEarnIt/LearnItEarnIt.entitlements;
 				DEVELOPMENT_TEAM = UM5SX26C6N;
@@ -515,6 +583,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 85451FB6E8DEFB98F6CF38D4 /* Pods-LearnItEarnIt.release.xcconfig */;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_ENTITLEMENTS = LearnItEarnIt/LearnItEarnIt.entitlements;
 				DEVELOPMENT_TEAM = UM5SX26C6N;

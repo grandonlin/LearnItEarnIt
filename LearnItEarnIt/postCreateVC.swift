@@ -18,7 +18,6 @@ class PostCreateVC: UIViewController, UITextViewDelegate, UIImagePickerControlle
     @IBOutlet weak var postImage: UIImageView!
     @IBOutlet weak var stackView: UIStackView!
     @IBOutlet weak var topSpace: NSLayoutConstraint!
-    @IBOutlet weak var activityIndicatorView: UIActivityIndicatorView!
 
     var imagePicker: UIImagePickerController!
     var indicator = UIActivityIndicatorView()
@@ -38,6 +37,8 @@ class PostCreateVC: UIViewController, UITextViewDelegate, UIImagePickerControlle
         imagePicker.delegate = self
         
         indicator.center = self.view.center
+        indicator.frame = CGRect(x: self.view.center.x, y: self.view.center.y, width: 4.0, height: 4.0)
+        indicator.hidesWhenStopped = true
         indicator.activityIndicatorViewStyle = .whiteLarge
         self.view.addSubview(indicator)
         
@@ -105,12 +106,14 @@ class PostCreateVC: UIViewController, UITextViewDelegate, UIImagePickerControlle
     }
     
     @IBAction func nextBtnPressed(_ sender: Any) {
+//        self.indicator.startAnimating()
         guard let postTitle = postTitleTextField.text, postTitle != "" else {
             let titleAlert = UIAlertController(title: "Missing Title", message: "Please give your post a cool name.", preferredStyle: .alert)
             titleAlert.addAction(UIAlertAction(title: "Cancel", style: .default, handler: nil))
             self.present(titleAlert, animated: true, completion: nil)
             return
         }
+        
         guard let postDesc = textView.text, postDesc != "" else {
             let descAlert = UIAlertController(title: "Missing Description", message: "Post description is not entered.", preferredStyle: .alert)
             descAlert.addAction(UIAlertAction(title: "Cancel", style: .default, handler: nil))
@@ -118,14 +121,15 @@ class PostCreateVC: UIViewController, UITextViewDelegate, UIImagePickerControlle
             return
         }
         
-        activityIndicatorView.startAnimating()
+        loadingView = LoadingView(uiView: view, message: "Creating...")
         
         if self.post.isNew {
-            let stepToBeInit = Step(postId: self.postId, stepNum: 1, stepDesc: "", stepImg: UIImage(named: "emptyImage")!)
+            let stepImgUrl = "https://firebasestorage.googleapis.com/v0/b/learnitearnit-2223f.appspot.com/o/emptyImage.png?alt=media&token=a683e44f-e9ab-4ecc-a5a4-19ad16411a49"
+            let stepToBeInit = Step(postId: self.postId, stepNum: 1, stepDesc: "", stepImg: UIImage(named: "emptyImage")!, stepImgUrl: stepImgUrl, imageData: Data(), metaData: StorageMetadata())
             steps.append(stepToBeInit)
         }
         
-        DataService.ds.REF_USERS_CURRENT.child("myPost").child(postId).setValue(post.created)
+        DataService.ds.REF_USERS_CURRENT.child("myPosts").child(postId).setValue(post.created)
         
         if let postImg = postImage.image {
             if let imgData = UIImageJPEGRepresentation(postImg, 0.5) {
@@ -156,8 +160,8 @@ class PostCreateVC: UIViewController, UITextViewDelegate, UIImagePickerControlle
 
             }
         }
-        
-        activityIndicatorView.stopAnimating()
+//        self.indicator.stopAnimating()
+        loadingView.hide()
         performSegue(withIdentifier: "DetailStepVC", sender: sender)
         
     }
@@ -187,12 +191,13 @@ class PostCreateVC: UIViewController, UITextViewDelegate, UIImagePickerControlle
     }
     
     @IBAction func backBtnPressed(_ sender: Any) {
+        loadingView = LoadingView(uiView: view, message: "")
         let postRef = DataService.ds.REF_POSTS
         postRef.observeSingleEvent(of: .value, with: { (snapshot) in
             if let snapShot = snapshot.children.allObjects as? [DataSnapshot] {
                 for snap in snapShot {
                     if snap.key == self.postId {
-                        DataService.ds.REF_USERS_CURRENT.child("myPost").child(self.postId).removeValue()
+                        DataService.ds.REF_USERS_CURRENT.child("myPosts").child(self.postId).removeValue()
                         DataService.ds.REF_POSTS.child(self.postId).removeValue()
                         DataService.ds.POST_IMAGE.child(self.postId).child(self.completionImgName).delete(completion: nil)
                         break
@@ -200,6 +205,7 @@ class PostCreateVC: UIViewController, UITextViewDelegate, UIImagePickerControlle
                 }
             }
         })
+        loadingView.hide()
         dismiss(animated: true, completion: nil)
     }
     
