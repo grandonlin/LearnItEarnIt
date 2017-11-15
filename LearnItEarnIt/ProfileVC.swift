@@ -13,9 +13,10 @@ import SwiftKeychainWrapper
 class ProfileVC: UIViewController, UIImagePickerControllerDelegate, UINavigationControllerDelegate {
 
     @IBOutlet weak var profileImg: CircleView!
-    @IBOutlet weak var profileUserLbl: UILabel!
+    @IBOutlet weak var profileUserLbl: FancyLabel!
     @IBOutlet weak var recentCompletedImg: UIImageView!
-    @IBOutlet weak var genderLbl: UILabel!
+    @IBOutlet weak var genderLbl: FancyLabel!
+    @IBOutlet weak var activityIndicator: UIActivityIndicatorView!
 
 //    static var imageCache: NSCache<NSString, UIImage> = NSCache()
     
@@ -23,25 +24,28 @@ class ProfileVC: UIViewController, UIImagePickerControllerDelegate, UINavigation
     var handle: UInt!
     var ref: DatabaseReference!
     var completionImage: UIImage!
-    var indicator = UIActivityIndicatorView()
+//    var indicator = UIActivityIndicatorView()
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        indicator.center = self.view.center
-        indicator.frame = CGRect(x: self.view.center.x, y: self.view.center.y, width: 4.0, height: 4.0)
-        indicator.hidesWhenStopped = true
-        indicator.activityIndicatorViewStyle = .whiteLarge
-        self.view.addSubview(indicator)
+//        loadingView = LoadingView(uiView: view)
+//        loadingView.show()
         
-        indicator.startAnimating()
+        
+        activityIndicator.startAnimating()
+//        downloadProfileData()
+
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
         downloadProfileData()
-        indicator.stopAnimating()
     }
 
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(true)
-        
+//        loadingView.hide()
+        activityIndicator.stopAnimating()
     }
     
     override func viewDidDisappear(_ animated: Bool) {

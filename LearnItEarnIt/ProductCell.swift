@@ -39,6 +39,8 @@ class ProductCell: UITableViewCell {
         
     }
     
-
+    override func prepareForReuse() {
+        
+    }
 
 }

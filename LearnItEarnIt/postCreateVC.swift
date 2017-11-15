@@ -18,6 +18,7 @@ class PostCreateVC: UIViewController, UITextViewDelegate, UIImagePickerControlle
     @IBOutlet weak var postImage: UIImageView!
     @IBOutlet weak var stackView: UIStackView!
     @IBOutlet weak var topSpace: NSLayoutConstraint!
+    @IBOutlet weak var activityIndicator: UIActivityIndicatorView!
 
     var imagePicker: UIImagePickerController!
     var indicator = UIActivityIndicatorView()
@@ -36,38 +37,13 @@ class PostCreateVC: UIViewController, UITextViewDelegate, UIImagePickerControlle
         imagePicker.allowsEditing = true
         imagePicker.delegate = self
         
-        indicator.center = self.view.center
-        indicator.frame = CGRect(x: self.view.center.x, y: self.view.center.y, width: 4.0, height: 4.0)
-        indicator.hidesWhenStopped = true
-        indicator.activityIndicatorViewStyle = .whiteLarge
-        self.view.addSubview(indicator)
+        createPostWithID()
         
-        lastPost = KeychainWrapper.standard.integer(forKey: LAST_POST)
-        print("Grandon(postCreateVC): postCount is now \(lastPost)")
-        postId = "\(lastPost + 1)"
-        
-//        postId = NSUUID().uuidString
-        post = Post(key: postId)
-        
-        let tapRecognizer = UITapGestureRecognizer(target: self, action: #selector(handleBackgroundTap))
-        
-        tapRecognizer.cancelsTouchesInView = false
-        self.view.addGestureRecognizer(tapRecognizer)
+        assignTapGesture()
         
         //Uncover the content behind the keyboard
-        NotificationCenter.default.addObserver(self, selector: #selector(keyboardUP), name: NSNotification.Name.UIKeyboardWillShow, object: nil)
+        uncoverComponentsBeneathKeyboard()
         
-        NotificationCenter.default.addObserver(self, selector: #selector(keyboardDOWN), name: NSNotification.Name.UIKeyboardWillHide, object: nil)
-        
-        let toolBar = UIToolbar()
-        toolBar.sizeToFit()
-        
-        let doneButton = UIBarButtonItem(barButtonSystemItem: .done, target: self, action: #selector(self.doneClicked))
-        
-        toolBar.setItems([doneButton], animated: false)
-        
-        textView.inputAccessoryView = toolBar
-        postTitleTextField.inputAccessoryView = toolBar
         
         if steps.count == 0 {
             self.post.isNew = true
@@ -106,7 +82,6 @@ class PostCreateVC: UIViewController, UITextViewDelegate, UIImagePickerControlle
     }
     
     @IBAction func nextBtnPressed(_ sender: Any) {
-//        self.indicator.startAnimating()
         guard let postTitle = postTitleTextField.text, postTitle != "" else {
             let titleAlert = UIAlertController(title: "Missing Title", message: "Please give your post a cool name.", preferredStyle: .alert)
             titleAlert.addAction(UIAlertAction(title: "Cancel", style: .default, handler: nil))
@@ -120,17 +95,22 @@ class PostCreateVC: UIViewController, UITextViewDelegate, UIImagePickerControlle
             self.present(descAlert, animated: true, completion: nil)
             return
         }
+//        loadingView = LoadingView(uiView: view)
+//        loadingView.show()
         
-        loadingView = LoadingView(uiView: view, message: "Creating...")
+        activityIndicator.startAnimating()
         
         if self.post.isNew {
-            let stepImgUrl = "https://firebasestorage.googleapis.com/v0/b/learnitearnit-2223f.appspot.com/o/emptyImage.png?alt=media&token=a683e44f-e9ab-4ecc-a5a4-19ad16411a49"
+            let stepImgUrl = INIT_IMG_URL
             let stepToBeInit = Step(postId: self.postId, stepNum: 1, stepDesc: "", stepImg: UIImage(named: "emptyImage")!, stepImgUrl: stepImgUrl, imageData: Data(), metaData: StorageMetadata())
             steps.append(stepToBeInit)
         }
         
         DataService.ds.REF_USERS_CURRENT.child("myPosts").child(postId).setValue(post.created)
         
+        if postImage.image == nil {
+            self.sendAlertWithoutHandler(alertTitle: "Missing Image", alertMessage: "Are you sure you an image is not required?", actionTitle: ["Yes", "Cancel"])
+        }
         if let postImg = postImage.image {
             if let imgData = UIImageJPEGRepresentation(postImg, 0.5) {
                 completionImgName = postTitle
@@ -145,14 +125,14 @@ class PostCreateVC: UIViewController, UITextViewDelegate, UIImagePickerControlle
                     } else {
                         let imgUrl = data?.downloadURL()?.absoluteString
                         if self.post.isNew {
-                            let step = ["stepDescription": "", "stepImgUrl": "https://firebasestorage.googleapis.com/v0/b/learnitearnit-2223f.appspot.com/o/emptyImage.png?alt=media&token=a683e44f-e9ab-4ecc-a5a4-19ad16411a49", "stepNum" : 1] as [String : Any]
-                            let postDict = ["completionImgUrl": imgUrl!, "created": self.post.created, "likes": 0, "postTitle": postTitle, "steps": ["detailDescription" : postDesc, "stepDetails": ["step1": step]]] as [String : Any]
-                            DataService.ds.REF_POSTS.child(self.postId).updateChildValues(postDict)                            
+                            let step = ["stepDescription": "", "stepImgUrl": INIT_IMG_URL, "stepNum" : 1] as [String : Any]
+                            let postDict = ["completionImgUrl": imgUrl!, "created": self.post.created, "likes": 0, "postTitle": postTitle, "steps": ["detailDescription" : postDesc, "stepDetails": ["1": step]]] as [String : Any]
+                            POST_REF.child(self.postId).updateChildValues(postDict)
                             self.post.isNew = false
                         } else {
-                            DataService.ds.REF_POSTS.child(self.postId).child("completionImgUrl").setValue(imgUrl!)
-                            DataService.ds.REF_POSTS.child(self.postId).child("postTitle").setValue(postTitle)
-                            DataService.ds.REF_POSTS.child(self.postId).child("steps").child("detailDescription").setValue(postDesc)
+                            POST_REF.child(self.postId).child("completionImgUrl").setValue(imgUrl!)
+                            POST_REF.child(self.postId).child("postTitle").setValue(postTitle)
+                            POST_REF.child(self.postId).child("steps").child("detailDescription").setValue(postDesc)
                         }
                         
                     }
@@ -160,10 +140,9 @@ class PostCreateVC: UIViewController, UITextViewDelegate, UIImagePickerControlle
 
             }
         }
-//        self.indicator.stopAnimating()
-        loadingView.hide()
+        activityIndicator.stopAnimating()
         performSegue(withIdentifier: "DetailStepVC", sender: sender)
-        
+//        loadingView.hide()
     }
     
     @IBAction func onDismissKeyboard(_ sender: Any) {
@@ -191,22 +170,52 @@ class PostCreateVC: UIViewController, UITextViewDelegate, UIImagePickerControlle
     }
     
     @IBAction func backBtnPressed(_ sender: Any) {
-        loadingView = LoadingView(uiView: view, message: "")
-        let postRef = DataService.ds.REF_POSTS
-        postRef.observeSingleEvent(of: .value, with: { (snapshot) in
-            if let snapShot = snapshot.children.allObjects as? [DataSnapshot] {
-                for snap in snapShot {
-                    if snap.key == self.postId {
-                        DataService.ds.REF_USERS_CURRENT.child("myPosts").child(self.postId).removeValue()
-                        DataService.ds.REF_POSTS.child(self.postId).removeValue()
-                        DataService.ds.POST_IMAGE.child(self.postId).child(self.completionImgName).delete(completion: nil)
-                        break
-                    }
-                }
+        activityIndicator.startAnimating()
+        DataService.ds.REF_USERS_CURRENT.child("myPosts").child(self.postId).removeValue()
+        DataService.ds.REF_POSTS.child(self.postId).removeValue()
+        if completionImgName != nil && completionImgName != "" {
+           DataService.ds.POST_IMAGE.child(self.postId).child(self.completionImgName).delete(completion: nil)
+        }
+        if steps.count > 0 {
+            for step in steps {
+                DataService.ds.STEP_IMAGE.child(self.postId).child("Step \(step.stepNum)").delete(completion: nil)
             }
-        })
-        loadingView.hide()
+            steps.removeAll()
+        }
+        activityIndicator.stopAnimating()
         dismiss(animated: true, completion: nil)
+    }
+    
+    func createPostWithID() {
+        if KeychainWrapper.standard.integer(forKey: LAST_POST) == nil {
+            KeychainWrapper.standard.set(0, forKey: LAST_POST)
+        }
+        lastPost = KeychainWrapper.standard.integer(forKey: LAST_POST)
+        postId = "\(lastPost + 1)"
+        post = Post(key: postId)
+
+    }
+    
+    func assignTapGesture() {
+        let tapRecognizer = UITapGestureRecognizer(target: self, action: #selector(handleBackgroundTap))
+        tapRecognizer.cancelsTouchesInView = false
+        self.view.addGestureRecognizer(tapRecognizer)
+    }
+    
+    func uncoverComponentsBeneathKeyboard() {
+        NotificationCenter.default.addObserver(self, selector: #selector(keyboardUP), name: NSNotification.Name.UIKeyboardWillShow, object: nil)
+        
+        NotificationCenter.default.addObserver(self, selector: #selector(keyboardDOWN), name: NSNotification.Name.UIKeyboardWillHide, object: nil)
+        
+        let toolBar = UIToolbar()
+        toolBar.sizeToFit()
+        
+        let doneButton = UIBarButtonItem(barButtonSystemItem: .done, target: self, action: #selector(self.doneClicked))
+        
+        toolBar.setItems([doneButton], animated: false)
+        
+        textView.inputAccessoryView = toolBar
+        postTitleTextField.inputAccessoryView = toolBar
     }
     
 }

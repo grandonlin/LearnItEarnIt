@@ -13,7 +13,15 @@ class CircleButton: UIButton {
     override func layoutSubviews() {
         super.layoutSubviews()
         
+    }
+    
+    func circleWidth() {
         layer.cornerRadius = self.frame.width / 2
+        imageView?.contentMode = .scaleAspectFit
+    }
+    
+    func circleHeight() {
+        layer.cornerRadius = self.frame.height / 2
         imageView?.contentMode = .scaleAspectFit
     }
 }

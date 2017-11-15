@@ -23,7 +23,8 @@ class DetailSettingVC: UIViewController, UITextFieldDelegate, UIImagePickerContr
     @IBOutlet weak var confPwTextField: UITextField!
     @IBOutlet weak var saveBtn: UIButton!
     @IBOutlet weak var authLbl: UILabel!
-    @IBOutlet weak var authBtn: UIButton!
+    @IBOutlet weak var authBtn: CircleButton!
+    @IBOutlet weak var activityIndicator: UIActivityIndicatorView!
     
     var detailSettingTitle: String!
     var imagePicker: UIImagePickerController!
@@ -51,14 +52,20 @@ class DetailSettingVC: UIViewController, UITextFieldDelegate, UIImagePickerContr
         imagePicker.delegate = self
         imagePicker.allowsEditing = true
         
+        authBtn.circleHeight()
+        
         titleLbl.text = detailSettingTitle
-        
-        NotificationCenter.default.addObserver(self, selector: #selector(keyboardUP), name: NSNotification.Name.UIKeyboardWillShow, object: nil)
-        
-        NotificationCenter.default.addObserver(self, selector: #selector(keyboardDOWN), name: NSNotification.Name.UIKeyboardWillHide, object: nil)
+//        
+//        NotificationCenter.default.addObserver(self, selector: #selector(keyboardUP), name: NSNotification.Name.UIKeyboardWillShow, object: nil)
+//        
+//        NotificationCenter.default.addObserver(self, selector: #selector(keyboardDOWN), name: NSNotification.Name.UIKeyboardWillHide, object: nil)
         
         existNames = [String]()
         
+        loadScreen()
+    }
+    
+    func loadScreen() {
         if titleLbl.text == "Profile Image" {
             profileImageView.isHidden = false
             imageBtn.isHidden = false
@@ -109,15 +116,11 @@ class DetailSettingVC: UIViewController, UITextFieldDelegate, UIImagePickerContr
             currentPassword = KeychainWrapper.standard.string(forKey: CURRENT_PASSWORD)
             currentEmail = KeychainWrapper.standard.string(forKey: CURRENT_EMAIL)
         }
-        
-        
-        
     }
     
     func textFieldDidEndEditing(_ textField: UITextField) {
         if titleLbl.text == "Name" {
             if nameTextField.text != currentUsername {
-                
                 usernameChanged = true
             } else {
                 usernameChanged = false
@@ -140,23 +143,23 @@ class DetailSettingVC: UIViewController, UITextFieldDelegate, UIImagePickerContr
         return true
     }
     
-    func keyboardUP(notification: Notification) {
-        if confPwTextField.isEditing {
-            if let keyboardSize = (notification.userInfo?[UIKeyboardFrameBeginUserInfoKey] as? NSValue)?.cgRectValue {
-                self.view.frame.origin.y -= keyboardSize.height
-            }
-        }
-        
-    }
-    
-    func keyboardDOWN(notification: Notification) {
-        if confPwTextField.isEditing {
-            if let keyboardSize = (notification.userInfo?[UIKeyboardFrameBeginUserInfoKey] as? NSValue)?.cgRectValue {
-                self.view.frame.origin.y += keyboardSize.height
-            }
-        }
-        
-    }
+//    func keyboardUP(notification: Notification) {
+//        if confPwTextField.isEditing {
+//            if let keyboardSize = (notification.userInfo?[UIKeyboardFrameBeginUserInfoKey] as? NSValue)?.cgRectValue {
+//                self.view.frame.origin.y -= keyboardSize.height
+//            }
+//        }
+//        
+//    }
+//    
+//    func keyboardDOWN(notification: Notification) {
+//        if confPwTextField.isEditing {
+//            if let keyboardSize = (notification.userInfo?[UIKeyboardFrameBeginUserInfoKey] as? NSValue)?.cgRectValue {
+//                self.view.frame.origin.y += keyboardSize.height
+//            }
+//        }
+//        
+//    }
     
 
     func numberOfComponents(in pickerView: UIPickerView) -> Int {
@@ -177,12 +180,13 @@ class DetailSettingVC: UIViewController, UITextFieldDelegate, UIImagePickerContr
     }
     
     func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [String : Any]) {
+        activityIndicator.startAnimating()
         if let selectedImage = info[UIImagePickerControllerEditedImage] as? UIImage {
             profileImageView.image = selectedImage
             if let imageData = UIImageJPEGRepresentation(selectedImage, 0.5) {
                 let metadata = StorageMetadata()
                 metadata.contentType = "image/jpeg"
-                DataService.ds.STORAGE_PROFILE_IMAGE.child(self.profileKey).putData(imageData, metadata: metadata) { (metadata, error) in
+                DataService.ds.STORAGE_PROFILE_IMAGE.child(self.profileKey).child("profile Image").putData(imageData, metadata: metadata) { (metadata, error) in
                     if error != nil {
                         print("Grandon(DetailSettingVC): unable to upload picture - \(error?.localizedDescription)")
                     } else {
@@ -192,6 +196,7 @@ class DetailSettingVC: UIViewController, UITextFieldDelegate, UIImagePickerContr
                 }
             }
         }
+        activityIndicator.stopAnimating()
         imagePicker.dismiss(animated: true, completion: nil)
     }
     
@@ -212,10 +217,9 @@ class DetailSettingVC: UIViewController, UITextFieldDelegate, UIImagePickerContr
             }
         })
     }
-    
-    
 
     @IBAction func backBtnPressed(_ sender: Any) {
+        activityIndicator.startAnimating()
         if genderPickerView.isHidden == false {
             let genderPicked = genderPickerView.selectedRow(inComponent: 0)
             if genderPicked == 0 {
@@ -227,13 +231,11 @@ class DetailSettingVC: UIViewController, UITextFieldDelegate, UIImagePickerContr
             }
         } else if nameTextField.isHidden == false {
             if nameTextField.text != currentUsername {
-                
                 usernameChanged = true
             } else {
                 usernameChanged = false
             }
-            print("Grandon: the current username is \(nameTextField.text)")
-            print("Grandon: username has been changed - \(usernameChanged)")
+            
             if nameTextField.text == "" {
                     let emptyUsernameAlert = UIAlertController(title: "Missing Username", message: "Please make sure your username is entered", preferredStyle: .alert)
                     emptyUsernameAlert.addAction(UIAlertAction(title: "Cancel", style: .default, handler: nil))
@@ -279,6 +281,7 @@ class DetailSettingVC: UIViewController, UITextFieldDelegate, UIImagePickerContr
     }
     
     @IBAction func saveBtnPressed(_ sender: Any) {
+        activityIndicator.startAnimating()
         if let currentPw = currentPwTextField.text, let newPw = newPwTextField.text, let confPw = confPwTextField.text {
             if newPw != confPw {
                 sendAlertWithoutHandler(alertTitle: "Password Reset Fails", alertMessage: "Passwords not matched", actionTitle: ["OK"])
@@ -312,15 +315,6 @@ class DetailSettingVC: UIViewController, UITextFieldDelegate, UIImagePickerContr
 
             }
         }
-    }
-    
-    
-    
-    func sendAlertWithoutHandler(alertTitle: String, alertMessage: String, actionTitle: [String]) {
-        let alert = UIAlertController(title: alertTitle, message: alertMessage, preferredStyle: .alert)
-        for action in actionTitle {
-            alert.addAction(UIAlertAction(title: action, style: .default, handler: nil))
-        }
-        self.present(alert, animated: true, completion: nil)
+        activityIndicator.stopAnimating()
     }
 }

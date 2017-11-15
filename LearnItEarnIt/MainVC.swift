@@ -15,11 +15,13 @@ import SwiftKeychainWrapper
 
 class MainVC: UIViewController, UITableViewDataSource, UITableViewDelegate, UISearchBarDelegate {
 
+    @IBOutlet weak var profileBtn: CircleButton!
     @IBOutlet weak var tableView: UITableView!
-    @IBOutlet weak var likeNumLbl: UILabel!
+    @IBOutlet weak var likeNumLbl: FancyLabel!
     @IBOutlet weak var segment: UISegmentedControl!
     @IBOutlet weak var searchBar: UISearchBar!
-    @IBOutlet weak var activityIndicatorView: UIActivityIndicatorView!
+    @IBOutlet weak var activityIndicator: UIActivityIndicatorView!
+
     
     var inSearchMode = false
     var post: Post!
@@ -34,10 +36,11 @@ class MainVC: UIViewController, UITableViewDataSource, UITableViewDelegate, UISe
     var facebookProfileImg: UIImage!
     var defaultCompletionImgUrl: String!
     var ref: DatabaseReference!
-    var postRef: DatabaseReference!
     let profileKey = KeychainWrapper.standard.string(forKey: KEY_UID)!
     var indicator = UIActivityIndicatorView()
     var loadingView: LoadingView!
+    var allLoaded: Bool = false
+    var postLoaded = 0
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -47,6 +50,8 @@ class MainVC: UIViewController, UITableViewDataSource, UITableViewDelegate, UISe
         searchBar.delegate = self
         searchBar.returnKeyType = UIReturnKeyType.done
         
+        profileBtn.circleWidth()
+        
 //        indicator.frame = self.view.frame
 //        indicator.center = self.view.center
 //        indicator.frame = CGRect(x: self.view.center.x, y: self.view.center.y, width: 4.0, height: 4.0)
@@ -55,12 +60,11 @@ class MainVC: UIViewController, UITableViewDataSource, UITableViewDelegate, UISe
 //        indicator.color = UIColor.red
 //        self.view.addSubview(indicator)
         
-        postRef = DataService.ds.REF_POSTS
         
 //        self.showActivityIndicator()
-        loadingView = LoadingView(uiView: view, message: "Loading...")
+        activityIndicator.startAnimating()
         
-        
+//        fetchData()
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -79,30 +83,26 @@ class MainVC: UIViewController, UITableViewDataSource, UITableViewDelegate, UISe
             }
         })
         
-        fetchData()
         
+
     }
-    
-    
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(true)
-        
-        
-        loadingView.hide()
-//
-//        DispatchQueue.global().async {
-//            self.fetchData()
-//            DispatchQueue.main.async {
-//                self.indicator.stopAnimating()
-//            }
-//        }
+        DispatchQueue.global().async {
+            self.fetchData()
+            if self.checkPostLoaded(posts: posts) {
+                DispatchQueue.main.async {
+                    self.activityIndicator.stopAnimating()
+                }
+            }
+        }
     }
     
     override func viewDidDisappear(_ animated: Bool) {
 //        self.posts.removeAll()
         ref.removeObserver(withHandle: HANDLE)
-        postRef.removeObserver(withHandle: HANDLE)
+        POST_REF.removeObserver(withHandle: HANDLE)
     }
     
     func numberOfSections(in tableView: UITableView) -> Int {
@@ -175,16 +175,16 @@ class MainVC: UIViewController, UITableViewDataSource, UITableViewDelegate, UISe
     }
     
     func fetchData() {
-        self.showActivityIndicator()
         posts.removeAll()
         if segment.selectedSegmentIndex == 0 {
-            postRef.queryOrderedByKey().observeSingleEvent(of: .value, with: { (snapshot) in
+            DataService.ds.REF_POSTS.queryOrderedByKey().observeSingleEvent(of: .value, with: { (snapshot) in
                 if let snapshot = snapshot.children.allObjects as? [DataSnapshot] {
                     for snap in snapshot {
                         if let postDict = snap.value as? Dictionary<String, Any> {
                             let key = snap.key
                             let post = Post(key: key, postDict: postDict)
                             posts.insert(post, at: 0)
+                            self.postLoaded += 1
                         }
                     }
                 }
@@ -194,22 +194,29 @@ class MainVC: UIViewController, UITableViewDataSource, UITableViewDelegate, UISe
                 self.tableView.reloadData()
             })
         } else if segment.selectedSegmentIndex == 1 {
-            postRef.queryOrdered(byChild: "likes").observe(.value, with: { (snapshot) in
+            POST_REF.queryOrdered(byChild: "likes").observe(.value, with: { (snapshot) in
                 if let snapshot = snapshot.children.allObjects as? [DataSnapshot] {
                     for snap in snapshot {
                         if let postDict = snap.value as? Dictionary<String, Any> {
                             let key = snap.key
                             let post = Post(key: key, postDict: postDict)
                             posts.insert(post, at: 0)
-                            
+                            self.postLoaded += 1
                         }
                     }
                 }
                 self.tableView.reloadData()
             })
         }
-        self.hideActivityIndicator()
     }
+    
+    func checkPostLoaded(posts: [Post]) -> Bool {
+        if postLoaded == posts.count {
+            return true
+        }
+        return false
+    }
+    
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if let destination = segue.destination as? PostVC {

@@ -17,16 +17,15 @@ class RecentCompletionVC: UIViewController, UIImagePickerControllerDelegate, UIN
     var imageUrl: String!
     var indicator = UIActivityIndicatorView()
     let profileKey = KeychainWrapper.standard.string(forKey: KEY_UID)!
-    var loadingView: LoadingView!
+//    var loadingView: LoadingView!
     
     @IBOutlet weak var completionImageView: UIImageView!
+    @IBOutlet weak var activityIndicator: UIActivityIndicatorView!
     
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        indicator.center = self.view.center
-        indicator.activityIndicatorViewStyle = .whiteLarge
-        self.view.addSubview(indicator)
+      
         
         completionImageView.image = completionImage
         
@@ -34,11 +33,11 @@ class RecentCompletionVC: UIViewController, UIImagePickerControllerDelegate, UIN
         imagePicker.allowsEditing = true
         imagePicker.delegate = self
         
-        loadingView = LoadingView(uiView: view, message: "Loading...")
     }
 
     override func viewDidAppear(_ animated: Bool) {
-        loadingView.hide()
+//        loadingView.hide()
+        activityIndicator.stopAnimating()
     }
     
     @IBAction func imagePressed(_ sender: Any) {
@@ -57,22 +56,20 @@ class RecentCompletionVC: UIViewController, UIImagePickerControllerDelegate, UIN
     
     @IBAction func saveBtnPressed(_ sender: UIButton) {
 //        indicator.startAnimating()
-        loadingView.show()
+//        loadingView.show()
         if let imageData = UIImageJPEGRepresentation(completionImageView.image!, 0.5) {
-            let imageUid = NSUUID().uuidString
+            let imageUid = "Recent Completion Image"
             let metadata = StorageMetadata()
             metadata.contentType = "image/jpeg"
-            DataService.ds.STORAGE_PROFILE_IMAGE.child(imageUid).putData(imageData, metadata: metadata) { (metadata, error) in
+            DataService.ds.STORAGE_PROFILE_IMAGE.child(self.profileKey).child(imageUid).putData(imageData, metadata: metadata) { (metadata, error) in
                 if error != nil {
                     print("Grandon(RecentVC): unable to upload picture.")
                 } else {
                     let imageUrl = metadata?.downloadURL()?.absoluteString
                     let completionImgDic = ["recentCompletionImgUrl": imageUrl!]
                     DataService.ds.REF_USERS.child(self.profileKey).child("profile").updateChildValues(completionImgDic)
-                    self.indicator.stopAnimating()
                 }
             }
-            loadingView.hide()
             performSegue(withIdentifier: "ProfileVC", sender: AnyObject.self)
             
         }

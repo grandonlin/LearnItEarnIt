@@ -34,8 +34,29 @@ class MyPostCell: UITableViewCell {
             }
         }
         self.postTitleLbl.text = post.title
-        self.postDateLbl.text = "\(post.created)"
+        let daysPassed = calculateInterval(post: post)
+        assignPostDateLbl(daysPassed: daysPassed, post: post)
         self.postDescLbl.text = post.postDescription
     }
+    
+    func calculateInterval(post: Post) -> Int {
+        let currentDate = NSDate()
+        let df = DateFormatter()
+        df.dateFormat = "yyyy-MM-dd HH:mm:ss"
+        let date = df.date(from: post.created)!
+        let interval = currentDate.timeIntervalSince(date as Date)
+        return Int(interval) / 259200
+    }
 
+    func assignPostDateLbl(daysPassed: Int, post: Post) {
+        if  daysPassed > 3 {
+            self.postDateLbl.text = "\(daysPassed)ds ago"
+        } else {
+            let date = post.created
+            let index = date.index(date.startIndex, offsetBy: 10)
+            let shortDate = date.substring(to: index)
+            self.postDateLbl.text = "\(shortDate)"
+        }
+    }
+    
 }

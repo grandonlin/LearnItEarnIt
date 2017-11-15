@@ -14,8 +14,6 @@ class StepCell: UITableViewCell, UITextViewDelegate {
     @IBOutlet weak var stepLbl: UILabel!
     @IBOutlet weak var stepImg: UIImageView!
     @IBOutlet weak var stepDescTextView: UITextView!
-    @IBOutlet weak var deleteImgBtn: UIButton!
-    
     
     var selectedIndex: Int!
     
@@ -46,6 +44,8 @@ class StepCell: UITableViewCell, UITextViewDelegate {
         
         NotificationCenter.default.addObserver(self, selector: #selector(keyboardDOWN), name: NSNotification.Name.UIKeyboardWillHide, object: nil)
         
+        loadingView = LoadingView(uiView: UIView())
+        loadingView.hide()
         
     }
     
@@ -104,6 +104,9 @@ class StepCell: UITableViewCell, UITextViewDelegate {
         stepDescTextView.endEditing(true)
     }
     
+    override func prepareForReuse() {
+        loadingView.hide()
+    }
 
 
 
