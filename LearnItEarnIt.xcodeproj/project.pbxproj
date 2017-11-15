@@ -59,7 +59,10 @@
 		C1CC26AE1EB4A56A00CFA708 /* SetupVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1CC26AD1EB4A56A00CFA708 /* SetupVC.swift */; };
 		C1CC26B11EB5973200CFA708 /* Profile.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1CC26B01EB5973200CFA708 /* Profile.swift */; };
 		C1CC26B51EB8A1FE00CFA708 /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1CC26B41EB8A1FE00CFA708 /* User.swift */; };
+		C1CD8C841FB89114006CA498 /* LoaderController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1CD8C831FB89114006CA498 /* LoaderController.swift */; };
+		C1CD8C861FBB9D26006CA498 /* FancyLabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1CD8C851FBB9D26006CA498 /* FancyLabel.swift */; };
 		C1DFB2B41F9E68F8009C9D93 /* LoadingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1DFB2B31F9E68F8009C9D93 /* LoadingView.swift */; };
+		C1DFB2B61FAC14C2009C9D93 /* DetailStepImageVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1DFB2B51FAC14C2009C9D93 /* DetailStepImageVC.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -131,7 +134,10 @@
 		C1CC26AF1EB578F900CFA708 /* LearnItEarnIt.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = LearnItEarnIt.entitlements; sourceTree = "<group>"; };
 		C1CC26B01EB5973200CFA708 /* Profile.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Profile.swift; sourceTree = "<group>"; };
 		C1CC26B41EB8A1FE00CFA708 /* User.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
+		C1CD8C831FB89114006CA498 /* LoaderController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoaderController.swift; sourceTree = "<group>"; };
+		C1CD8C851FBB9D26006CA498 /* FancyLabel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FancyLabel.swift; sourceTree = "<group>"; };
 		C1DFB2B31F9E68F8009C9D93 /* LoadingView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoadingView.swift; sourceTree = "<group>"; };
+		C1DFB2B51FAC14C2009C9D93 /* DetailStepImageVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DetailStepImageVC.swift; sourceTree = "<group>"; };
 		D7C9C38294BA99CEF24D18B7 /* Pods-LearnItEarnIt.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-LearnItEarnIt.debug.xcconfig"; path = "Pods/Target Support Files/Pods-LearnItEarnIt/Pods-LearnItEarnIt.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -223,6 +229,7 @@
 				C101E5DB1F62BC22003CEF0A /* ConfigurationVC.swift */,
 				C101E5DD1F640A50003CEF0A /* MyPostTVC.swift */,
 				C101E5DF1F640AB8003CEF0A /* DetailSettingVC.swift */,
+				C1DFB2B51FAC14C2009C9D93 /* DetailStepImageVC.swift */,
 			);
 			name = Controller;
 			sourceTree = "<group>";
@@ -240,6 +247,8 @@
 				C101E5E11F649145003CEF0A /* MyPostCell.swift */,
 				C101E5E31F64E342003CEF0A /* ConfigurationCell.swift */,
 				C1DFB2B31F9E68F8009C9D93 /* LoadingView.swift */,
+				C1CD8C831FB89114006CA498 /* LoaderController.swift */,
+				C1CD8C851FBB9D26006CA498 /* FancyLabel.swift */,
 			);
 			name = View;
 			sourceTree = "<group>";
@@ -427,7 +436,9 @@
 				C1A956301F329B4D006DBCE7 /* Global.swift in Sources */,
 				C15BF6121EAEFBCD0057310D /* LoginVC.swift in Sources */,
 				C15BF5FE1EAB04E10057310D /* CircleButton.swift in Sources */,
+				C1CD8C841FB89114006CA498 /* LoaderController.swift in Sources */,
 				C11AD9161F1A913600CC8D73 /* StepCell.swift in Sources */,
+				C1CD8C861FBB9D26006CA498 /* FancyLabel.swift in Sources */,
 				C15BF60C1EAC3F3F0057310D /* Step.swift in Sources */,
 				C101E5E01F640AB8003CEF0A /* DetailSettingVC.swift in Sources */,
 				C101E5DC1F62BC22003CEF0A /* ConfigurationVC.swift in Sources */,
@@ -442,6 +453,7 @@
 				C178A6031EF478BF00B97F43 /* RecentCompletionVC.swift in Sources */,
 				C15BF60A1EAC3DD50057310D /* ProductCell.swift in Sources */,
 				C15BF6081EAB74C90057310D /* Post.swift in Sources */,
+				C1DFB2B61FAC14C2009C9D93 /* DetailStepImageVC.swift in Sources */,
 				C1DFB2B41F9E68F8009C9D93 /* LoadingView.swift in Sources */,
 				C15BF6021EAB6A210057310D /* PostVC.swift in Sources */,
 			);

@@ -15,6 +15,7 @@ class MyPostTVC: UIViewController, UITableViewDelegate, UITableViewDataSource, U
     @IBOutlet weak var titleLbl: UILabel!
     @IBOutlet weak var searchBar: UISearchBar!
     @IBOutlet weak var editBtn: UIButton!
+    @IBOutlet weak var activityIndicator: UIActivityIndicatorView!
 
     
     var pageTitle: String!
@@ -35,20 +36,15 @@ class MyPostTVC: UIViewController, UITableViewDelegate, UITableViewDataSource, U
         searchBar.delegate = self
         searchBar.returnKeyType = UIReturnKeyType.done
         
-        indicator.center = self.view.center
-        indicator.frame = CGRect(x: self.view.center.x, y: self.view.center.y, width: 4.0, height: 4.0)
-        indicator.hidesWhenStopped = true
-        indicator.activityIndicatorViewStyle = .whiteLarge
-        indicator.color = UIColor.red
-        self.view.addSubview(indicator)
-        
         titleLbl.text = pageTitle
         
         if pageTitle == "My Favourites" {
             editBtn.isHidden = true
         }
         
-        loadingView = LoadingView(uiView: view, message: "Loading...")
+//        loadingView = LoadingView(uiView: view)
+//        loadingView.show()
+        activityIndicator.startAnimating()
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -59,13 +55,12 @@ class MyPostTVC: UIViewController, UITableViewDelegate, UITableViewDataSource, U
         myFavPostIds.removeAll()
         print("Grandon(MyPostTVC): myFavPostIds has \(myFavPostIds.count) records")
         myFavPosts.removeAll()
-        indicator.startAnimating()
         searchPost()
-        indicator.stopAnimating()
     }
     
     override func viewDidAppear(_ animated: Bool) {
-        loadingView.hide()
+//        loadingView.hide()
+        activityIndicator.stopAnimating()
     }
     
     override func viewWillDisappear(_ animated: Bool) {
@@ -101,12 +96,10 @@ class MyPostTVC: UIViewController, UITableViewDelegate, UITableViewDataSource, U
             let post: Post!
             if pageTitle == "My Posts" {
                 if isSearchMode {
-                    
                     post = filterPosts[indexPath.row]
                 } else {
                     post = myPosts[indexPath.row]
                 }
-                
             } else {
                 if isSearchMode {
                     post = filterPosts[indexPath.row]
@@ -142,6 +135,7 @@ class MyPostTVC: UIViewController, UITableViewDelegate, UITableViewDataSource, U
     }
     
     func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCellEditingStyle, forRowAt indexPath: IndexPath) {
+        activityIndicator.startAnimating()
         postTableView.beginUpdates()
         let post: Post!
         if isSearchMode {
@@ -163,7 +157,7 @@ class MyPostTVC: UIViewController, UITableViewDelegate, UITableViewDataSource, U
         }
         postTableView.reloadData()
         postTableView.endUpdates()
-        
+        activityIndicator.stopAnimating()
     }
     
     func tableView(_ tableView: UITableView, editingStyleForRowAt indexPath: IndexPath) -> UITableViewCellEditingStyle {
@@ -192,21 +186,21 @@ class MyPostTVC: UIViewController, UITableViewDelegate, UITableViewDataSource, U
         } else {
             isSearchMode = true
             if pageTitle == "My Posts" {
-                filterPosts = myPosts.filter({ (text) -> Bool in
-                    let tmp = text as Post
+                filterPosts = myPosts.filter({ (post) -> Bool in
+                    let tmp = post as Post
                     let range = tmp.title.lowercased().contains(searchText.lowercased())
                     return range
                 })
             } else {
-                filterPosts = myFavPosts.filter({ (text) -> Bool in
-                    let tmp = text as Post
+                filterPosts = myFavPosts.filter({ (post) -> Bool in
+                    let tmp = post as Post
                     let range = tmp.title.lowercased().contains(searchText.lowercased())
                     return range
             })
 //            let lower = searchBar.text!.lowercased()
             //            filterPosts = myPosts.filter({$0.title.range(of: lower) != nil })
-            postTableView.reloadData()
             }
+            postTableView.reloadData()
         }
     }
     
@@ -243,10 +237,12 @@ class MyPostTVC: UIViewController, UITableViewDelegate, UITableViewDataSource, U
                                         if let postDict = postSnap.value as? Dictionary<String, Any> {
                                             let post = Post(key: postSnap.key, postDict: postDict)
                                             myPosts.append(post)
-                                            self.postTableView.reloadData()
+                                            print("Grandon(MyPostTVC): this post was created on \(post.created)")
+                                            
                                         }
                                     }
                                 }
+                                self.postTableView.reloadData()
                             }
                         })
                     }

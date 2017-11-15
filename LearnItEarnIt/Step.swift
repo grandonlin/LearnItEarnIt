@@ -91,7 +91,6 @@ class Step {
         }
     }
     
-    
     //Initiate when creating steps
     init(postId: String, stepNum: Int, stepDesc: String, stepImg: UIImage, stepImgUrl: String, imageData: Data, metaData: StorageMetadata) {
         self._postId = postId

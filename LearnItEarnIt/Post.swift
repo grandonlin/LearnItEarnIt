@@ -14,9 +14,11 @@ class Post {
     private var _likes: Int!
     private var _postImgUrl: String!
     private var _created: String!
+//    private var _dateCreatedInString: String!
     private var _key: String!
     private var _postDescription: String!
     private var _isNew: Bool!
+    private static var numberOfPosts = 0
     
     var title: String {
         return _title
@@ -51,10 +53,14 @@ class Post {
         }
     }
     
+    //
     init(key: String) {
         self._key = key
-        self._created = "\(NSDate().timeCreated())"
+        self._created = "\(NSDate().fullTimeCreated())"
+        print("Grandon(Post): the date created is \(self._created)")
+//        self._dateCreatedInString = "\(NSDate().timeCreated())"
         self._isNew = true
+        
     }
     
 //    init(key: String, postTitle: String, postImgUrl: String, postDesc: String) {
@@ -82,10 +88,10 @@ class Post {
         }
         
         if let created = postDict["created"] as? String {
-            let removeRange = created.range(of: " at")
-            let index = removeRange!.lowerBound
-            let dateCreated = created.substring(to: index)
-            self._created = dateCreated
+//            let removeRange = created.range(of: " at")
+//            let index = removeRange!.lowerBound
+//            let dateCreated = created.substring(to: index)
+            self._created = created
         }
         
         if let postStep = postDict["steps"] as? Dictionary<String, Any> {
@@ -95,13 +101,23 @@ class Post {
         
     }
     
+    func getNumberOfPosts() -> Int {
+        return Post.numberOfPosts
+    }
+    
+    func increaseNumberOfPosts() {
+        Post.numberOfPosts += 1
+    }
+    
 }
 
 extension NSDate {
-    func timeCreated() -> String {
-        let dateFormatter = DateFormatter()
-        dateFormatter.dateStyle = .long
-        dateFormatter.timeStyle = .medium
-        return dateFormatter.string(from: self as Date)
+    
+    func fullTimeCreated() -> String {
+        let df = DateFormatter()
+        df.dateFormat = "yyyy-MM-dd HH:mm:ss"
+        return df.string(from: self as Date)
     }
 }
+
+

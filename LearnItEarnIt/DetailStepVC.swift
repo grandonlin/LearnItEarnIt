@@ -19,6 +19,7 @@ class DetailStepVC: UIViewController, UITableViewDelegate, UITableViewDataSource
     @IBOutlet weak var addBtn: UIButton!
     @IBOutlet weak var postBtn: UIButton!
     @IBOutlet weak var backBtn: FancyBtn!
+    @IBOutlet weak var activityIndicator: UIActivityIndicatorView!
     
     var postTitle: String!
     var postId: String!
@@ -32,7 +33,7 @@ class DetailStepVC: UIViewController, UITableViewDelegate, UITableViewDataSource
     var number: Int!
     var stepRef = DataService.ds.REF_POSTS
     var stepImgRef = DataService.ds.STEP_IMAGE
-    var loadingView: LoadingView!
+    var canBePosted = 3
 //    var stepCount = 1
 
     override func viewDidLoad() {
@@ -45,18 +46,31 @@ class DetailStepVC: UIViewController, UITableViewDelegate, UITableViewDataSource
         tableView.delegate = self
         tableView.dataSource = self
         
-        indicator.center = self.view.center
-        indicator.frame = CGRect(x: self.view.center.x, y: self.view.center.y, width: 4.0, height: 4.0)
-        indicator.hidesWhenStopped = true
-        indicator.activityIndicatorViewStyle = .whiteLarge
-        indicator.color = UIColor.red
-        self.view.addSubview(indicator)
-        
         postTitleLbl.text = postTitle
 
-        print("Grandon(DetailStepVC): The steps array is: \(steps[0].stepNum), \(steps[0].stepImage), \(steps[0].stepDescription)")
+        loadingView = LoadingView(uiView: self.viewIfLoaded!)
+        loadingView.hide()
+        
+//        print("Grandon(DetailStepVC): The steps array is: \(steps[0].stepNum), \(steps[0].stepImage), \(steps[0].stepDescription)")
     }
     
+    override func viewDidAppear(_ animated: Bool) {
+        loadingView.hide()
+    }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        print("Grandon(DetailStepVC): The canBePosted value is \(canBePosted)")
+        switch canBePosted {
+        case 0:
+            performSegue(withIdentifier: "PostVC", sender: nil)
+        case 1:
+            backBtnPressed(AnyObject.self)
+        case 2:
+            print("Image selection")
+        default:
+            cancelBtnPressed(AnyObject.self)
+        }
+    }
     
     func numberOfSections(in tableView: UITableView) -> Int {
         return 1
@@ -75,9 +89,7 @@ class DetailStepVC: UIViewController, UITableViewDelegate, UITableViewDataSource
             cell.stepImg.isUserInteractionEnabled = true
             let step = steps[indexPath.row]
             cell.stepDescTextView.delegate = self
-//            cell.selectedIndex = selectedIndex
             cell.configureCell(step: step)
-
             return cell
         }
         return StepCell()
@@ -88,24 +100,14 @@ class DetailStepVC: UIViewController, UITableViewDelegate, UITableViewDataSource
     }
     
     func tableView(_ tableView: UITableView, moveRowAt sourceIndexPath: IndexPath, to destinationIndexPath: IndexPath) {
-//        indicator.startAnimating()
-        loadingView = LoadingView(uiView: view, message: "Updating...")
+        loadingView.show()
+        activityIndicator.startAnimating()
         self.view.isUserInteractionEnabled = false
         let sourceStep = steps[sourceIndexPath.row]
-        print("Grandon(DetailStepVC): the sourceIndexPath is \(sourceIndexPath.row)")
-        print("Grandon(DetailStepVC): the destinationIndexPath is \(destinationIndexPath.row)")
-//        let destinationStep = steps[destinationIndexPath.row]
-//            0     1      2      3      4      5
-//        [Step1, Step2, Step3, Step4, Step5, Step6]
-//        [Step1, Step4, Step2, Step3, Step4, Step5, Step6]
-//        [Step1, Step4, Step2, Step3, Step5, Step6]
-//        [Step1, Step4, Step3, Step4, Step5, Step6]
 
         if sourceIndexPath.row > destinationIndexPath.row {
             steps.insert(sourceStep, at: destinationIndexPath.row)
             steps.remove(at: sourceIndexPath.row + 1)
-            
-//            destinationStep.stepNum = destinationIndexPath.row + 1
             for step in steps {
                 
                 if step.stepNum > destinationIndexPath.row && step.stepNum <= sourceIndexPath.row {
@@ -139,17 +141,15 @@ class DetailStepVC: UIViewController, UITableViewDelegate, UITableViewDataSource
         let destStep = steps[destinationIndexPath.row]
         destStep.stepNum = destinationIndexPath.row + 1
         updateStepDetail(step: destStep)
-//        indicator.stopAnimating()
         loadingView.hide()
+//        activityIndicator.stopAnimating()
         self.view.isUserInteractionEnabled = true
         print("Grandon(DetailStepVC): this is step number \(destStep.stepNum), step description is \(destStep.stepDescription)")
     }
     
-    
-    
     func textViewDidEndEditing(_ textView: UITextView) {
-//        indicator.startAnimating()
-        loadingView = LoadingView(uiView: view, message: "")
+        loadingView.show()
+//        activityIndicator.startAnimating()
         self.view.isUserInteractionEnabled = false
         var v: UIView = textView
         repeat { v = v.superview!} while !(v is UITableViewCell)
@@ -160,17 +160,17 @@ class DetailStepVC: UIViewController, UITableViewDelegate, UITableViewDataSource
             step.stepDescription = stepCell.stepDescTextView.text
             steps[ip.row] = step
             print("Grandon(DetailStepVC): the step information is \(step.stepNum), \(step.stepDescription)")
-            DataService.ds.REF_POSTS.child(self.postId).child("steps").child("stepDetails").child("step\(step.stepNum)").child("stepDescription").setValue(step.stepDescription)
+            DataService.ds.REF_POSTS.child(self.postId).child("steps").child("stepDetails").child("\(step.stepNum)").child("stepDescription").setValue(step.stepDescription)
             textView.resignFirstResponder()
         }
-//        indicator.stopAnimating()
         loadingView.hide()
+//        activityIndicator.stopAnimating()
         self.view.isUserInteractionEnabled = true
     }
     
     @IBAction func addStepBtnPressed(_ sender: Any) {
-//        indicator.startAnimating()
-        loadingView = LoadingView(uiView: view, message: "")
+        loadingView.show()
+//        activityIndicator.startAnimating()
         self.view.isUserInteractionEnabled = false
         let stepImgUrl = INIT_IMG_URL
         let newStep = Step(postId: postId, stepNum: steps.count + 1, stepDesc: "", stepImg: UIImage(named: "emptyImage")!, stepImgUrl: stepImgUrl, imageData: Data(), metaData: StorageMetadata())
@@ -184,19 +184,18 @@ class DetailStepVC: UIViewController, UITableViewDelegate, UITableViewDataSource
         tableView.endUpdates()
         
         let step = ["stepDescription": "", "stepImgUrl": INIT_IMG_URL, "stepNum" : steps.count] as [String : Any]
-        DataService.ds.REF_POSTS.child(self.postId).child("steps").child("stepDetails").child("step00000000000\(steps.count)").updateChildValues(step)
-        
+        DataService.ds.REF_POSTS.child(self.postId).child("steps").child("stepDetails").child("\(steps.count)").updateChildValues(step)
         tableView.scrollToRow(at: indexPath, at: .middle, animated: true)
-//        indicator.stopAnimating()
         loadingView.hide()
+//        activityIndicator.stopAnimating()
         self.view.isUserInteractionEnabled = true
     }
     
     func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCellEditingStyle, forRowAt indexPath: IndexPath) {
-//        startActiveIndicator()
-        loadingView = LoadingView(uiView: view, message: "")
+        loadingView.show()
+//        activityIndicator.startAnimating()
         number = indexPath.row + 1
-        stepRef.child(self.postId).child("steps").child("stepDetails").child("step\(number!)").removeValue()
+        stepRef.child(self.postId).child("steps").child("stepDetails").child("\(number!)").removeValue()
         stepImgRef.child(self.postId).child("Step \(number!)").delete(completion: nil)
         
 //        [Step1, Step2, Step3, Step4, Step5]
@@ -222,18 +221,17 @@ class DetailStepVC: UIViewController, UITableViewDelegate, UITableViewDataSource
         }
         
         tableView.deleteRows(at: [indexPath], with: .fade)
-        
         tableView.reloadData()
         tableView.endUpdates()
-//        stopActiveIndicator()
         loadingView.hide()
+//        activityIndicator.stopAnimating()
     }
     
     @IBAction func adjustStepBtnPressed(_ sender: Any) {
         if tableView.isEditing {
             adjustBtn.setTitle("Adjust Steps", for: .normal)
-//            indicator.startAnimating()
-            loadingView = LoadingView(uiView: view, message: "Updating...")
+            loadingView.show()
+            activityIndicator.startAnimating()
             var stepDictionary = [String: Any]()
             for i in 0...steps.count - 1 {
                 //            if step.stepNum == number {
@@ -242,12 +240,12 @@ class DetailStepVC: UIViewController, UITableViewDelegate, UITableViewDataSource
                 //                step.stepNum = step.stepNum - 1
                 let step = steps[i]
                 let stepDetail = ["stepDescription": step.stepDescription, "stepImgUrl": step.stepImgUrl, "stepNum": step.stepNum] as [String : Any]
-                stepDictionary["step\(step.stepNum)"] = stepDetail
+                stepDictionary["\(step.stepNum)"] = stepDetail
                 //            }
             }
             stepRef.child(self.postId).child("steps").child("stepDetails").setValue(stepDictionary)
-//            indicator.stopAnimating()
             loadingView.hide()
+            activityIndicator.stopAnimating()
             tableView.setEditing(false, animated: true)
             tableView.reloadData()
         } else {
@@ -276,21 +274,14 @@ class DetailStepVC: UIViewController, UITableViewDelegate, UITableViewDataSource
             self.present(imgAlert, animated: true, completion: nil)
         }
         
-        for step in steps {
-            let stepImg = step.stepImage
-            let stepDesc = step.stepDescription
-            if stepImg == UIImage(named: "emptyImage") {
-                missingImgCount += 1
-            }
-            
-            if stepDesc == "" {
-                missingDescCount += 1
-            }
-        }
+        missingImgCount = checkMissingImg(steps: steps)
+        missingDescCount = checkMissingDesc(steps: steps)
+        
         print("Grandon(DetailStepVC): missing image count is \(missingImgCount), missing description count is \(missingDescCount)")
         
         if missingImgCount == 0 && missingDescCount == 0 {
-            performSegue(withIdentifier: "PostVC", sender: nil)
+            canBePosted = 0
+            
         } else if missingDescCount != 0 && missingImgCount == 0 {
             descAlert.addAction(UIAlertAction(title: "Yes", style: .default, handler: descConfirmHandler))
             descAlert.addAction(UIAlertAction(title: "Cancel", style: .default, handler: nil))
@@ -310,6 +301,28 @@ class DetailStepVC: UIViewController, UITableViewDelegate, UITableViewDataSource
         
     }
     
+    func checkMissingImg(steps: Array<Step>) -> Int {
+        var missingImg: Int = 0
+        for step in steps {
+            let stepImg = step.stepImage
+            if stepImg == UIImage(named: "emptyImage") {
+                missingImg += 1
+            }
+        }
+        return missingImg
+    }
+    
+    func checkMissingDesc(steps: Array<Step>) -> Int {
+        var missingDesc: Int = 0
+        for step in steps {
+            let stepDesc = step.stepDescription
+            if stepDesc == "" {
+                missingDesc += 1
+            }
+        }
+        return missingDesc
+    }
+    
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if let destination = segue.destination as? PostVC {
             destination.postKey = postId
@@ -318,12 +331,13 @@ class DetailStepVC: UIViewController, UITableViewDelegate, UITableViewDataSource
     }
     
     @IBAction func backBtnPressed(_ sender: Any) {
+        canBePosted = 1
         dismiss(animated: true, completion: nil)
     }
     
     @IBAction func cancelBtnPressed(_ sender: Any) {
-//        indicator.startAnimating()
-        loadingView = LoadingView(uiView: view, message: "Cancelling...")
+//        loadingView = LoadingView(uiView: view)
+        activityIndicator.startAnimating()
         self.view.isUserInteractionEnabled = false
         for step in steps {
             DataService.ds.STEP_IMAGE.child(self.postId).child("Step \(step.stepNum)").delete(completion: nil)
@@ -337,14 +351,15 @@ class DetailStepVC: UIViewController, UITableViewDelegate, UITableViewDataSource
         }
         DataService.ds.REF_USERS_CURRENT.child("myPosts").child(self.postId).removeValue()
         DataService.ds.REF_POSTS.child(self.postId).removeValue()
-//        indicator.stopAnimating()
-        loadingView.hide()
+//        loadingView.hide()
+        activityIndicator.stopAnimating()
         self.view.isUserInteractionEnabled = true
         performSegue(withIdentifier: "MainVC", sender: nil)
         
     }
 
     func imageTapped(_ sender: UITapGestureRecognizer) {
+        canBePosted = 2
         let location = sender.location(in: tableView)
         let ip = tableView.indexPathForRow(at: location)!
         selectedIndex = ip.row
@@ -352,8 +367,8 @@ class DetailStepVC: UIViewController, UITableViewDelegate, UITableViewDataSource
     }
 
     func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [String : Any]) {
-//        self.indicator.startAnimating()
-        loadingView = LoadingView(uiView: view, message: "Updating...")
+        loadingView.show()
+//        activityIndicator.startAnimating()
         self.view.isUserInteractionEnabled = false
         if let selectedImage = info[UIImagePickerControllerOriginalImage] as? UIImage {
             let index = NSIndexPath(row: selectedIndex, section: 0) as IndexPath
@@ -381,20 +396,22 @@ class DetailStepVC: UIViewController, UITableViewDelegate, UITableViewDataSource
                         print("Grandon(DetailStepVC): successfully upload profile image.")
                         let imageUrl = data?.downloadURL()?.absoluteString
                         step.stepImgUrl = imageUrl!
-                        DataService.ds.REF_POSTS.child(self.postId).child("steps").child("stepDetails").child("step\(self.selectedIndex + 1)").child("stepImgUrl").setValue(imageUrl)
+                        DataService.ds.REF_POSTS.child(self.postId).child("steps").child("stepDetails").child("\(self.selectedIndex + 1)").child("stepImgUrl").setValue(imageUrl)
                         
-//                        self.indicator.stopAnimating()
+//
                         self.view.isUserInteractionEnabled = true
                     }
                 }
             }
             
-            loadingView.hide()
 //            tableView.reloadData()
             
         }
+//        activityIndicator.stopAnimating()
         dismiss(animated: true, completion: nil)
     }
+    
+    
     
     func updateStepDetail(step: Step) {
 //        if let imageData = UIImageJPEGRepresentation(step.stepImage, 0.5) {
@@ -418,15 +435,6 @@ class DetailStepVC: UIViewController, UITableViewDelegate, UITableViewDataSource
         let updatedStep = ["stepDescription": step.stepDescription, "stepImgUrl": step.stepImgUrl, "stepNum" : step.stepNum] as [String : Any]
         DataService.ds.REF_POSTS.child(postId).child("steps").child("stepDetails").child("step\(step.stepNum)").updateChildValues(updatedStep)
         DataService.ds.STEP_IMAGE.child(postId).child("Step \(step.stepNum)").putData(step.imageData, metadata: step.metaData)
-    }
-    
-    func startActiveIndicator() {
-        self.indicator.startAnimating()
-    }
-    
-    func stopActiveIndicator() {
-        self.indicator.stopAnimating()
-        
     }
 }
 
